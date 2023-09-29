@@ -1,0 +1,18 @@
+project:
+  type: book
+
+book:
+  title: "Close the Loop"
+  author: "Norah Jones"
+  date: "9/28/2023"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - summary.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
