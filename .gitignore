@@ -27,3 +27,20 @@
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
+
+*.csv
+*.docx
+*.drawio
+*.fst
+*.gz
+*.jpg
+*.log
+*.pdf
+*.png
+*.pptx
+*.RData
+*.rdb
+*.rdx
+*.xlsx
+
+
