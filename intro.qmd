@@ -1,9 +1,17 @@
 # Introduction
 
-This is a book created from markdown and executable code.
+En Tigo, medimos el Quality of Service (QoS) utilizando encuestas de Net
+Promoter Score (NPS) de tipo transaccional, las cuales evalúan la
+experiencia reciente del usuario con la calidad de nuestra red. Un día
+después de recibir las respuestas, un equipo de analistas, el Close The
+Loop, agrega un diagnóstico basado en métricas de red para representar la
+posible causa del Poor User Experience para cada cliente encuestado. Las
+posibles causas están categorizadas en: Capacidad, Cobertura, Optimización,
+Transmisión, Disponibilidad y No detractor.
 
-See @knuth84 for additional discussion of literate programming.
-
-```{r}
-1 + 1
-```
+Se tiene un NPS Transaccional de red móvil que está impactando en el
+revenue y aumenta la taza de abandono de los clientes. Actualmente existe
+un equipo llamado CTL que analiza las encuestas y los KPIs de red con el
+fin de realizar una clasificación manual de los diagnósticos de los
+usuarios detractores de red. Posteriormente, se realizan acciones
+correctivas.

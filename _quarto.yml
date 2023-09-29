@@ -15,9 +15,35 @@ book:
     right: |
       Universidad del Valle de Guatemala <a href="https://www.uvg.edu.gt/">UVG</a>.
   cover-image: cover.jpg
+  favicon: fav.jpg
+  repo-url: https://github.com/yunkel09/yunkel09.github.io
+  repo-branch: master
   chapters:
     - index.qmd
+
+
     - intro.qmd
+
+    - part: data-adquisition.qmd
+      chapters:
+        - data-collection.qmd
+        - data-import.qmd
+
+    - part: visualize.qmd
+      chapters:
+        - preliminary-analysis.qmd
+        - data-cleaning.qmd
+        - eda-post-cleaning.qmd
+
+    - part: modeling.qmd
+      chapters:
+        - split.qmd
+        - cross-validation.qmd
+        - preprocessing.qmd
+        - model-specification.qmd
+        - model-training.qmd
+        - model-evaluation.qmd
+
     - summary.qmd
     - references.qmd
 
