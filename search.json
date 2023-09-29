@@ -4,27 +4,27 @@
     "href": "index.html",
     "title": "Close the Loop",
     "section": "",
-    "text": "Prefacio\nEl proyecto busca desarrollar un modelo de machine learning para analizar y clasificar automáticamente las respuestas de las encuestas de NPS (Net Promoter Score) en Tigo Guatemala. El objetivo es utilizar estos insights para guiar decisiones estratégicas en áreas como inversión en infraestructura, optimización de red y mejora de la calidad del servicio. Al hacerlo, la empresa espera mejorar la percepción del cliente, medida a través del NPS, y en última instancia, aumentar la lealtad del cliente y el retorno de inversión (ROI).\nEn Tigo, medimos el Quality of Service (QoS) utilizando encuestas de Net Promoter Score (NPS) de tipo transaccional, las cuales evalúan la experiencia reciente del usuario con la calidad de nuestra red. Un día después de recibir las respuestas, un equipo de analistas, el Close The Loop, agrega un diagnóstico basado en métricas de red para representar la posible causa del Poor User Experience para cada cliente encuestado. Las posibles causas están categorizadas en: Capacidad, Cobertura, Optimización, Transmisión, Disponibilidad y No detractor.\nSe tiene un NPS Transaccional de red móvil que está impactando en el revenue y aumenta la taza de abandono de los clientes. Actualmente existe un equipo llamado CTL que analiza las encuestas y los KPIs de red con el fin de realizar una clasificación manual de los diagnósticos de los usuarios detractores de red. Posteriormente, se realizan acciones correctivas."
+    "text": "Preface\nEl proyecto busca desarrollar un modelo de machine learning para analizar y clasificar automáticamente las respuestas de las encuestas de NPS (Net Promoter Score) en Tigo Guatemala. El objetivo es utilizar estos insights para guiar decisiones estratégicas en áreas como inversión en infraestructura, optimización de red y mejora de la calidad del servicio. Al hacerlo, la empresa espera mejorar la percepción del cliente, medida a través del NPS, y en última instancia, aumentar la lealtad del cliente y el retorno de inversión (ROI)."
   },
   {
     "objectID": "intro.html",
     "href": "intro.html",
     "title": "1  Introduction",
     "section": "",
-    "text": "This is a book created from markdown and executable code.\nSee Knuth (1984) for additional discussion of literate programming.\n\n1 + 1\n\n[1] 2\n\n\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97."
+    "text": "En Tigo, medimos el Quality of Service (QoS) utilizando encuestas de Net Promoter Score (NPS) de tipo transaccional, las cuales evalúan la experiencia reciente del usuario con la calidad de nuestra red. Un día después de recibir las respuestas, un equipo de analistas, el Close The Loop, agrega un diagnóstico basado en métricas de red para representar la posible causa del Poor User Experience para cada cliente encuestado. Las posibles causas están categorizadas en: Capacidad, Cobertura, Optimización, Transmisión, Disponibilidad y No detractor.\nSe tiene un NPS Transaccional de red móvil que está impactando en el revenue y aumenta la taza de abandono de los clientes. Actualmente existe un equipo llamado CTL que analiza las encuestas y los KPIs de red con el fin de realizar una clasificación manual de los diagnósticos de los usuarios detractores de red. Posteriormente, se realizan acciones correctivas."
+  },
+  {
+    "objectID": "visualize.html",
+    "href": "visualize.html",
+    "title": "Visualize",
+    "section": "",
+    "text": "kdkdkd"
   },
   {
     "objectID": "summary.html",
     "href": "summary.html",
-    "title": "2  Summary",
+    "title": "13  Summary",
     "section": "",
     "text": "In summary, this book has no content whatsoever.\n\n1 + 1\n\n[1] 2"
-  },
-  {
-    "objectID": "references.html",
-    "href": "references.html",
-    "title": "References",
-    "section": "",
-    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97."
   }
 ]
