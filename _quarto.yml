@@ -1,10 +1,20 @@
 project:
   type: book
+  output-dir: _book
 
 book:
   title: "Close the Loop"
-  author: "Norah Jones"
+  author:
+  - name: "William Chavarría"
+    orcid: 0009-0001-4084-9290
   date: "9/28/2023"
+
+  page-footer:
+    left: |
+      Close the Loop (CTL) fue escrito por William Chavarría
+    right: |
+      Universidad del Valle de Guatemala <a href="https://www.uvg.edu.gt/">UVG</a>.
+  cover-image: cover.jpg
   chapters:
     - index.qmd
     - intro.qmd
