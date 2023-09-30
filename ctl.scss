@@ -1,5 +1,15 @@
 /*-- scss:defaults --*/
 
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap');
+
+.r {
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'JetBrains Mono', monospace;
+
+}
+
+
 $primary: #637238 !default;
 $font-size-root: 18px !default;
 
@@ -41,6 +51,12 @@ h5 { margin-top: 1.5em; font-size: 1rem; }
   color: #6C6C6C;
   font-weight: normal;
 }
+
+p {
+  text-align: justify;
+}
+
+
 
 /* Code ------------------------------------------------ */
 

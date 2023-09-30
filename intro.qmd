@@ -15,3 +15,4 @@ un equipo llamado CTL que analiza las encuestas y los KPIs de red con el
 fin de realizar una clasificación manual de los diagnósticos de los
 usuarios detractores de red. Posteriormente, se realizan acciones
 correctivas.
+

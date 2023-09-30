@@ -1,0 +1,204 @@
+# EDA {#sec-EDA}
+
+```{r}
+#| echo: false
+source("_common.R")
+source("_functions.R")
+source("_load.R")
+```
+
+
+```{r}
+#| echo: false
+ctl_01 <- read_fst("data/ctl_01.fst") |> as_tibble()
+```
+
+## Estructura
+
+El proceso de preparación y limpieza dió como resultado un único set de datos,
+el cual consta de `r nrow(ctl_01)` filas y `r ncol(ctl_01)` columnas.
+
+```{r}
+ctl_01 |> glimpse(width = 71)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Mostrar Código"
+#| label: tbl-ctl
+#| tbl-cap: "ctl"
+ctl_01 |> 
+ slice_head(n = 5) |> 
+ gt() |> 
+ tab_header(
+    title = md("**Muestra Aleatoria - CTL**"),
+    subtitle = md("Tabla principal")
+  ) |> 
+ gt_theme_538() |> 
+ fmt_number(columns = cll_prctg:last_col(), decimals = 2) |> 
+ cols_align_decimal() |> 
+ cols_align(align = "center", columns = where(~ is.numeric(.x))) |> 
+ tab_footnote(
+  footnote = md("Cada usuario tiene el top 5 celdas a las que más se conecta"),
+  locations = cells_body(columns = bts_sh_nm, rows = 1)) 
+```
+
+```{r}
+#| code-fold: true
+#| fig-align: center
+#| code-summary: "Código"
+#| label: fig-resumen
+#| fig-width: 9
+#| fig-cap: Se puede apreciar que la gran mayoría de las columnas están completas. Un 80% son *features* de tipo continuo y el restante son de tipo categórico.  Se requiere explorar los valores faltantes con mayor detalle.
+plot_intro(
+ ctl_01,ggtheme = yunkel,
+ title = "Resumen Descriptivo",
+ geom_label_args = list(label.size = 0.8, size = 7),
+ theme_config = list(
+ axis.text = element_text(size = 40)))
+```
+
+## Medidas repetidas
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+#| label: tbl-repetidos
+#| tbl-cap: "Valores repetidos"
+#| column: page
+ctl_01 |>
+ get_dupes(msisdn_dd) |> 
+ head(5) |> 
+ select(
+  fct_srvy_dt, msisdn_dd, srvy_id, bts_sh_nm) |> 
+ gt() |> 
+ tab_header(
+  title = md("**Datos de Perfil**"),
+    subtitle = md("Medidas repetidas")
+  ) |> 
+ gt_theme_538()
+```
+
+En la tabla @tbl-repetidos vemos que el identificador único (número de 
+celular del usuario) se repite, debido a que contamos con datos de
+[perfil](https://bit.ly/3PjtasC)
+
+
+## Valores faltantes
+
+
+```{r}
+#| fig-align: center
+#| label: fig-faltantes
+#| fig-cap: La mayor cantidad de valores perdidos se encuentra en la columna `thp_required_lte`. Dependiendo de la distribución de los mismos será posible aplicar técnicas de imputación en la fase de preprocesamiento
+#| code-fold: true
+#| code-summary: "Código"
+#| fig-width: 8
+plot_missing(ctl_01, missing_only = TRUE,
+ ggtheme = yunkel,
+ title = "Valores Faltantes",
+ geom_label_args = list(label.size = 0.8, size = 8),
+ theme_config = list(
+  axis.text = element_text(size = 40)))
+```
+
+## Resumen estadístico
+
+```{r}
+# crear set de datos solo con variables numéricas
+ctl_n <- ctl_01 |>
+ select(where(is.numeric), -c(msisdn_dd, srvy_id))
+```
+
+</br>
+
+```{r}
+#| code-fold: true
+#| code-summary: "Mostrar Código"
+#| label: tbl-resumen
+#| cap-location: bottom
+#| tbl-cap: Resumen estadístico
+ctl_n |> 
+ resumir() |> 
+ gt() |> 
+ # tab_header(
+ #  title = md("**Resumen Estadístico**"),
+ #    subtitle = md("para *features* Numéricos")
+ # ) |> 
+ gt_theme_538() |> 
+ cols_align(align = "center", columns = where(~ is.numeric(.x))) |> 
+ fmt_number(columns = where(is.numeric), decimals = 2)
+```
+
+En @tbl-resumen se observa que hay valores atípicos en algunas
+observaciones.  Los valores mínimos con valor cero para algunas variables
+ameritan atención.  
+
+
+
+## Variable dependiente
+
+Uno de los primeros pasos del proceso de análisis exploratorios cuando el
+propósito final es predecir una respuesta es crear visualizaciones que
+ayuden a dilucidar el conocimiento de la respuesta y luego descubrir
+relaciones entre los predictores y la respuesta [@kuhn_feature_2020].
+
+```{r}
+#| fig-width: 8
+#| code-fold: true
+#| code-summary: "Código"
+#| label: fig-depe
+#| fig-cap: Distribución de la variable dependiente
+ctl_01 |> 
+ barra(diag) +
+ theme(legend.position = "none") +
+ labs(title = "Clasificación variable politómica")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

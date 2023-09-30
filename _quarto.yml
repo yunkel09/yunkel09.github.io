@@ -4,6 +4,9 @@ project:
 
 book:
   title: "Close the Loop"
+  sidebar:
+    style: docked
+    background: white
   author:
   - name: "William Chavarría"
     orcid: 0009-0001-4084-9290
@@ -28,12 +31,12 @@ book:
       chapters:
         - data-collection.qmd
         - data-import.qmd
+        - data-dictionary.qmd
 
     - part: visualize.qmd
       chapters:
-        - preliminary-analysis.qmd
-        - data-cleaning.qmd
-        - eda-post-cleaning.qmd
+        - data-prep.qmd
+        - eda.qmd
 
     - part: modeling.qmd
       chapters:
@@ -51,6 +54,11 @@ bibliography: references.bib
 
 format:
   html:
+    mermaid:
+      theme: forest
+    highlight-style: breeze
+    toc-expand: true
+    # cap-location: margin
     theme:
       - cosmo
       - ctl.scss

@@ -1,1 +1,58 @@
 # Data collection {#sec-data-collection}
+
+En el contexto de este proyecto, que se centró en cerrar el ciclo de
+retroalimentación del cliente (Close The Loop, CTL) mediante el análisis de
+métricas de red y su correlación con el Net Promoter Score (NPS) transaccional,
+la recolección de datos fue un componente crucial. Los datos se obtuvieron de
+una variedad de fuentes para proporcionar una visión completa y precisa del
+rendimiento de la red y la experiencia del cliente. Primero, se utilizaron
+encuestas para recopilar datos directamente de los usuarios, lo que nos
+permitió entender mejor su percepción y experiencia con los servicios de red.
+
+Además, se accedió a los servidores principales AS-400 para extraer registros
+históricos y en tiempo real relacionados con el rendimiento de la red y las
+transacciones del cliente. Los gestores de red manejados por el Network
+Operations Center (NOC), como Tivoli y Netcool, también fueron fuentes valiosas
+de datos, ya que proporcionaron información en tiempo real sobre el estado y la
+salud de la red.
+
+Por último, se utilizaron las API proporcionadas por proveedores de equipos de
+red como Nokia, Huawei, Infinera y Juniper para extraer métricas específicas
+que fueron cruciales para este estudio. Estos datos se recopilaron tanto en
+tiempo real como en lotes para su posterior análisis y correlación con las
+métricas del NPS transaccional.
+
+</br>
+
+```{mermaid, fig-oferta}
+%%| fig-width: 9.5
+erDiagram
+  DIAGNOSTICO ||--o{ METRICAS : has
+  DIAGNOSTICO ||--o{ DISPONIBILIDAD : has
+  DIAGNOSTICO {
+    integer msisdn_dd
+    integer srvy_id
+  }
+  METRICAS {
+    integer msisdn_dd
+    integer srvy_id
+  }
+  DISPONIBILIDAD {
+    integer msisdn_dd
+    integer srvy_id
+  }
+```
+
+## Diagnóstico
+
+La tabla maestra diagnóstico contiene...
+
+
+## Métricas
+
+La tabla de métricas se caracteriza por ...
+
+
+## Disponibilidad
+
+Con esta `disponibilidad` lo que tenemos es principalmente...

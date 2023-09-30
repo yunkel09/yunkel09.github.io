@@ -210,7 +210,9 @@ diag_03 |> filter(diag != "PROMOTOR") |> get_dupes(msisdn_dd, srvy_id)
 
 diag_03 |>
  barra(x = diag) +
+ theme(legend.position = "none") +
  labs(title = "Etiquetas")
+
 
 # Conteo
 diag_03 |> count(diag, sort = TRUE)
