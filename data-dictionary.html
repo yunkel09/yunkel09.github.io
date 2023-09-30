@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="William Chavarría, André Rodas, Francisco Manjon y Pablo Armas">
 
-<title>Close the Loop - 6&nbsp; EDA post-cleaning</title>
+<title>Close the Loop - 4&nbsp; Data dictionary</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +31,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./modeling.html" rel="next">
-<link href="./data-cleaning.html" rel="prev">
+<link href="./visualize.html" rel="next">
+<link href="./data-import.html" rel="prev">
 <link href="./fav.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -71,7 +72,7 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-sidebar floating">
+<body class="nav-sidebar docked">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -80,7 +81,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./visualize.html">Visualize</a></li><li class="breadcrumb-item"><a href="./eda-post-cleaning.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">EDA post-cleaning</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data-adquisition.html">Data adquisition</a></li><li class="breadcrumb-item"><a href="./data-dictionary.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dictionary</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -92,7 +93,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Close the Loop</a> 
@@ -141,6 +142,12 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data import</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-dictionary.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dictionary</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -154,20 +161,14 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./preliminary-analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preliminary analysis</span></span></a>
+  <a href="./data-prep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data prep</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./data-cleaning.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data cleaning</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./eda-post-cleaning.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">EDA post-cleaning</span></span></a>
+  <a href="./eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">EDA</span></span></a>
   </div>
 </li>
       </ul>
@@ -242,9 +243,9 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./visualize.html">Visualize</a></li><li class="breadcrumb-item"><a href="./eda-post-cleaning.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">EDA post-cleaning</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data-adquisition.html">Data adquisition</a></li><li class="breadcrumb-item"><a href="./data-dictionary.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dictionary</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-eda-post-cleaning" class="quarto-section-identifier"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">EDA post-cleaning</span></span></h1>
+<h1 class="title"><span id="sec-data-dictionary" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dictionary</span></span></h1>
 </div>
 
 
@@ -259,6 +260,241 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p><a href="#tbl-feature-table" class="quarto-xref">Table&nbsp;<span>4.1</span></a> muestra la primera parte del diccionario con los atributos del dataset que son generales</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="tbl-feature-table" class="anchored">
+<table class="table table-sm table-striped small">
+<caption>Table&nbsp;4.1: Features generales.</caption>
+<colgroup>
+<col style="width: 17%">
+<col style="width: 10%">
+<col style="width: 58%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">feature</th>
+<th style="text-align: left;">tipo_dato</th>
+<th style="text-align: left;">descripcion</th>
+<th style="text-align: left;">tabla</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">cll_prctg</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Porcentaje de tiempo que estuvo conectado a la celda.</td>
+<td style="text-align: left;">Métricas</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fct_srvy_dt</td>
+<td style="text-align: left;">date</td>
+<td style="text-align: left;">Día en que fue llenada la encuesta por el usuario</td>
+<td style="text-align: left;">Diagnóstico</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">bts_sh_nm</td>
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">Identificador de celda</td>
+<td style="text-align: left;">Métricas</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">msisdn_dd</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">Número de teléfono</td>
+<td style="text-align: left;">Diagnóstico</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">srvy_id</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">Identificador de encuesta</td>
+<td style="text-align: left;">Diagnóstico</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">cty_nm</td>
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">Ciudad</td>
+<td style="text-align: left;">Diagnóstico</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">trrtry_cmrcl_nm</td>
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">Región comercial</td>
+<td style="text-align: left;">Diagnóstico</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">trrtry_tf_nm</td>
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">Región de RF planning</td>
+<td style="text-align: left;">Diagnóstico</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">stt_nm</td>
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">Departamento al que más se conecta</td>
+<td style="text-align: left;">Diagnóstico</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">diag</td>
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">Variable respuesta con las categorías a predecir</td>
+<td style="text-align: left;">Diagnóstico</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>La <a href="#tbl-metricas-table" class="quarto-xref">Table&nbsp;<span>4.2</span></a> muestra las métricas de red que están asociadas a las categorías de diagnóstico.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="tbl-metricas-table" class="anchored">
+<table class="table table-sm table-striped small">
+<caption>Table&nbsp;4.2: Métricas de red.</caption>
+<colgroup>
+<col style="width: 23%">
+<col style="width: 10%">
+<col style="width: 67%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">feature</th>
+<th style="text-align: left;">tipo_dato</th>
+<th style="text-align: left;">descripcion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">rate_prb_dl</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Porcentaje de uso de bloques de recursos en el enlace descendente.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">throughput_dl</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Velocidad de descarga por dispositivo en Mbps.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">throughput_ul</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Velocidad de subida por dispositivo en Mbps.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">time_cl</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Porcentaje de tiempo en buen estado de carga de celda.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">thp_required_lte</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Porcentaje de tiempo con throughput requerido en LTE.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ra_ta_ue_index1</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Distancia y conexiones a la estacion base (indice 1).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ra_ta_ue_index2</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Conexiones generadas a cierta distancia (Indice 2).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ra_ta_ue_index3</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Conexiones generadas a cierta distancia (Indice 3).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ra_ta_ue_index4</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Conexiones generadas a cierta distancia (Indice 4).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ra_ta_ue_index5</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Conexiones generadas a cierta distancia (Indice 5).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ra_ta_ue_index6</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Conexiones generadas a cierta distancia (Indice 6).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ra_ta_ue_index7</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Conexiones generadas a cierta distancia (Indice 7).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ra_ta_ue_total</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Total de conexiones de datos o llamadas.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">time_lte</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Tiempo conectado a LTE.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">avlblty</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Tiempo de navegacion sin fallas.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">avlblty_tckt_2hrs</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Tickets de mas de 2 horas sobre total de tickets.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">unvlbty_ttl_hrs_prop</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Horas de indisponibilidad del usuario.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">erab_success_rate</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Tasa de exito en la configuracion de E-RAB en LTE.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">rrc_success_rate</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Tasa de exito en la conexion RRC en LTE.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">corrected_cqi</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Indice de calidad de celda.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">l_ul_interference_avg</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Interferencia promedio en el enlace ascendente.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">volte_erlang</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Volumen de trafico VoLTE en erlangs.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">modulation_16qam_ratio</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Uso de modulacion 16QAM en la transferencia de datos.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">modulation_64qam_ratio</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Uso de modulacion 64QAM en la transferencia de datos.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">modulation_qpsk_ratio</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Uso de modulacion QPSK en la transferencia de datos.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 
 
 
@@ -567,13 +803,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./data-cleaning.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data cleaning</span></span>
+      <a href="./data-import.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data import</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./modeling.html" class="pagination-link">
-        <span class="nav-page-text">Modeling</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./visualize.html" class="pagination-link">
+        <span class="nav-page-text">Visualize</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

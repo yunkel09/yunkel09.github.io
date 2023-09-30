@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="William Chavarría, André Rodas, Francisco Manjon y Pablo Armas">
 
 <title>Close the Loop - 3&nbsp; Data import</title>
 <style>
@@ -20,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,7 +65,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./visualize.html" rel="next">
+<link href="./data-dictionary.html" rel="next">
 <link href="./data-collection.html" rel="prev">
 <link href="./fav.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js"></script>
@@ -71,7 +106,7 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-sidebar floating">
+<body class="nav-sidebar docked">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -92,7 +127,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Close the Loop</a> 
@@ -141,6 +176,12 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data import</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-dictionary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dictionary</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -154,20 +195,14 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./preliminary-analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preliminary analysis</span></span></a>
+  <a href="./data-prep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data prep</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./data-cleaning.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data cleaning</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./eda-post-cleaning.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">EDA post-cleaning</span></span></a>
+  <a href="./eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">EDA</span></span></a>
   </div>
 </li>
       </ul>
@@ -259,6 +294,103 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p>Una vez recolectados los datos de diversas fuentes, el siguiente paso crucial fue importarlos al entorno de trabajo donde se desarrolló el modelo analítico. Para este propósito, se utilizó el lenguaje de programación R, aprovechando su robusto ecosistema de bibliotecas y herramientas para el manejo de datos. En particular, se empleó la biblioteca purrr para iterar sobre los conjuntos de datos y cargarlos eficientemente en la memoria.</p>
+<p>Se almacenaron tres tablas principales en el entorno de R: “diagnóstico”, “métricas” y “disponibilidad”, que se asignaron a los objetos diag_00, metr_00 y disp_00, respectivamente. La importación de estos conjuntos de datos se realizó en un solo ciclo utilizando la función <code>purrr::map()</code>, lo que permitió una carga más rápida y eficiente de los datos en el entorno de trabajo. Este enfoque no solo optimizó el tiempo de carga, sino que también facilitó la posterior manipulación y análisis de los datos.</p>
+<p>Este método de importación de datos aseguró que todas las tablas estuvieran disponibles para el análisis subsiguiente, permitiendo una transición fluida hacia las etapas de limpieza de datos y modelado.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>archivos <span class="ot">&lt;-</span> <span class="fu">dir_ls</span>(<span class="at">type =</span> <span class="st">"file"</span>, <span class="at">path =</span> <span class="st">"data"</span>, <span class="at">glob =</span> <span class="st">"*.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(diag_00, disp_00, metr_00) <span class="sc">%&lt;-%</span> (archivos <span class="sc">|&gt;</span> <span class="fu">map</span>(read_csv))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>diag_00 <span class="sc">|&gt;</span> <span class="fu">glimpse</span>(<span class="at">width =</span> <span class="dv">70</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 72,644</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Columns: 38</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ fct_srvy_dt         &lt;dbl&gt; 20220103, 20221026, 20221119, 20230614, …</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ bs_ln_cd            &lt;chr&gt; "PRE", "HYB", "PRE", "PRE", "PRE", "HYB"…</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ bs_ln_nm            &lt;chr&gt; "PREPAID", "POSTPAID HYBRID", "PREPAID",…</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ msisdn_dd           &lt;dbl&gt; 51684654, 50431166, 45707712, 37266836, …</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ srvy_id             &lt;dbl&gt; 539124531, 685399274, 698188789, 8119437…</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ nps_mdll            &lt;dbl&gt; 8, 10, 0, 10, 10, 10, 9, 5, 9, 9, 10, 10…</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ class_1             &lt;chr&gt; NA, NA, "RENDIMIENTO", NA, NA, NA, NA, "…</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ class_2             &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ class_3             &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ users_class         &lt;dbl&gt; 0, 1, -1, 1, 1, 1, 1, -1, 1, 1, 1, 1, 1,…</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ macro_desc          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ class_desc          &lt;chr&gt; "NEUTRO", "PROMOTOR", "DETRACTOR", "PROM…</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ bts_sh_nm_1         &lt;chr&gt; "NBVP009C", "LGUA661B", "WGUA356A", "LSC…</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ trrtry_tf_nm        &lt;chr&gt; "NOR-ORIENTE", "CENTRAL", "CENTRAL", "SU…</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ trrtry_cmrcl_nm     &lt;chr&gt; "OCCIDENTE", "CENTRAL", "CENTRAL", "OCCI…</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ stt_nm              &lt;chr&gt; "BAJA VERAPAZ", "GUATEMALA", "GUATEMALA"…</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ cty_nm              &lt;chr&gt; "CUBULCO", "AMATITLAN", "SAN JOSE PINULA…</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ segmento            &lt;chr&gt; "TBD", "TBD", "TBD", "TBD", "TBD", "TBD"…</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ tipo_cobertura      &lt;chr&gt; "TBD", "TBD", "TBD", "TBD", "TBD", "TBD"…</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ time_lte            &lt;dbl&gt; 0.9904817, 0.9884153, 0.0000000, 0.93261…</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ time_3g             &lt;dbl&gt; 0.004485764, 0.011045974, 0.987307939, 0…</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ cell_load_lte       &lt;dbl&gt; NA, 0.9655166, NA, 1.0000000, 0.2432869,…</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ cell_load_3g        &lt;dbl&gt; 1.00000000, 1.00000000, 1.00000000, 0.82…</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ thp_required_lte    &lt;dbl&gt; NA, 1.0000000, NA, 1.0000000, 0.3492566,…</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ thp_required_3g     &lt;dbl&gt; 1.00000000, 0.97479047, 0.99950695, 0.48…</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ prfrmnc             &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ fct_dt              &lt;dbl&gt; 20230820, 20230820, 20230820, 20230820, …</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ fct_dt_ctl          &lt;date&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ msisdn_dd_ctl       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ srvy_id_ctl         &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ cmmnt_clnt_1        &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ cmmnt_clnt_2        &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ diag                &lt;chr&gt; "no_diag", "no_diag", "no_diag", "no_dia…</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ diag_dtl            &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ cmmnt_anlyst        &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ cmnt_anlyst_on_clnt &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ month               &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ rk                  &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>metr_00 <span class="sc">|&gt;</span> <span class="fu">glimpse</span>(<span class="at">width =</span> <span class="dv">70</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 273,434</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Columns: 27</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ fct_srvy_dt            &lt;dbl&gt; 20220103, 20220105, 20220105, 2022010…</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ msisdn_dd              &lt;dbl&gt; 48752970, 46176730, 30484168, 4509420…</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ srvy_id                &lt;dbl&gt; 542177126, 543198907, 543386621, 5439…</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ r1                     &lt;dbl&gt; 1, 4, 3, 2, 1, 4, 2, 3, 2, 5, 5, 1, 3…</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ cll_prctg              &lt;dbl&gt; 0.824634392, 0.034284450, 0.151509464…</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ bts_sh_nm              &lt;chr&gt; "LSMR065B", "5PTN071B", "KPTN639A", "…</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ rate_prb_dl            &lt;dbl&gt; 0.95210, 0.09452, 0.97424, 0.92788, 0…</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ cell_load              &lt;dbl&gt; 2.20687884, 0.10004342, 3.26123202, 0…</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ rrc_success_rate       &lt;dbl&gt; 0.9780692, 0.9967742, 0.9980931, 0.99…</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ erab_success_rate      &lt;dbl&gt; 0.9838215, 0.9984152, 0.9974223, 0.99…</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ service_drop_rate      &lt;dbl&gt; 0.008424494, 0.001610306, 0.001427862…</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ l_ul_interference_avg  &lt;dbl&gt; -114, -118, -119, -117, -117, -114, -…</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ thoughput_dl           &lt;dbl&gt; 806.6095, 12050.7719, 729.3367, 3163.…</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ thpughput_ul           &lt;dbl&gt; 157.78615, 52.38569, 184.64894, 1076.…</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ corrected_cqi          &lt;dbl&gt; 7, 9, 11, 10, 11, 9, 10, 0, 0, 11, 8,…</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index1        &lt;dbl&gt; 0.03724291, 0.14681440, 0.00000000, 0…</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index2        &lt;dbl&gt; 0.011535689, 0.101391650, 0.000000000…</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index3        &lt;dbl&gt; 0.057750188, 0.230932203, 0.000000000…</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index4        &lt;dbl&gt; 0.239936042, 0.414285714, 0.000093600…</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index5        &lt;dbl&gt; 0.296958855, 0.010638298, 0.081905479…</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index6        &lt;dbl&gt; 0.192351896, 0.019656020, 0.642143143…</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index7        &lt;dbl&gt; 0.129028815, 0.001472754, 0.276889244…</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_total         &lt;dbl&gt; 9709, 470, 10736, 6225, 8972, 4737, 1…</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ volte_erlang           &lt;dbl&gt; 4.546555556, 0.006083333, 1.796555556…</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ modulation_64qam_ratio &lt;dbl&gt; 0.21873159, 0.46142123, 0.63927274, 0…</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ modulation_16qam_ratio &lt;dbl&gt; 0.32449740, 0.40558635, 0.26136434, 0…</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ modulation_qpsk_ratio  &lt;dbl&gt; 0.461401863, 0.107595772, 0.099906462…</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>disp_00 <span class="sc">|&gt;</span> <span class="fu">glimpse</span>(<span class="at">width =</span> <span class="dv">70</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 72,426</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Columns: 8</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ msisdn_dd             &lt;dbl&gt; 52079871, 59075914, 53184894, 40893852…</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ srvy_id               &lt;dbl&gt; 666820295, 636635685, 708482502, 54633…</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ time_cl               &lt;dbl&gt; 0.9567349, 0.9954649, 0.9949580, 0.481…</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ time_lte              &lt;dbl&gt; 0.9584363, 0.9730749, 0.9537411, 0.982…</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ time_thrgpt           &lt;dbl&gt; 0.8172875458, 0.6161637281, 0.63594658…</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ avlblty               &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ avlblty_tckt_2hrs     &lt;dbl&gt; 0.00000000, 0.00000000, 0.00000000, 0.…</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ unvlblty_ttl_hrs_prop &lt;dbl&gt; 1.305747e+01, 1.427198e+01, 4.607728e+…</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 
@@ -572,8 +704,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./visualize.html" class="pagination-link">
-        <span class="nav-page-text">Visualize</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./data-dictionary.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dictionary</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
