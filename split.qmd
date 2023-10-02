@@ -1,6 +1,17 @@
 
 # Split {#sec-split}
 
+## Snooping bias
+
+Para evitar el *snooping bias* es necesario poder dividir el conjunto total
+en tres partes: entrenamiento, validación y prueba.  Esto se debe a que si
+se realiza el EDA con todos los datos, se corre el riesgo de que esto influya
+en la selección de los modelos.  Las vistas preliminares de la sección
+anterior no generan problemas, sin embargo es importante asegurarse de que
+cualquier decisión que tomemos se base únicamente en lo visto en el conjunto
+de entrenamiento [@geron_hands-machine_2017]
+
+
 ```{r}
 #| echo: false
 source("_common.R")
@@ -12,6 +23,8 @@ source("_load.R")
 #| echo: false
 ctl_01 <- read_fst("data/ctl_01.fst") |> as_tibble()
 ```
+
+## Data spending
 
 Con la función `initial_validation_split()` se puede crear una división triple
 de los datos en un conjunto de entrenamiento, validación y prueba. Se realizará

@@ -1,1 +1,37 @@
 # Cross-validation {#sec-cross-validation}
+
+```{r}
+#| echo: false
+source("_common.R")
+source("_functions.R")
+source("_load.R")
+```
+
+```{r}
+#| echo: false
+datos_split <- board_folder(path = "split_data")
+```
+
+
+```{r}
+#| echo: false
+ctl_split <- pin_read(board = datos_split, name = "split_datos")
+ctl_train <- training(ctl_split)
+```
+
+La validación cruzada de grupo V crea divisiones de los datos en función de
+alguna variable de agrupación (que puede tener más de una fila asociada). La
+función puede crear tantas divisiones como valores únicos de la variable de
+agrupación o puede crear un conjunto más pequeño de divisiones donde más de un
+grupo queda fuera a la vez. Un uso común de este tipo de remuestreo es cuando
+se tienen medidas repetidas del mismo tema.
+
+```{r}
+# ctl_folds <- group_vfold_cv(
+#  data = ctl_train, 
+#  group = "msisdn_dd", 
+#  v = 5,
+#  balance = "observations",
+#  strata = "diag")
+```
+

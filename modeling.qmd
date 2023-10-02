@@ -1,1 +1,12 @@
 # Modeling {#sec-modeling .unnumbered}
+
+El framework a utilizar para el modelado será tidymodels.  En tidymodels el
+preprocesamiento y el modelado están integrados a través de algo llamado
+*workflow*, el cual tiene similitudes con los *pipelines* de Python.
+
+Esta integración de preprocesamiento permite que todo el feature-engineering
+se realice en algo llamado receta, a lo que después se le pueden pasar las
+especificaciones de modelos que sean necesarias. 
+
+
+![Modelado y preprocesamiento](imagenes/proper-workflow.svg)

@@ -9,6 +9,12 @@ source("_load.R")
 
 ```{r}
 #| echo: false
+datos_split <- board_folder(path = "split_data")
+```
+
+
+```{r}
+#| echo: false
 ctl_split <- pin_read(board = datos_split, name = "split_datos")
 ctl_train <- training(ctl_split)
 ```
@@ -918,8 +924,8 @@ corm |>
  labs(title = "Matriz de correlación", 
       subtitle = "Correlaciones mayores a 0.75") +
  yunkel +
- theme(axis.text.y = element_text(size = 13),
-       axis.text.x = element_text(size = 13, angle = 45, hjust = 1))
+ theme(axis.text.y = element_text(size = 14),
+       axis.text.x = element_text(size = 16, angle = 45, hjust = 1))
 ```
 
 ```{r}
