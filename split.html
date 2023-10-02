@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -260,6 +294,37 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p>Con la función <code>initial_validation_split()</code> se puede crear una división triple de los datos en un conjunto de entrenamiento, validación y prueba. Se realizará estratificación sobre nuestra variable objetivo <code>diag</code>. Dejaremos las proporciones por defecto debido a que tenemos 26559 observaciones. El valor predeterminado de <code>prop = c(0.6, 0.2)</code> lo que significa que el 60% de los datos se asignarán al conjunto de entrenamiento, un 20% a validación y el 20% restante al conjunto de prueba.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ctl_split <span class="ot">&lt;-</span> ctl_01 <span class="sc">|&gt;</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">initial_validation_split</span>(<span class="at">strata =</span> diag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ctl_split</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;Training/Validation/Testing/Total&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;15934/5312/5313/26559&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Podemos acceder a estos conjuntos de la siguiente manera:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">training</span>(ctl_split) <span class="sc">|&gt;</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">head</span>()</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 35</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   fct_srvy_dt msisdn_dd   srvy_id trrtry_tf_nm  trrtry_cmrcl_nm stt_nm    cty_nm</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;date&gt;          &lt;int&gt;     &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;           &lt;chr&gt;     &lt;chr&gt; </span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 2022-01-01   48770669 541309979 NOR_ORIENTE   ORIENTE         IZABAL    EL_ES…</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 2022-01-01   48770669 541309979 NOR_ORIENTE   ORIENTE         IZABAL    EL_ES…</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 2022-01-02   30887841 541779025 SUR_OCCIDENTE OCCIDENTE       CHIMALTE… CHIMA…</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 2022-01-02   30887841 541779025 SUR_OCCIDENTE OCCIDENTE       CHIMALTE… CHIMA…</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 2022-01-02   30887841 541779025 SUR_OCCIDENTE OCCIDENTE       CHIMALTE… CHIMA…</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 2022-01-02   33150718 541789606 SUR_ORIENTE   ORIENTE         JUTIAPA   JUTIA…</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 28 more variables: thp_required_lte &lt;dbl&gt;, bts_sh_nm &lt;chr&gt;,</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   cll_prctg &lt;dbl&gt;, rate_prb_dl &lt;dbl&gt;, rrc_success_rate &lt;dbl&gt;,</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   erab_success_rate &lt;dbl&gt;, l_ul_interference_avg &lt;dbl&gt;, thoughput_dl &lt;dbl&gt;,</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   thpughput_ul &lt;dbl&gt;, corrected_cqi &lt;dbl&gt;, ra_ta_ue_index1 &lt;dbl&gt;,</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   ra_ta_ue_index2 &lt;dbl&gt;, ra_ta_ue_index3 &lt;dbl&gt;, ra_ta_ue_index4 &lt;dbl&gt;,</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   ra_ta_ue_index5 &lt;dbl&gt;, ra_ta_ue_index6 &lt;dbl&gt;, ra_ta_ue_index7 &lt;dbl&gt;,</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   ra_ta_ue_total &lt;dbl&gt;, volte_erlang &lt;dbl&gt;, modulation_64qam_ratio &lt;dbl&gt;, …</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 
