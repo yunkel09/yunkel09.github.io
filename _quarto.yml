@@ -36,11 +36,11 @@ book:
     - part: visualize.qmd
       chapters:
         - data-prep.qmd
+        - split.qmd
         - eda.qmd
 
     - part: modeling.qmd
       chapters:
-        - split.qmd
         - cross-validation.qmd
         - preprocessing.qmd
         - model-specification.qmd
@@ -64,4 +64,4 @@ format:
       - ctl.scss
 
     author-meta: "William Chavarría, André Rodas, Francisco Manjon y Pablo Armas"
-    callout-appearance: simple
+    callout-appearance: default

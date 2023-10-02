@@ -45,7 +45,7 @@ import::from(ggstatsplot,   ggbetweenstats)
 import::from(viridis,       scale_fill_viridis)
 import::from(gtools,        combinations)
 import::from(colorblindr,   scale_fill_OkabeIto)
-import::from(magrittr,      "%$%",  ex = extract, .into = "operadores")
+import::from(bestNormalize, bestNormalize, step_best_normalize)
 pacman::p_load(
  knitr,
  paletteer,
@@ -55,8 +55,11 @@ pacman::p_load(
  gtExtras,
  glue,
  inspectdf,
+ corrr,
  DataExplorer,
  ggpackets,
+ pins,
+ tidymodels,
  tidyverse)
 
 

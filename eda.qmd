@@ -7,19 +7,19 @@ source("_functions.R")
 source("_load.R")
 ```
 
-
 ```{r}
 #| echo: false
-ctl_01 <- read_fst("data/ctl_01.fst") |> as_tibble()
+ctl_split <- pin_read(board = datos_split, name = "split_datos")
+ctl_train <- training(ctl_split)
 ```
 
 ## Estructura
 
 El proceso de preparación y limpieza dió como resultado un único set de datos,
-el cual consta de `r nrow(ctl_01)` filas y `r ncol(ctl_01)` columnas.
+el cual consta de `r nrow(ctl_train)` filas y `r ncol(ctl_train)` columnas.
 
 ```{r}
-ctl_01 |> glimpse(width = 71)
+ctl_train |> glimpse(width = 71)
 ```
 
 ```{r}
@@ -27,7 +27,7 @@ ctl_01 |> glimpse(width = 71)
 #| code-summary: "Mostrar Código"
 #| label: tbl-ctl
 #| tbl-cap: "ctl"
-ctl_01 |> 
+ctl_train |> 
  slice_head(n = 5) |> 
  gt() |> 
  tab_header(
@@ -51,7 +51,7 @@ ctl_01 |>
 #| fig-width: 9
 #| fig-cap: Se puede apreciar que la gran mayoría de las columnas están completas. Un 80% son *features* de tipo continuo y el restante son de tipo categórico.  Se requiere explorar los valores faltantes con mayor detalle.
 plot_intro(
- ctl_01,ggtheme = yunkel,
+ ctl_train,ggtheme = yunkel,
  title = "Resumen Descriptivo",
  geom_label_args = list(label.size = 0.8, size = 7),
  theme_config = list(
@@ -66,7 +66,7 @@ plot_intro(
 #| label: tbl-repetidos
 #| tbl-cap: "Valores repetidos"
 #| column: page
-ctl_01 |>
+ctl_train |>
  get_dupes(msisdn_dd) |> 
  head(5) |> 
  select(
@@ -94,7 +94,7 @@ celular del usuario) se repite, debido a que contamos con datos de
 #| code-fold: true
 #| code-summary: "Código"
 #| fig-width: 8
-plot_missing(ctl_01, missing_only = TRUE,
+plot_missing(ctl_train, missing_only = TRUE,
  ggtheme = yunkel,
  title = "Valores Faltantes",
  geom_label_args = list(label.size = 0.8, size = 8),
@@ -106,7 +106,7 @@ plot_missing(ctl_01, missing_only = TRUE,
 
 ```{r}
 # crear set de datos solo con variables numéricas
-ctl_n <- ctl_01 |>
+ctl_n <- ctl_train |>
  select(where(is.numeric), -c(msisdn_dd, srvy_id))
 ```
 
@@ -149,7 +149,7 @@ relaciones entre los predictores y la respuesta [@kuhn_feature_2020].
 #| code-summary: "Código"
 #| label: fig-depe
 #| fig-cap: Distribución de la variable dependiente
-ctl_01 |> 
+ctl_train |> 
  barra(diag) +
  theme(legend.position = "none") +
  labs(title = "Clasificación variable politómica")
@@ -162,7 +162,7 @@ a un rendimiento deficiente en la clasificación de otras clases.  La aplicació
 de técnicas de remuestreo para balancear las clases será clave en la fase de
 preprocesamiento.
 
-### Variables numéricas
+### Variables numéricas {#sec-distribuiciones}
 
 Analizar la distribución de cada predictor nos puede orientar sobre si
 necesitamos hacer ingeniería de características mediante transformaciones antes
@@ -439,8 +439,7 @@ dist_predictores[25:26] |>
 la de disponibilidad y representan partes de la disponibilidad. Su sesgo es
 opuesto.
 
-::: {.callout-tip}
-### Preprocesamiento de datos de perfil
+
 Como se señaló en la sección @sec-mr, los datos de perfil demandan un
 preprocesamiento especializado. Los modelos seleccionados deben ser robustos
 ante este tipo de datos y la presencia de valores atípicos. Por esta razón, es
@@ -448,12 +447,12 @@ recomendable considerar modelos basados en árboles, que son inherentemente más
 tolerantes a estas características. Además, se explorarán diversas
 transformaciones de las variables para evaluar y comparar su impacto en el
 rendimiento del modelo.
-:::
+
 
 ### Variables categóricas
 
 ```{r}
-ctl_c <- ctl_01 |>
+ctl_c <- ctl_train |>
  select(where(is.character), -diag) 
 ```
 
@@ -504,6 +503,8 @@ ctl_c |>
 
 ### Dependiente vs numéricas
 
+#### Gráficos de confianza
+
 Debido al desbalance de clases presente en la variable respuesta, será
 necesario reflejar claramente el grado de incertidumbre que esto ocasiona.  Si
 una clase tiene más observaciones que otra entonces la comparación no sería
@@ -530,6 +531,15 @@ El intervalo da una idea de dónde podrían caer las verdaderas medias de
 `thp_required_lte` para cada categoría si tuvieras acceso a toda la población,
 en lugar de solo una muestra.
 
+::: {.callout-note}
+#### ¿Por qué no solo usar boxplots?
+Aunque los boxplots ofrecen una visión más completa de la distribución de los
+datos, no proporcionan el mismo nivel de detalle sobre la incertidumbre en torno
+a la media que los gráficos de confianza. Usar ambos proporciona una visión más
+completa de los datos. Los gráficos de confianza dan detalles sobre la media y
+su incertidumbre, mientras que los boxplots muestran la distribución completa.
+:::
+
 ```{r}
 # Función para calcular la media y el intervalo de confianza
 mean_ci <- function(df, metrica, conf.level = 0.95) {
@@ -545,7 +555,7 @@ mean_ci <- function(df, metrica, conf.level = 0.95) {
 ```{r}
 # Función para crear un dataframe con los intervalos por cada métrica
 calcular_ci <- function(kpi) {
- ctl_01 |> 
+ ctl_train |> 
  group_by(diag) %>%
  do(mean_ci(., kpi)) %>%
  ungroup() %>%
@@ -683,7 +693,7 @@ muy cercana.  En este caso, amerita evaluar si esta diferencia es significativa.
 #| fig-width: 8
 #| label: fig-throuput-dl-anova
 #| fig-cap: ANOVA entre-sujetos
-bx(.df = ctl_01, .x = diag, .y = thoughput_dl)
+bx(.df = ctl_train, .x = diag, .y = thoughput_dl)
 ```
 
 En la parte superior de la @fig-throuput-dl-anova vemos el resultado de la
@@ -739,12 +749,67 @@ pero siempre cobertura es menor, hasta que finalmente en índice 6 ciertas
 conexiones se pueden etiquetar tanto como problemas de capacidad como de
 cobertura.
 
+#### Variabilidad y rango
+
+Debido a que 
+
+```{r}
+#| eval: false
+ctl_normalized <- ctl_train |>
+ select(where(is.numeric), 
+  -c(msisdn_dd, srvy_id), diag) |> 
+ recipe(diag ~ ., data = _) |> 
+ step_best_normalize(all_predictors(), -all_nominal())  |> 
+ ver()
+```
+
+
+```{r}
+#| eval: false
+#| echo: false
+write_fst(ctl_normalized, path = "data/ctl_normalized.fst", compress = 0)
+```
+
+```{r}
+#| echo: false
+ctl_normalized <- read_fst("data/ctl_normalized.fst") |> 
+ as_tibble()
+```
+
+
+```{r}
+#| fig-height: 10
+#| fig-width: 8
+#| label: fig-boxplots
+#| fig-cap: Análisis de variabilidad, rango y atípicos
+#| warning: false
+ctl_normalized |> 
+ select(-c(avlblty, avlblty_tckt_2hrs)) |> 
+ plot_boxplot(
+  by = "diag", 
+  ncol = 3,
+  geom_boxplot_args = list("outlier.color" = "red"), 
+  ggtheme = drako, 
+  theme_config = list(strip.text = element_text(size = 30)))	
+```
+
+Usamos el paquete {bestNormalize} para transformar los datos
+y mejorar la visualización de los boxplots. Aunque los gráficos de confianza son
+más detallados, los boxplots también muestran variaciones importantes dentro de
+cada categoría. El rango intercuartil (IQR) nos indica que hay más variabilidad
+en ciertos features. En particular, las variables `corrected_cqi`,
+`interferencia` y `time_cl` muestran menos variación. Como se discutió en la
+sección @sec-distribuiciones, la variable 64QAM sigue una distribución cercana a
+la normal.  Para tratar los valores atípicos podemos considerar el aplicar una
+transformación llamada *spatial sign* [ver @kuhn_feature_2020] y
+[@kuhn_applied_2013] o bien usar modelos robustos a valores atípicos.
+
 ### Dependiente vs categóricas
 
 
 ```{r}
 # Seleccionar predictores de tipo factor y dejar top-10 para ciudad
-ctl_fc <- ctl_01 |> 
+ctl_fc <- ctl_train |> 
  select(where(is.character), -bts_sh_nm, time_cl) |> 
  mutate(ciudad = fct_lump(cty_nm, n = 10, other_level = "OTRO")) |> 
  select(-cty_nm) |> 
@@ -774,12 +839,15 @@ tiene_diag <- function(x) str_detect(x, pattern = "diag")
 
 ```{r}
 # Generar mosaicos
-lista_mosaicos <- map2(.x = comb[, 1],
-                       .y = comb[, 2], ~ graficar_mosaicos(df = ctl_fc,
-                                                           f1 = .x,
-                                                           f2 = .y,
-                                                           ra = 0.3,
-                                                           leyenda = TRUE)) |>
+lista_mosaicos <- map2(
+ .x = comb[, 1],
+ .y = comb[, 2], 
+ ~ graficar_mosaicos(
+  df = ctl_fc,
+  f1 = .x,
+  f2 = .y,
+  ra = 0.3,
+  leyenda = TRUE)) |>
  set_names(nm) |> 
  keep_at(tiene_diag)
 ```
@@ -822,17 +890,76 @@ walk(lista_mosaicos[4], ~ print(.x))
 
 ### Análisis de correlación
 
+Se debe realizar la inspección de las correlaciones que se encuentren arriba
+de 0.75 en valor absoluto.  Este umbral es sugerido por algunos autores
+[@kuhn_applied_2013, pag 87].
+
+```{r}
+# La correlación de Spearman es más sólida para los valores
+# atípicos que la correlación de Pearson.
+corm <- ctl_n |>
+ correlate(
+  use    = "pairwise.complete.obs", 
+  method = "spearman", 
+  quiet  = TRUE)
+```
+
 ```{r}
 #| fig-height: 6
 #| fig-width: 8
-#| echo: false
+#| code-fold: true
+#| code-summary: "Mostrar Código"
 #| label: fig-correlacion
 #| fig-cap: Análisis de correlación
-ctl_n |> 
- drop_na() |> 
- plot_correlation(type = "c", ggtheme = drako)
+corm |> 
+ rearrange() |> 
+ shave() |> 
+ rplot(colours = c("red", "green")) +
+ labs(title = "Matriz de correlación", 
+      subtitle = "Correlaciones mayores a 0.75") +
+ yunkel +
+ theme(axis.text.y = element_text(size = 13),
+       axis.text.x = element_text(size = 13, angle = 45, hjust = 1))
 ```
 
+```{r}
+matriz_reducida <- corm |> 
+ rearrange() |> 
+ shave() |> 
+ stretch(na.rm = TRUE) |> 
+ filter(abs(r) >= .75)
+```
+
+
+```{r}
+#| code-fold: true
+#| code-summary: "Mostrar Código"
+#| label: tbl-altas-correlaciones
+#| tbl-cap: "high-r"
+matriz_reducida |> 
+ arrange(r) |> 
+ gt() |> 
+ gt_theme_538() |> 
+ tab_header(
+  title = html("<p style='color:#25a7f0;'><strong>Correlaciones altas</strong></p>"),
+    subtitle = md("Mayores a 0.75")
+  ) |> 
+ data_color(
+    columns = r,
+    method = "numeric",
+    palette = "RdYlGn", 
+    reverse = TRUE
+  ) |> 
+ tab_style(
+    style = list(cell_text(align = "center"), v_align = "top"),
+    locations = cells_column_labels(columns = everything())
+ )
+```
+
+La correlación de Pearson es mayor que la de Spearman, lo que podría significar
+que existan correlaciones no lineales entre los predictores y la variable
+objetivo.  Las interacciones complejas entre predictores es parte de lo
+esperado dado el contexto brindado por los SMEs.
 
 
 

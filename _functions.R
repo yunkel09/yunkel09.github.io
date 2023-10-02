@@ -193,7 +193,8 @@ graficar_mosaicos <- function(df, f1, f2, leyenda = F, ra = 0.4) {
   }
 }
 
-
+# preparar y desplegar receta
+ver <- . %>% prep() %>% juice()
 
 
 

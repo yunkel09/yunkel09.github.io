@@ -1,1 +1,55 @@
+
 # Split {#sec-split}
+
+```{r}
+#| echo: false
+source("_common.R")
+source("_functions.R")
+source("_load.R")
+```
+
+```{r}
+#| echo: false
+ctl_01 <- read_fst("data/ctl_01.fst") |> as_tibble()
+```
+
+Con la función `initial_validation_split()` se puede crear una división triple
+de los datos en un conjunto de entrenamiento, validación y prueba. Se realizará
+estratificación sobre nuestra variable objetivo `diag`. Dejaremos las
+proporciones por defecto debido a que tenemos `r nrow(ctl_01)` observaciones.
+El valor predeterminado de `prop = c(0.6, 0.2)` lo que significa que el 60% de
+los datos se asignarán al conjunto de entrenamiento, un 20% a validación y el
+20% restante al conjunto de prueba.
+
+```{r}
+ctl_split <- ctl_01 |> 
+ initial_validation_split(strata = diag)
+```
+
+```{r}
+ctl_split
+```
+
+Podemos acceder a estos conjuntos de la siguiente manera:
+
+```{r}
+training(ctl_split) |> 
+ head()
+```
+
+```{r}
+#| echo: false
+datos_split <- board_folder(path = "split_data")
+```
+
+```{r}
+#| echo: false
+pin_write(
+ board = datos_split,
+ x     = ctl_split,
+ name  = "split_datos",
+ type  = "rds",
+ title = "division_datos_ctl",
+ description = "three_way_split")
+```
+
