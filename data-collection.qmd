@@ -52,6 +52,13 @@ La tabla maestra diagnóstico contiene...
 
 La tabla de métricas se caracteriza por ...
 
+Existen métricas de tipo **multicausalidad**.  Es posible que una métrica tenga
+efectos en múltiples categorías. Por ejemplo, un problema de optimización
+podría llevar a problemas de cobertura, y viceversa.
+
+
+- **thp_required_lte:** Porcentaje de tiempo que mantiene el throughput
+requerido en LTE.
 
 ## Disponibilidad
 

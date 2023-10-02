@@ -1,3 +1,10 @@
 # Visualize {#sec-visualize .unnumbered}
 
-kdkdkd
+El objetivo clave en todo lo que hacemos en el proceso de modelado es encontrar
+formas fiables de explicar las variaciones en la variable respuesta. Encontrar
+patrones entre los predictores que se relacionan con la respuesta implica
+elegir un esquema de remuestreo para evitar el sobreajuste, seleccionar una
+métrica de rendimiento, ajustar y entrenar varios modelos, y comparar su
+desempeño para ver cuál es el mejor. Cuando tenemos un nuevo conjunto de datos,
+es fácil querer saltar directo al modelado predictivo para ver si logramos
+rápidamente un modelo que cumpla con las expectativas de rendimiento. 

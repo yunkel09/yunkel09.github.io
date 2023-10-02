@@ -201,8 +201,6 @@ de la columna `diag`
 10. Remover la columna `class_desc` ya que puede causar *data leakage*.
 11. Remover duplicados, dejando únicamente un usuario y una encuesta única.
 
-La tabla @tbl-diagnostico muestra los primeros cinco registros y la totalidad
-de sus columnas.
 
 ## Métricas
 
