@@ -224,8 +224,8 @@ dist_predictores[3:4] |>
 una alta demanda de recursos y potencialmente llevar a una degradación del
 rendimiento de la red. El comportamiento bimodal podría ser un indicio de que
 hay partes de la red que tienen una utilización de recursos muy baja, es decir,
-debido a sub-utilización.  Sería beneficioso analizar en que partes de la red
-se tiene este rango (0.00 - 0.05) de utilización como parte del análisis de QA.
+debido a sub-utilización.  El comportamiento bimodal es correcto posterior a la
+entrevista con los SMEs.
 
 - **rrc_success_rate:** En la distribución vemos que la gran mayoría de usuarios
 presentan una alta tasa de éxito en cuanto a las conexiones RRC (Radio
@@ -258,7 +258,8 @@ número menor (más negativo) generalmente indica menos interferencia, lo cual e
 positivo para el rendimiento de la red. Se aprecia un comportamiento bimodal lo
 que podría ser un indicio de celdas problemas muy serios o que están
 desconfiguradas. Se debe investigar si es un error en los datos o si son casos
-particulares.
+particulares.  Los valores atípicos pueden afectar más la transmisión en los
+escenarios donde esta última va por microondas.
 
 ```{r}
 #| echo: false
@@ -271,7 +272,8 @@ dist_predictores[7:8] |>
 - **throughput_dl:** Mide la velocidad de descarga por Unidad de Equipo de 
 Usuario en una red celular, generalmente en Mbps. Según la gráfica, el downlink
 se ubica en su mayoría arriba de los 25Mbps, lo cual es esperado.  Lo que es
-necesario analizar es el throughput_dl menor a 2.7 Mbps.
+necesario analizar es el throughput_dl menor a 2.7 Mbps. Una gran parte de
+los usuarios se encuentran por debajo de este umbral.
 
 - **throughput_ul:** Mide la velocidad de transmisión de datos del dispositivo
 móvil a la estación base, generalmente también en Mbps. Es normal observar
@@ -297,8 +299,9 @@ los usuarios. Como política, el departamento de QA definió un umbral crítico 
 7, significando que todo lo que esté por debajo de dicho umbral es malo. Debido
 a la naturaleza discreta de la distribución de estos valores, observamos que la
 superposición de densidad aparenta multimodalidad, sin embargo,
-no es así.  Se debe investigar las observaciones que tienen un valor de cero en
-esta métrica, ya que son atípicos importantes.
+no es así.  Las celdas con valores atípicos inferiores a 1 es porque se
+encuentran en tunning, normalmente porque empiezan con número o porque aun no
+le han cambiado la etiqueta.
 
 - **ra_ta_ue_index1:** Es una métrica que, en función de distintos índices,
 indica tanto la distancia aproximada entre la estación base y el dispositivo
@@ -315,6 +318,7 @@ dist_predictores[11:12] |>
  reduce(.f = `+`)
 ```
 
+TA 2 está a un radio de 500 mts
 
 ```{r}
 #| echo: false
@@ -375,6 +379,14 @@ hay un comportamiento bimodal que puede indicar que en ciertas celadas o bien
 ubicaciones geográficas, hay pocos usuarios utilizando este tipo de modulación
 de mayor capacidad.  Dejando de lado el valor atípico, se observa que la
 distribución es bastante normal.
+
+**Si la última letra termina en UWXYZ entonces la celdas podría estar apagada**
+Podríamos excluir con base a la tabla de Kenny aquellas celdas que no empiecen
+con alguno de los prefijos que maneja Kenny.  Kenny nos compartirá la tabla.
+Si aparece en cero en todas las modulaciones, podría ser que no tiene activado
+los contadores.
+- No hay modulación para 3G, solo para LTE
+- Probar una receta filtrando todo los 3G y otra con todos los 3G y LTE.
 
 - **modulation_16qam_ratio:** Representa el porcentaje de tiempo que la red
 está utilizando la modulación 16-Quadrature Amplitude Modulation (16QAM) para
@@ -811,6 +823,10 @@ transformación llamada *spatial sign* [ver @kuhn_feature_2020] y
 [@kuhn_applied_2013] o bien usar modelos robustos a valores atípicos.
 
 ### Dependiente vs categóricas
+
+Utilizar ambos indicadores para todas las regiones.
+Va a depender si el CVE al que le estamos apuntando es urbano (time_lte) o
+rural (time_cl).
 
 
 ```{r}

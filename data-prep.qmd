@@ -1,8 +1,4 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
+
 # Data prep {#sec-data-prep}
 
 ```{r}
@@ -224,24 +220,37 @@ disp_01 <- disp_00 |>
  select(-time_thrgpt)
 ```
 
+## Precipitación
+
+```{r}
+lluv_01 <- lluv_00 |>
+ select(-fct_srvy_15_mnth) |> 
+ mutate(across(fct_srvy_dt, ymd))
+```
+
 ## Unión
 
 Para la unión utilizaremos una llave compuesta por el número de teléfono del
 usuario representado por la variable `msisdn_dd` y el número de encuesta
 `srvy_id`.
 
-La primera unión a realizar es entre las métricas de red y la disponibilidad
+La primera unión a realizar es entre las métricas de red, disponibilidad y
+cantidad de precipitación promedio.
 
 ```{r}
+# ctl_00 solo disp_00: 273,434 x30
 ctl_00 <- metr_01 |>
- inner_join(disp_01, join_by(msisdn_dd, srvy_id))
+ inner_join(disp_01, join_by(msisdn_dd, srvy_id)) |> 
+ inner_join(lluv_01, join_by(msisdn_dd, srvy_id, fct_srvy_dt, bts_sh_nm))
 ```
+
 
 La siguiente unión será contra la tabla maestra `diag_03`.  Posteriormente
 aplicaremos transformaciones relacionadas a la posición de las columnas y 
 convertir a tipo entero las variables identificadoras.
 
 ```{r}
+# 26,559 x 35
 ctl_01 <- diag_03 |>
  inner_join(ctl_00, join_by(msisdn_dd, srvy_id, fct_srvy_dt)) |>
  relocate(diag, .after = last_col()) |>
@@ -251,7 +260,6 @@ ctl_01 <- diag_03 |>
 
 
 ```{r}
-#| eval: false
 #| echo: false
 write_fst(ctl_01, path = "data/ctl_01.fst", compress = 0)
 ```

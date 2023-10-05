@@ -1,9 +1,7 @@
-
 # Data import {#sec-data-import}
 
 ```{r}
 #| echo: false
-
 source("_common.R")
 ```
 
@@ -31,7 +29,7 @@ archivos <- dir_ls(type = "file", path = "data", glob = "*.csv")
 ```
 
 ```{r}
-c(diag_00, disp_00, metr_00) %<-% (archivos |> map(read_csv))
+c(diag_00, disp_00, metr_00, lluv_00) %<-% (archivos |> map(read_csv))
 ```
 
 ```{r}
@@ -47,10 +45,15 @@ disp_00 |> glimpse(width = 70)
 ```
 
 ```{r}
+lluv_00 |> glimpse(width = 70)
+```
+
+```{r}
 #| eval: false
 #| echo: false
 write_fst(diag_00, path = "data/diag_00.fst", compress = 0)
 write_fst(metr_00, path = "data/metr_00.fst", compress = 0)
 write_fst(disp_00, path = "data/disp_00.fst", compress = 0)
+write_fst(lluv_00, path = "data/lluv_00.fst", compress = 0)
 ```
 
