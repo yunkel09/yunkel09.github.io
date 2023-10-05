@@ -8,7 +8,7 @@
 
 <meta name="author" content="William Chavarría, André Rodas, Francisco Manjon y Pablo Armas">
 
-<title>Close the Loop - 6&nbsp; EDA</title>
+<title>Close the Loop - 7&nbsp; EDA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -85,7 +85,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./modeling.html" rel="next">
-<link href="./data-prep.html" rel="prev">
+<link href="./split.html" rel="prev">
 <link href="./fav.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -136,7 +136,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./visualize.html">Visualize</a></li><li class="breadcrumb-item"><a href="./eda.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">EDA</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./visualize.html">Visualize</a></li><li class="breadcrumb-item"><a href="./eda.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">EDA</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -222,8 +222,14 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./split.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Split</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./eda.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">EDA</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">EDA</span></span></a>
   </div>
 </li>
       </ul>
@@ -237,12 +243,6 @@ div.csl-indent {
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./split.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Split</span></span></a>
-  </div>
-</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cross-validation.html" class="sidebar-item-text sidebar-link">
@@ -297,21 +297,23 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#estructura" id="toc-estructura" class="nav-link active" data-scroll-target="#estructura"><span class="header-section-number">6.1</span> Estructura</a></li>
-  <li><a href="#sec-mr" id="toc-sec-mr" class="nav-link" data-scroll-target="#sec-mr"><span class="header-section-number">6.2</span> Medidas repetidas</a></li>
-  <li><a href="#valores-faltantes" id="toc-valores-faltantes" class="nav-link" data-scroll-target="#valores-faltantes"><span class="header-section-number">6.3</span> Valores faltantes</a></li>
-  <li><a href="#resumen-estadístico" id="toc-resumen-estadístico" class="nav-link" data-scroll-target="#resumen-estadístico"><span class="header-section-number">6.4</span> Resumen estadístico</a></li>
-  <li><a href="#análisis-univariado" id="toc-análisis-univariado" class="nav-link" data-scroll-target="#análisis-univariado"><span class="header-section-number">6.5</span> Análisis univariado</a>
+  <li><a href="#estructura" id="toc-estructura" class="nav-link active" data-scroll-target="#estructura"><span class="header-section-number">7.1</span> Estructura</a></li>
+  <li><a href="#sec-mr" id="toc-sec-mr" class="nav-link" data-scroll-target="#sec-mr"><span class="header-section-number">7.2</span> Medidas repetidas</a></li>
+  <li><a href="#valores-faltantes" id="toc-valores-faltantes" class="nav-link" data-scroll-target="#valores-faltantes"><span class="header-section-number">7.3</span> Valores faltantes</a></li>
+  <li><a href="#resumen-estadístico" id="toc-resumen-estadístico" class="nav-link" data-scroll-target="#resumen-estadístico"><span class="header-section-number">7.4</span> Resumen estadístico</a></li>
+  <li><a href="#análisis-univariado" id="toc-análisis-univariado" class="nav-link" data-scroll-target="#análisis-univariado"><span class="header-section-number">7.5</span> Análisis univariado</a>
   <ul class="collapse">
-  <li><a href="#variable-dependiente" id="toc-variable-dependiente" class="nav-link" data-scroll-target="#variable-dependiente"><span class="header-section-number">6.5.1</span> Variable dependiente</a></li>
-  <li><a href="#sec-distribuiciones" id="toc-sec-distribuiciones" class="nav-link" data-scroll-target="#sec-distribuiciones"><span class="header-section-number">6.5.2</span> Variables numéricas</a></li>
-  <li><a href="#variables-categóricas" id="toc-variables-categóricas" class="nav-link" data-scroll-target="#variables-categóricas"><span class="header-section-number">6.5.3</span> Variables categóricas</a></li>
+  <li><a href="#variable-dependiente" id="toc-variable-dependiente" class="nav-link" data-scroll-target="#variable-dependiente"><span class="header-section-number">7.5.1</span> Variable dependiente</a></li>
+  <li><a href="#sec-distribuiciones" id="toc-sec-distribuiciones" class="nav-link" data-scroll-target="#sec-distribuiciones"><span class="header-section-number">7.5.2</span> Variables numéricas</a></li>
+  <li><a href="#variables-categóricas" id="toc-variables-categóricas" class="nav-link" data-scroll-target="#variables-categóricas"><span class="header-section-number">7.5.3</span> Variables categóricas</a></li>
   </ul></li>
-  <li><a href="#análisis-bivariado" id="toc-análisis-bivariado" class="nav-link" data-scroll-target="#análisis-bivariado"><span class="header-section-number">6.6</span> Análisis bivariado</a>
+  <li><a href="#análisis-bivariado" id="toc-análisis-bivariado" class="nav-link" data-scroll-target="#análisis-bivariado"><span class="header-section-number">7.6</span> Análisis bivariado</a>
   <ul class="collapse">
-  <li><a href="#dependiente-vs-numéricas" id="toc-dependiente-vs-numéricas" class="nav-link" data-scroll-target="#dependiente-vs-numéricas"><span class="header-section-number">6.6.1</span> Dependiente vs numéricas</a></li>
-  <li><a href="#dependiente-vs-categóricas" id="toc-dependiente-vs-categóricas" class="nav-link" data-scroll-target="#dependiente-vs-categóricas"><span class="header-section-number">6.6.2</span> Dependiente vs categóricas</a></li>
-  <li><a href="#análisis-de-correlación" id="toc-análisis-de-correlación" class="nav-link" data-scroll-target="#análisis-de-correlación"><span class="header-section-number">6.6.3</span> Análisis de correlación</a></li>
+  <li><a href="#dependiente-vs-numéricas" id="toc-dependiente-vs-numéricas" class="nav-link" data-scroll-target="#dependiente-vs-numéricas"><span class="header-section-number">7.6.1</span> Dependiente vs numéricas</a></li>
+  <li><a href="#analizar-interacciones" id="toc-analizar-interacciones" class="nav-link" data-scroll-target="#analizar-interacciones"><span class="header-section-number">7.6.2</span> Analizar interacciones</a></li>
+  <li><a href="#dependiente-vs-categóricas" id="toc-dependiente-vs-categóricas" class="nav-link" data-scroll-target="#dependiente-vs-categóricas"><span class="header-section-number">7.6.3</span> Dependiente vs categóricas</a></li>
+  <li><a href="#análisis-de-correlación" id="toc-análisis-de-correlación" class="nav-link" data-scroll-target="#análisis-de-correlación"><span class="header-section-number">7.6.4</span> Análisis de correlación</a></li>
+  <li><a href="#mutual-information" id="toc-mutual-information" class="nav-link" data-scroll-target="#mutual-information"><span class="header-section-number">7.6.5</span> Mutual information</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -319,9 +321,9 @@ div.csl-indent {
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./visualize.html">Visualize</a></li><li class="breadcrumb-item"><a href="./eda.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">EDA</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./visualize.html">Visualize</a></li><li class="breadcrumb-item"><a href="./eda.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">EDA</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-EDA" class="quarto-section-identifier"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">EDA</span></span></h1>
+<h1 class="title"><span id="sec-EDA" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">EDA</span></span></h1>
 </div>
 
 
@@ -336,53 +338,55 @@ div.csl-indent {
 
 </header>
 
-<section id="estructura" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="estructura"><span class="header-section-number">6.1</span> Estructura</h2>
-<p>El proceso de preparación y limpieza dió como resultado un único set de datos, el cual consta de 26559 filas y 35 columnas.</p>
+<section id="estructura" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="estructura"><span class="header-section-number">7.1</span> Estructura</h2>
+<p>El proceso de preparación y limpieza dió como resultado un único set de datos, el cual consta de 14850 filas y 37 columnas.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ctl_01 <span class="sc">|&gt;</span> <span class="fu">glimpse</span>(<span class="at">width =</span> <span class="dv">71</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 26,559</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Columns: 35</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ fct_srvy_dt            &lt;date&gt; 2022-01-01, 2022-01-01, 2022-01-01, 2…</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ msisdn_dd              &lt;int&gt; 48770669, 48770669, 48770669, 48770669…</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ srvy_id                &lt;int&gt; 541309979, 541309979, 541309979, 54130…</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ctl_train <span class="sc">|&gt;</span> <span class="fu">glimpse</span>(<span class="at">width =</span> <span class="dv">71</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 14,850</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Columns: 37</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ fct_srvy_dt            &lt;date&gt; 2022-01-03, 2022-01-03, 2022-01-03, 2…</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ msisdn_dd              &lt;int&gt; 45392596, 45392596, 45392596, 46184079…</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ srvy_id                &lt;int&gt; 542205822, 542205822, 542205822, 54220…</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ trrtry_tf_nm           &lt;chr&gt; "NOR_ORIENTE", "NOR_ORIENTE", "NOR_ORI…</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ trrtry_cmrcl_nm        &lt;chr&gt; "ORIENTE", "ORIENTE", "ORIENTE", "ORIE…</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ stt_nm                 &lt;chr&gt; "IZABAL", "IZABAL", "IZABAL", "IZABAL"…</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ cty_nm                 &lt;chr&gt; "EL_ESTOR", "EL_ESTOR", "EL_ESTOR", "E…</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ thp_required_lte       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ bts_sh_nm              &lt;chr&gt; "LIZB039B", "LGUA165C", "LGUA165J", "L…</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ cll_prctg              &lt;dbl&gt; 0.346619192, 0.097322720, 0.108952417,…</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ rate_prb_dl            &lt;dbl&gt; 0.99124, 0.56140, 0.41380, 0.89256, 0.…</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ rrc_success_rate       &lt;dbl&gt; 0.9955466, 0.9993186, 0.9987815, 0.997…</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ erab_success_rate      &lt;dbl&gt; 0.9954686, 0.9994823, 0.9989230, 0.995…</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ l_ul_interference_avg  &lt;dbl&gt; -116, -109, -116, -104, -118, -110, -1…</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ thoughput_dl           &lt;dbl&gt; 796.8668, 8419.5650, 7635.8684, 2476.5…</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ thpughput_ul           &lt;dbl&gt; 247.27017, 766.74849, 371.89887, 262.7…</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ corrected_cqi          &lt;dbl&gt; 8, 11, 11, 11, 10, 11, 7, 10, 11, 10, …</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index1        &lt;dbl&gt; 0.005732344, 0.256282051, 0.276476101,…</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index2        &lt;dbl&gt; 0.031614350, 0.613306882, 0.535770072,…</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index3        &lt;dbl&gt; 0.143104150, 0.090416944, 0.127476314,…</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index4        &lt;dbl&gt; 0.309353215, 0.004202448, 0.010693721,…</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index5        &lt;dbl&gt; 0.131959911, 0.000000000, 0.000000000,…</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index6        &lt;dbl&gt; 0.321787709, 0.000000000, 0.000000000,…</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index7        &lt;dbl&gt; 0.056191723, 0.000000000, 0.000000000,…</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_total         &lt;dbl&gt; 11774, 6688, 2571, 19204, 2566, 5228, …</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ volte_erlang           &lt;dbl&gt; 12.8858889, 12.1652778, 0.1143056, 16.…</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ modulation_64qam_ratio &lt;dbl&gt; 0.24526090, 0.65148499, 0.69274165, 0.…</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ modulation_16qam_ratio &lt;dbl&gt; 0.4926279, 0.2451231, 0.2429123, 0.230…</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ modulation_qpsk_ratio  &lt;dbl&gt; 0.25203057, 0.09255258, 0.06352240, 0.…</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ time_cl                &lt;dbl&gt; 0.7520931, 0.7520931, 0.7520931, 0.752…</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ time_lte               &lt;dbl&gt; 0.9640478, 0.9640478, 0.9640478, 0.964…</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ trrtry_cmrcl_nm        &lt;chr&gt; "OCCIDENTE", "OCCIDENTE", "OCCIDENTE",…</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ stt_nm                 &lt;chr&gt; "ALTA_VERAPAZ", "ALTA_VERAPAZ", "ALTA_…</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ cty_nm                 &lt;chr&gt; "SAN_JUAN_CHAMELCO", "SAN_JUAN_CHAMELC…</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ thp_required_lte       &lt;dbl&gt; 1.0000000, 1.0000000, 1.0000000, NA, N…</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ bts_sh_nm              &lt;chr&gt; "LAVP527D", "LAVP137C", "HAVP527G", "L…</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ cll_prctg              &lt;dbl&gt; 0.08431669, 0.38918104, 0.16295014, 0.…</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ rate_prb_dl            &lt;dbl&gt; 0.88582, 0.73678, 0.88838, 0.96468, 0.…</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ rrc_success_rate       &lt;dbl&gt; 0.9986484, 0.9981464, 0.9980925, 0.999…</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ erab_success_rate      &lt;dbl&gt; 0.9985284, 0.9979743, 0.9984071, 0.999…</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ l_ul_interference_avg  &lt;dbl&gt; -114, -114, -117, -108, -114, -112, -1…</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ thoughput_dl           &lt;dbl&gt; 862.1951, 4133.4229, 1889.2004, 648.11…</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ thpughput_ul           &lt;dbl&gt; 1434.3077, 930.9678, 375.1958, 531.528…</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ corrected_cqi          &lt;dbl&gt; 9, 8, 10, 12, 7, 6, 8, 7, 0, 10, 8, 9,…</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index1        &lt;dbl&gt; 0.021427501, 0.248430081, 0.013204537,…</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index2        &lt;dbl&gt; 0.260526478, 0.191786533, 0.141878047,…</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index3        &lt;dbl&gt; 0.616793046, 0.345042395, 0.502266308,…</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index4        &lt;dbl&gt; 0.07730710, 0.04562579, 0.28956185, 0.…</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index5        &lt;dbl&gt; 0.008302583, 0.137567053, 0.047603062,…</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index6        &lt;dbl&gt; 0.000661000, 0.004699078, 0.000000000,…</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_index7        &lt;dbl&gt; 0.000127000, 0.000000000, 0.000000000,…</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ ra_ta_ue_total         &lt;dbl&gt; 20596, 5135, 14391, 55033, 6774, 3478,…</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ volte_erlang           &lt;dbl&gt; 30.1669444, 3.4219444, 2.0346667, 28.9…</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ modulation_64qam_ratio &lt;dbl&gt; 0.42234061, 0.32748105, 0.63852959, 0.…</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ modulation_16qam_ratio &lt;dbl&gt; 0.4288202, 0.4107964, 0.2978861, 0.169…</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ modulation_qpsk_ratio  &lt;dbl&gt; 0.15673500, 0.26979092, 0.06972546, 0.…</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ time_cl                &lt;dbl&gt; 0.9203436, 0.9203436, 0.9203436, 0.578…</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ time_lte               &lt;dbl&gt; 0.9847598, 0.9847598, 0.9847598, 0.958…</span></span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ avlblty                &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…</span></span>
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ avlblty_tckt_2hrs      &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ unvlblty_ttl_hrs_prop  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ diag                   &lt;chr&gt; "CAPACIDAD", "CAPACIDAD", "CAPACIDAD",…</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ unvlblty_ttl_hrs_prop  &lt;dbl&gt; 0.000000000, 0.000000000, 0.000000000,…</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ twr                    &lt;chr&gt; "AVP527", "AVP137", "AVP527", "HHT174"…</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ rain                   &lt;dbl&gt; 215, 215, 215, 11, 10, 10, 11, 6, 320,…</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ diag                   &lt;chr&gt; "CAPACIDAD", "CAPACIDAD", "CAPACIDAD",…</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <details>
 <summary>Mostrar Código</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ctl_01 <span class="sc">|&gt;</span> </span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ctl_train <span class="sc">|&gt;</span> </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">tab_header</span>(</span>
@@ -395,9 +399,7 @@ div.csl-indent {
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a> <span class="fu">cols_align</span>(<span class="at">align =</span> <span class="st">"center"</span>, <span class="at">columns =</span> <span class="fu">where</span>(<span class="sc">~</span> <span class="fu">is.numeric</span>(.x))) <span class="sc">|&gt;</span> </span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a> <span class="fu">tab_footnote</span>(</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">footnote =</span> <span class="fu">md</span>(<span class="st">"Cada usuario tiene el top 5 celdas a las que más se conecta"</span>),</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">locations =</span> <span class="fu">cells_body</span>(<span class="at">columns =</span> bts_sh_nm, <span class="at">rows =</span> <span class="dv">1</span>)) </span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in max(nchar(x_lhs)): no non-missing arguments to max; returning -Inf</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in max(nchar(x_rhs)): no non-missing arguments to max; returning -Inf</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">locations =</span> <span class="fu">cells_body</span>(<span class="at">columns =</span> bts_sh_nm, <span class="at">rows =</span> <span class="dv">1</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="tbl-ctl" class="anchored">
@@ -849,13 +851,13 @@ tbody tr:last-child {
   border-bottom: 2px solid #ffffff00;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>Table&nbsp;6.1:  <p>ctl</p> </caption>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>Table&nbsp;7.1:  <p>ctl</p> </caption>
   <thead>
     <tr class="gt_heading">
-      <td colspan="35" class="gt_heading gt_title gt_font_normal" style="font-family: Chivo; font-weight: 700;"><strong>Muestra Aleatoria - CTL</strong></td>
+      <td colspan="37" class="gt_heading gt_title gt_font_normal" style="font-family: Chivo; font-weight: 700;"><strong>Muestra Aleatoria - CTL</strong></td>
     </tr>
     <tr class="gt_heading">
-      <td colspan="35" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="font-family: Chivo; font-weight: 300;">Tabla principal</td>
+      <td colspan="37" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="font-family: Chivo; font-weight: 300;">Tabla principal</td>
     </tr>
     <tr class="gt_col_headings">
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="border-top-width: 0px; border-top-style: solid; border-top-color: black; font-family: Chivo; font-size: 14px; vertical-align: bottom; font-weight: 200; text-transform: uppercase;" scope="col" id="fct_srvy_dt">fct_srvy_dt</th>
@@ -892,190 +894,202 @@ tbody tr:last-child {
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="border-top-width: 0px; border-top-style: solid; border-top-color: black; font-family: Chivo; font-size: 14px; vertical-align: bottom; font-weight: 200; text-transform: uppercase;" scope="col" id="avlblty">avlblty</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="border-top-width: 0px; border-top-style: solid; border-top-color: black; font-family: Chivo; font-size: 14px; vertical-align: bottom; font-weight: 200; text-transform: uppercase;" scope="col" id="avlblty_tckt_2hrs">avlblty_tckt_2hrs</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="border-top-width: 0px; border-top-style: solid; border-top-color: black; font-family: Chivo; font-size: 14px; vertical-align: bottom; font-weight: 200; text-transform: uppercase;" scope="col" id="unvlblty_ttl_hrs_prop">unvlblty_ttl_hrs_prop</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="border-top-width: 0px; border-top-style: solid; border-top-color: black; font-family: Chivo; font-size: 14px; vertical-align: bottom; font-weight: 200; text-transform: uppercase;" scope="col" id="twr">twr</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="border-top-width: 0px; border-top-style: solid; border-top-color: black; font-family: Chivo; font-size: 14px; vertical-align: bottom; font-weight: 200; text-transform: uppercase;" scope="col" id="rain">rain</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="border-top-width: 0px; border-top-style: solid; border-top-color: black; font-family: Chivo; font-size: 14px; vertical-align: bottom; font-weight: 200; text-transform: uppercase;" scope="col" id="diag">diag</th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
-    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2022-01-01</td>
-<td headers="msisdn_dd" class="gt_row gt_center">48770669&nbsp;</td>
-<td headers="srvy_id" class="gt_row gt_center">541309979&nbsp;</td>
+    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2022-01-03</td>
+<td headers="msisdn_dd" class="gt_row gt_center">45392596&nbsp;</td>
+<td headers="srvy_id" class="gt_row gt_center">542205822&nbsp;</td>
 <td headers="trrtry_tf_nm" class="gt_row gt_left">NOR_ORIENTE</td>
-<td headers="trrtry_cmrcl_nm" class="gt_row gt_left">ORIENTE</td>
-<td headers="stt_nm" class="gt_row gt_left">IZABAL</td>
-<td headers="cty_nm" class="gt_row gt_left">EL_ESTOR</td>
-<td headers="thp_required_lte" class="gt_row gt_center">NA</td>
-<td headers="bts_sh_nm" class="gt_row gt_left">LIZB039B<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></td>
-<td headers="cll_prctg" class="gt_row gt_center">0.35</td>
-<td headers="rate_prb_dl" class="gt_row gt_center">0.99</td>
+<td headers="trrtry_cmrcl_nm" class="gt_row gt_left">OCCIDENTE</td>
+<td headers="stt_nm" class="gt_row gt_left">ALTA_VERAPAZ</td>
+<td headers="cty_nm" class="gt_row gt_left">SAN_JUAN_CHAMELCO</td>
+<td headers="thp_required_lte" class="gt_row gt_center">1&nbsp;</td>
+<td headers="bts_sh_nm" class="gt_row gt_left">LAVP527D<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></td>
+<td headers="cll_prctg" class="gt_row gt_center">0.08</td>
+<td headers="rate_prb_dl" class="gt_row gt_center">0.89</td>
 <td headers="rrc_success_rate" class="gt_row gt_center">1.00</td>
 <td headers="erab_success_rate" class="gt_row gt_center">1.00</td>
-<td headers="l_ul_interference_avg" class="gt_row gt_center">−116.00</td>
-<td headers="thoughput_dl" class="gt_row gt_center">   796.87</td>
-<td headers="thpughput_ul" class="gt_row gt_center">247.27</td>
-<td headers="corrected_cqi" class="gt_row gt_center"> 8.00</td>
-<td headers="ra_ta_ue_index1" class="gt_row gt_center">0.01</td>
-<td headers="ra_ta_ue_index2" class="gt_row gt_center">0.03</td>
-<td headers="ra_ta_ue_index3" class="gt_row gt_center">0.14</td>
-<td headers="ra_ta_ue_index4" class="gt_row gt_center">0.31</td>
-<td headers="ra_ta_ue_index5" class="gt_row gt_center">0.13</td>
-<td headers="ra_ta_ue_index6" class="gt_row gt_center">0.32</td>
-<td headers="ra_ta_ue_index7" class="gt_row gt_center">0.06</td>
-<td headers="ra_ta_ue_total" class="gt_row gt_center">11,774.00</td>
-<td headers="volte_erlang" class="gt_row gt_center">12.89</td>
-<td headers="modulation_64qam_ratio" class="gt_row gt_center">0.25</td>
-<td headers="modulation_16qam_ratio" class="gt_row gt_center">0.49</td>
-<td headers="modulation_qpsk_ratio" class="gt_row gt_center">0.25</td>
-<td headers="time_cl" class="gt_row gt_center">0.75</td>
-<td headers="time_lte" class="gt_row gt_center">0.96</td>
-<td headers="avlblty" class="gt_row gt_center">1.00</td>
-<td headers="avlblty_tckt_2hrs" class="gt_row gt_center">0.00</td>
-<td headers="unvlblty_ttl_hrs_prop" class="gt_row gt_center">0.00</td>
-<td headers="diag" class="gt_row gt_left">CAPACIDAD</td></tr>
-    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2022-01-01</td>
-<td headers="msisdn_dd" class="gt_row gt_center">48770669&nbsp;</td>
-<td headers="srvy_id" class="gt_row gt_center">541309979&nbsp;</td>
-<td headers="trrtry_tf_nm" class="gt_row gt_left">NOR_ORIENTE</td>
-<td headers="trrtry_cmrcl_nm" class="gt_row gt_left">ORIENTE</td>
-<td headers="stt_nm" class="gt_row gt_left">IZABAL</td>
-<td headers="cty_nm" class="gt_row gt_left">EL_ESTOR</td>
-<td headers="thp_required_lte" class="gt_row gt_center">NA</td>
-<td headers="bts_sh_nm" class="gt_row gt_left">LGUA165C</td>
-<td headers="cll_prctg" class="gt_row gt_center">0.10</td>
-<td headers="rate_prb_dl" class="gt_row gt_center">0.56</td>
-<td headers="rrc_success_rate" class="gt_row gt_center">1.00</td>
-<td headers="erab_success_rate" class="gt_row gt_center">1.00</td>
-<td headers="l_ul_interference_avg" class="gt_row gt_center">−109.00</td>
-<td headers="thoughput_dl" class="gt_row gt_center"> 8,419.57</td>
-<td headers="thpughput_ul" class="gt_row gt_center">766.75</td>
-<td headers="corrected_cqi" class="gt_row gt_center">11.00</td>
-<td headers="ra_ta_ue_index1" class="gt_row gt_center">0.26</td>
-<td headers="ra_ta_ue_index2" class="gt_row gt_center">0.61</td>
-<td headers="ra_ta_ue_index3" class="gt_row gt_center">0.09</td>
-<td headers="ra_ta_ue_index4" class="gt_row gt_center">0.00</td>
-<td headers="ra_ta_ue_index5" class="gt_row gt_center">0.00</td>
+<td headers="l_ul_interference_avg" class="gt_row gt_center">−114.00</td>
+<td headers="thoughput_dl" class="gt_row gt_center">  862.20</td>
+<td headers="thpughput_ul" class="gt_row gt_center">1,434.31</td>
+<td headers="corrected_cqi" class="gt_row gt_center"> 9.00</td>
+<td headers="ra_ta_ue_index1" class="gt_row gt_center">0.02</td>
+<td headers="ra_ta_ue_index2" class="gt_row gt_center">0.26</td>
+<td headers="ra_ta_ue_index3" class="gt_row gt_center">0.62</td>
+<td headers="ra_ta_ue_index4" class="gt_row gt_center">0.08</td>
+<td headers="ra_ta_ue_index5" class="gt_row gt_center">0.01</td>
 <td headers="ra_ta_ue_index6" class="gt_row gt_center">0.00</td>
 <td headers="ra_ta_ue_index7" class="gt_row gt_center">0.00</td>
-<td headers="ra_ta_ue_total" class="gt_row gt_center"> 6,688.00</td>
-<td headers="volte_erlang" class="gt_row gt_center">12.17</td>
-<td headers="modulation_64qam_ratio" class="gt_row gt_center">0.65</td>
-<td headers="modulation_16qam_ratio" class="gt_row gt_center">0.25</td>
-<td headers="modulation_qpsk_ratio" class="gt_row gt_center">0.09</td>
-<td headers="time_cl" class="gt_row gt_center">0.75</td>
-<td headers="time_lte" class="gt_row gt_center">0.96</td>
+<td headers="ra_ta_ue_total" class="gt_row gt_center">20,596.00</td>
+<td headers="volte_erlang" class="gt_row gt_center">30.17</td>
+<td headers="modulation_64qam_ratio" class="gt_row gt_center">0.42</td>
+<td headers="modulation_16qam_ratio" class="gt_row gt_center">0.43</td>
+<td headers="modulation_qpsk_ratio" class="gt_row gt_center">0.16</td>
+<td headers="time_cl" class="gt_row gt_center">0.92</td>
+<td headers="time_lte" class="gt_row gt_center">0.98</td>
 <td headers="avlblty" class="gt_row gt_center">1.00</td>
 <td headers="avlblty_tckt_2hrs" class="gt_row gt_center">0.00</td>
 <td headers="unvlblty_ttl_hrs_prop" class="gt_row gt_center">0.00</td>
+<td headers="twr" class="gt_row gt_left">AVP527</td>
+<td headers="rain" class="gt_row gt_center">215.00</td>
 <td headers="diag" class="gt_row gt_left">CAPACIDAD</td></tr>
-    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2022-01-01</td>
-<td headers="msisdn_dd" class="gt_row gt_center">48770669&nbsp;</td>
-<td headers="srvy_id" class="gt_row gt_center">541309979&nbsp;</td>
+    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2022-01-03</td>
+<td headers="msisdn_dd" class="gt_row gt_center">45392596&nbsp;</td>
+<td headers="srvy_id" class="gt_row gt_center">542205822&nbsp;</td>
 <td headers="trrtry_tf_nm" class="gt_row gt_left">NOR_ORIENTE</td>
-<td headers="trrtry_cmrcl_nm" class="gt_row gt_left">ORIENTE</td>
-<td headers="stt_nm" class="gt_row gt_left">IZABAL</td>
-<td headers="cty_nm" class="gt_row gt_left">EL_ESTOR</td>
-<td headers="thp_required_lte" class="gt_row gt_center">NA</td>
-<td headers="bts_sh_nm" class="gt_row gt_left">LGUA165J</td>
-<td headers="cll_prctg" class="gt_row gt_center">0.11</td>
-<td headers="rate_prb_dl" class="gt_row gt_center">0.41</td>
+<td headers="trrtry_cmrcl_nm" class="gt_row gt_left">OCCIDENTE</td>
+<td headers="stt_nm" class="gt_row gt_left">ALTA_VERAPAZ</td>
+<td headers="cty_nm" class="gt_row gt_left">SAN_JUAN_CHAMELCO</td>
+<td headers="thp_required_lte" class="gt_row gt_center">1&nbsp;</td>
+<td headers="bts_sh_nm" class="gt_row gt_left">LAVP137C</td>
+<td headers="cll_prctg" class="gt_row gt_center">0.39</td>
+<td headers="rate_prb_dl" class="gt_row gt_center">0.74</td>
 <td headers="rrc_success_rate" class="gt_row gt_center">1.00</td>
 <td headers="erab_success_rate" class="gt_row gt_center">1.00</td>
-<td headers="l_ul_interference_avg" class="gt_row gt_center">−116.00</td>
-<td headers="thoughput_dl" class="gt_row gt_center"> 7,635.87</td>
-<td headers="thpughput_ul" class="gt_row gt_center">371.90</td>
-<td headers="corrected_cqi" class="gt_row gt_center">11.00</td>
-<td headers="ra_ta_ue_index1" class="gt_row gt_center">0.28</td>
-<td headers="ra_ta_ue_index2" class="gt_row gt_center">0.54</td>
-<td headers="ra_ta_ue_index3" class="gt_row gt_center">0.13</td>
+<td headers="l_ul_interference_avg" class="gt_row gt_center">−114.00</td>
+<td headers="thoughput_dl" class="gt_row gt_center">4,133.42</td>
+<td headers="thpughput_ul" class="gt_row gt_center">  930.97</td>
+<td headers="corrected_cqi" class="gt_row gt_center"> 8.00</td>
+<td headers="ra_ta_ue_index1" class="gt_row gt_center">0.25</td>
+<td headers="ra_ta_ue_index2" class="gt_row gt_center">0.19</td>
+<td headers="ra_ta_ue_index3" class="gt_row gt_center">0.35</td>
+<td headers="ra_ta_ue_index4" class="gt_row gt_center">0.05</td>
+<td headers="ra_ta_ue_index5" class="gt_row gt_center">0.14</td>
+<td headers="ra_ta_ue_index6" class="gt_row gt_center">0.00</td>
+<td headers="ra_ta_ue_index7" class="gt_row gt_center">0.00</td>
+<td headers="ra_ta_ue_total" class="gt_row gt_center"> 5,135.00</td>
+<td headers="volte_erlang" class="gt_row gt_center"> 3.42</td>
+<td headers="modulation_64qam_ratio" class="gt_row gt_center">0.33</td>
+<td headers="modulation_16qam_ratio" class="gt_row gt_center">0.41</td>
+<td headers="modulation_qpsk_ratio" class="gt_row gt_center">0.27</td>
+<td headers="time_cl" class="gt_row gt_center">0.92</td>
+<td headers="time_lte" class="gt_row gt_center">0.98</td>
+<td headers="avlblty" class="gt_row gt_center">1.00</td>
+<td headers="avlblty_tckt_2hrs" class="gt_row gt_center">0.00</td>
+<td headers="unvlblty_ttl_hrs_prop" class="gt_row gt_center">0.00</td>
+<td headers="twr" class="gt_row gt_left">AVP137</td>
+<td headers="rain" class="gt_row gt_center">215.00</td>
+<td headers="diag" class="gt_row gt_left">CAPACIDAD</td></tr>
+    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2022-01-03</td>
+<td headers="msisdn_dd" class="gt_row gt_center">45392596&nbsp;</td>
+<td headers="srvy_id" class="gt_row gt_center">542205822&nbsp;</td>
+<td headers="trrtry_tf_nm" class="gt_row gt_left">NOR_ORIENTE</td>
+<td headers="trrtry_cmrcl_nm" class="gt_row gt_left">OCCIDENTE</td>
+<td headers="stt_nm" class="gt_row gt_left">ALTA_VERAPAZ</td>
+<td headers="cty_nm" class="gt_row gt_left">SAN_JUAN_CHAMELCO</td>
+<td headers="thp_required_lte" class="gt_row gt_center">1&nbsp;</td>
+<td headers="bts_sh_nm" class="gt_row gt_left">HAVP527G</td>
+<td headers="cll_prctg" class="gt_row gt_center">0.16</td>
+<td headers="rate_prb_dl" class="gt_row gt_center">0.89</td>
+<td headers="rrc_success_rate" class="gt_row gt_center">1.00</td>
+<td headers="erab_success_rate" class="gt_row gt_center">1.00</td>
+<td headers="l_ul_interference_avg" class="gt_row gt_center">−117.00</td>
+<td headers="thoughput_dl" class="gt_row gt_center">1,889.20</td>
+<td headers="thpughput_ul" class="gt_row gt_center">  375.20</td>
+<td headers="corrected_cqi" class="gt_row gt_center">10.00</td>
+<td headers="ra_ta_ue_index1" class="gt_row gt_center">0.01</td>
+<td headers="ra_ta_ue_index2" class="gt_row gt_center">0.14</td>
+<td headers="ra_ta_ue_index3" class="gt_row gt_center">0.50</td>
+<td headers="ra_ta_ue_index4" class="gt_row gt_center">0.29</td>
+<td headers="ra_ta_ue_index5" class="gt_row gt_center">0.05</td>
+<td headers="ra_ta_ue_index6" class="gt_row gt_center">0.00</td>
+<td headers="ra_ta_ue_index7" class="gt_row gt_center">0.00</td>
+<td headers="ra_ta_ue_total" class="gt_row gt_center">14,391.00</td>
+<td headers="volte_erlang" class="gt_row gt_center"> 2.03</td>
+<td headers="modulation_64qam_ratio" class="gt_row gt_center">0.64</td>
+<td headers="modulation_16qam_ratio" class="gt_row gt_center">0.30</td>
+<td headers="modulation_qpsk_ratio" class="gt_row gt_center">0.07</td>
+<td headers="time_cl" class="gt_row gt_center">0.92</td>
+<td headers="time_lte" class="gt_row gt_center">0.98</td>
+<td headers="avlblty" class="gt_row gt_center">1.00</td>
+<td headers="avlblty_tckt_2hrs" class="gt_row gt_center">0.00</td>
+<td headers="unvlblty_ttl_hrs_prop" class="gt_row gt_center">0.00</td>
+<td headers="twr" class="gt_row gt_left">AVP527</td>
+<td headers="rain" class="gt_row gt_center">215.00</td>
+<td headers="diag" class="gt_row gt_left">CAPACIDAD</td></tr>
+    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2022-01-03</td>
+<td headers="msisdn_dd" class="gt_row gt_center">46184079&nbsp;</td>
+<td headers="srvy_id" class="gt_row gt_center">542208786&nbsp;</td>
+<td headers="trrtry_tf_nm" class="gt_row gt_left">NOR_OCCIDENTE</td>
+<td headers="trrtry_cmrcl_nm" class="gt_row gt_left">OCCIDENTE</td>
+<td headers="stt_nm" class="gt_row gt_left">TOTONICAPAN</td>
+<td headers="cty_nm" class="gt_row gt_left">SAN_BARTOLO</td>
+<td headers="thp_required_lte" class="gt_row gt_center">NA</td>
+<td headers="bts_sh_nm" class="gt_row gt_left">LHHT174B</td>
+<td headers="cll_prctg" class="gt_row gt_center">0.08</td>
+<td headers="rate_prb_dl" class="gt_row gt_center">0.96</td>
+<td headers="rrc_success_rate" class="gt_row gt_center">1.00</td>
+<td headers="erab_success_rate" class="gt_row gt_center">1.00</td>
+<td headers="l_ul_interference_avg" class="gt_row gt_center">−108.00</td>
+<td headers="thoughput_dl" class="gt_row gt_center">  648.12</td>
+<td headers="thpughput_ul" class="gt_row gt_center">  531.53</td>
+<td headers="corrected_cqi" class="gt_row gt_center">12.00</td>
+<td headers="ra_ta_ue_index1" class="gt_row gt_center">0.22</td>
+<td headers="ra_ta_ue_index2" class="gt_row gt_center">0.57</td>
+<td headers="ra_ta_ue_index3" class="gt_row gt_center">0.17</td>
 <td headers="ra_ta_ue_index4" class="gt_row gt_center">0.01</td>
 <td headers="ra_ta_ue_index5" class="gt_row gt_center">0.00</td>
 <td headers="ra_ta_ue_index6" class="gt_row gt_center">0.00</td>
 <td headers="ra_ta_ue_index7" class="gt_row gt_center">0.00</td>
-<td headers="ra_ta_ue_total" class="gt_row gt_center"> 2,571.00</td>
-<td headers="volte_erlang" class="gt_row gt_center"> 0.11</td>
-<td headers="modulation_64qam_ratio" class="gt_row gt_center">0.69</td>
-<td headers="modulation_16qam_ratio" class="gt_row gt_center">0.24</td>
-<td headers="modulation_qpsk_ratio" class="gt_row gt_center">0.06</td>
-<td headers="time_cl" class="gt_row gt_center">0.75</td>
+<td headers="ra_ta_ue_total" class="gt_row gt_center">55,033.00</td>
+<td headers="volte_erlang" class="gt_row gt_center">28.97</td>
+<td headers="modulation_64qam_ratio" class="gt_row gt_center">0.78</td>
+<td headers="modulation_16qam_ratio" class="gt_row gt_center">0.17</td>
+<td headers="modulation_qpsk_ratio" class="gt_row gt_center">0.05</td>
+<td headers="time_cl" class="gt_row gt_center">0.58</td>
 <td headers="time_lte" class="gt_row gt_center">0.96</td>
 <td headers="avlblty" class="gt_row gt_center">1.00</td>
 <td headers="avlblty_tckt_2hrs" class="gt_row gt_center">0.00</td>
 <td headers="unvlblty_ttl_hrs_prop" class="gt_row gt_center">0.00</td>
+<td headers="twr" class="gt_row gt_left">HHT174</td>
+<td headers="rain" class="gt_row gt_center"> 11.00</td>
 <td headers="diag" class="gt_row gt_left">CAPACIDAD</td></tr>
-    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2022-01-01</td>
-<td headers="msisdn_dd" class="gt_row gt_center">48770669&nbsp;</td>
-<td headers="srvy_id" class="gt_row gt_center">541309979&nbsp;</td>
-<td headers="trrtry_tf_nm" class="gt_row gt_left">NOR_ORIENTE</td>
-<td headers="trrtry_cmrcl_nm" class="gt_row gt_left">ORIENTE</td>
-<td headers="stt_nm" class="gt_row gt_left">IZABAL</td>
-<td headers="cty_nm" class="gt_row gt_left">EL_ESTOR</td>
+    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2022-01-03</td>
+<td headers="msisdn_dd" class="gt_row gt_center">46184079&nbsp;</td>
+<td headers="srvy_id" class="gt_row gt_center">542208786&nbsp;</td>
+<td headers="trrtry_tf_nm" class="gt_row gt_left">NOR_OCCIDENTE</td>
+<td headers="trrtry_cmrcl_nm" class="gt_row gt_left">OCCIDENTE</td>
+<td headers="stt_nm" class="gt_row gt_left">TOTONICAPAN</td>
+<td headers="cty_nm" class="gt_row gt_left">SAN_BARTOLO</td>
 <td headers="thp_required_lte" class="gt_row gt_center">NA</td>
-<td headers="bts_sh_nm" class="gt_row gt_left">LGUA242D</td>
-<td headers="cll_prctg" class="gt_row gt_center">0.12</td>
-<td headers="rate_prb_dl" class="gt_row gt_center">0.89</td>
+<td headers="bts_sh_nm" class="gt_row gt_left">HTTN804E</td>
+<td headers="cll_prctg" class="gt_row gt_center">0.27</td>
+<td headers="rate_prb_dl" class="gt_row gt_center">0.88</td>
 <td headers="rrc_success_rate" class="gt_row gt_center">1.00</td>
 <td headers="erab_success_rate" class="gt_row gt_center">1.00</td>
-<td headers="l_ul_interference_avg" class="gt_row gt_center">−104.00</td>
-<td headers="thoughput_dl" class="gt_row gt_center"> 2,476.57</td>
-<td headers="thpughput_ul" class="gt_row gt_center">262.75</td>
-<td headers="corrected_cqi" class="gt_row gt_center">11.00</td>
-<td headers="ra_ta_ue_index1" class="gt_row gt_center">0.41</td>
-<td headers="ra_ta_ue_index2" class="gt_row gt_center">0.50</td>
-<td headers="ra_ta_ue_index3" class="gt_row gt_center">0.04</td>
-<td headers="ra_ta_ue_index4" class="gt_row gt_center">0.00</td>
-<td headers="ra_ta_ue_index5" class="gt_row gt_center">0.00</td>
-<td headers="ra_ta_ue_index6" class="gt_row gt_center">0.00</td>
-<td headers="ra_ta_ue_index7" class="gt_row gt_center">0.00</td>
-<td headers="ra_ta_ue_total" class="gt_row gt_center">19,204.00</td>
-<td headers="volte_erlang" class="gt_row gt_center">16.30</td>
-<td headers="modulation_64qam_ratio" class="gt_row gt_center">0.67</td>
-<td headers="modulation_16qam_ratio" class="gt_row gt_center">0.23</td>
-<td headers="modulation_qpsk_ratio" class="gt_row gt_center">0.11</td>
-<td headers="time_cl" class="gt_row gt_center">0.75</td>
-<td headers="time_lte" class="gt_row gt_center">0.96</td>
-<td headers="avlblty" class="gt_row gt_center">1.00</td>
-<td headers="avlblty_tckt_2hrs" class="gt_row gt_center">0.00</td>
-<td headers="unvlblty_ttl_hrs_prop" class="gt_row gt_center">0.00</td>
-<td headers="diag" class="gt_row gt_left">CAPACIDAD</td></tr>
-    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2022-01-01</td>
-<td headers="msisdn_dd" class="gt_row gt_center">48770669&nbsp;</td>
-<td headers="srvy_id" class="gt_row gt_center">541309979&nbsp;</td>
-<td headers="trrtry_tf_nm" class="gt_row gt_left">NOR_ORIENTE</td>
-<td headers="trrtry_cmrcl_nm" class="gt_row gt_left">ORIENTE</td>
-<td headers="stt_nm" class="gt_row gt_left">IZABAL</td>
-<td headers="cty_nm" class="gt_row gt_left">EL_ESTOR</td>
-<td headers="thp_required_lte" class="gt_row gt_center">NA</td>
-<td headers="bts_sh_nm" class="gt_row gt_left">HIZB039D</td>
-<td headers="cll_prctg" class="gt_row gt_center">0.06</td>
-<td headers="rate_prb_dl" class="gt_row gt_center">0.49</td>
-<td headers="rrc_success_rate" class="gt_row gt_center">1.00</td>
-<td headers="erab_success_rate" class="gt_row gt_center">1.00</td>
-<td headers="l_ul_interference_avg" class="gt_row gt_center">−118.00</td>
-<td headers="thoughput_dl" class="gt_row gt_center">10,559.42</td>
-<td headers="thpughput_ul" class="gt_row gt_center">365.25</td>
-<td headers="corrected_cqi" class="gt_row gt_center">10.00</td>
-<td headers="ra_ta_ue_index1" class="gt_row gt_center">0.07</td>
-<td headers="ra_ta_ue_index2" class="gt_row gt_center">0.24</td>
-<td headers="ra_ta_ue_index3" class="gt_row gt_center">0.40</td>
+<td headers="l_ul_interference_avg" class="gt_row gt_center">−114.00</td>
+<td headers="thoughput_dl" class="gt_row gt_center">1,199.46</td>
+<td headers="thpughput_ul" class="gt_row gt_center">  376.57</td>
+<td headers="corrected_cqi" class="gt_row gt_center"> 7.00</td>
+<td headers="ra_ta_ue_index1" class="gt_row gt_center">0.01</td>
+<td headers="ra_ta_ue_index2" class="gt_row gt_center">0.03</td>
+<td headers="ra_ta_ue_index3" class="gt_row gt_center">0.02</td>
 <td headers="ra_ta_ue_index4" class="gt_row gt_center">0.13</td>
-<td headers="ra_ta_ue_index5" class="gt_row gt_center">0.04</td>
-<td headers="ra_ta_ue_index6" class="gt_row gt_center">0.03</td>
-<td headers="ra_ta_ue_index7" class="gt_row gt_center">0.08</td>
-<td headers="ra_ta_ue_total" class="gt_row gt_center"> 2,566.00</td>
-<td headers="volte_erlang" class="gt_row gt_center"> 0.24</td>
-<td headers="modulation_64qam_ratio" class="gt_row gt_center">0.61</td>
-<td headers="modulation_16qam_ratio" class="gt_row gt_center">0.32</td>
-<td headers="modulation_qpsk_ratio" class="gt_row gt_center">0.08</td>
-<td headers="time_cl" class="gt_row gt_center">0.75</td>
+<td headers="ra_ta_ue_index5" class="gt_row gt_center">0.45</td>
+<td headers="ra_ta_ue_index6" class="gt_row gt_center">0.36</td>
+<td headers="ra_ta_ue_index7" class="gt_row gt_center">0.00</td>
+<td headers="ra_ta_ue_total" class="gt_row gt_center"> 6,774.00</td>
+<td headers="volte_erlang" class="gt_row gt_center"> 0.11</td>
+<td headers="modulation_64qam_ratio" class="gt_row gt_center">0.16</td>
+<td headers="modulation_16qam_ratio" class="gt_row gt_center">0.37</td>
+<td headers="modulation_qpsk_ratio" class="gt_row gt_center">0.47</td>
+<td headers="time_cl" class="gt_row gt_center">0.58</td>
 <td headers="time_lte" class="gt_row gt_center">0.96</td>
 <td headers="avlblty" class="gt_row gt_center">1.00</td>
 <td headers="avlblty_tckt_2hrs" class="gt_row gt_center">0.00</td>
 <td headers="unvlblty_ttl_hrs_prop" class="gt_row gt_center">0.00</td>
+<td headers="twr" class="gt_row gt_left">TTN804</td>
+<td headers="rain" class="gt_row gt_center"> 10.00</td>
 <td headers="diag" class="gt_row gt_left">CAPACIDAD</td></tr>
   </tbody>
   
   <tfoot class="gt_footnotes">
     <tr>
-      <td class="gt_footnote" colspan="35"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> Cada usuario tiene el top 5 celdas a las que más se conecta</td>
+      <td class="gt_footnote" colspan="37"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> Cada usuario tiene el top 5 celdas a las que más se conecta</td>
     </tr>
   </tfoot>
 </table>
@@ -1087,7 +1101,7 @@ tbody tr:last-child {
 <details>
 <summary>Código</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_intro</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a> ctl_01,<span class="at">ggtheme =</span> yunkel,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a> ctl_train,<span class="at">ggtheme =</span> yunkel,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a> <span class="at">title =</span> <span class="st">"Resumen Descriptivo"</span>,</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a> <span class="at">geom_label_args =</span> <span class="fu">list</span>(<span class="at">label.size =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">7</span>),</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a> <span class="at">theme_config =</span> <span class="fu">list</span>(</span>
@@ -1097,18 +1111,18 @@ tbody tr:last-child {
 <div id="fig-resumen" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-resumen-1.png" class="img-fluid figure-img" width="864"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.1: Se puede apreciar que la gran mayoría de las columnas están completas. Un 80% son <em>features</em> de tipo continuo y el restante son de tipo categórico. Se requiere explorar los valores faltantes con mayor detalle.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.1: Se puede apreciar que la gran mayoría de las columnas están completas. Un 80% son <em>features</em> de tipo continuo y el restante son de tipo categórico. Se requiere explorar los valores faltantes con mayor detalle.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="sec-mr" class="level2 page-columns page-full" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="sec-mr"><span class="header-section-number">6.2</span> Medidas repetidas</h2>
+<section id="sec-mr" class="level2 page-columns page-full" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="sec-mr"><span class="header-section-number">7.2</span> Medidas repetidas</h2>
 <div class="cell page-columns page-full">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ctl_01 <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ctl_train <span class="sc">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">get_dupes</span>(msisdn_dd) <span class="sc">|&gt;</span> </span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(</span>
@@ -1570,7 +1584,7 @@ tbody tr:last-child {
   border-bottom: 2px solid #ffffff00;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>Table&nbsp;6.2:  <p>Valores repetidos</p> </caption>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>Table&nbsp;7.2:  <p>Valores repetidos</p> </caption>
   <thead>
     <tr class="gt_heading">
       <td colspan="4" class="gt_heading gt_title gt_font_normal" style="font-family: Chivo; font-weight: 700;"><strong>Datos de Perfil</strong></td>
@@ -1586,26 +1600,26 @@ tbody tr:last-child {
     </tr>
   </thead>
   <tbody class="gt_table_body">
-    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2022-07-01</td>
-<td headers="msisdn_dd" class="gt_row gt_right">30132206</td>
-<td headers="srvy_id" class="gt_row gt_right">631833809</td>
-<td headers="bts_sh_nm" class="gt_row gt_left">LSRS018C</td></tr>
-    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2022-07-01</td>
-<td headers="msisdn_dd" class="gt_row gt_right">30132206</td>
-<td headers="srvy_id" class="gt_row gt_right">631833809</td>
-<td headers="bts_sh_nm" class="gt_row gt_left">LGUA418B</td></tr>
-    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2022-07-01</td>
-<td headers="msisdn_dd" class="gt_row gt_right">30132206</td>
-<td headers="srvy_id" class="gt_row gt_right">631833809</td>
-<td headers="bts_sh_nm" class="gt_row gt_left">OSRS018C</td></tr>
-    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2022-07-01</td>
-<td headers="msisdn_dd" class="gt_row gt_right">30132206</td>
-<td headers="srvy_id" class="gt_row gt_right">631833809</td>
-<td headers="bts_sh_nm" class="gt_row gt_left">LGUA234A</td></tr>
-    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2022-07-01</td>
-<td headers="msisdn_dd" class="gt_row gt_right">30132206</td>
-<td headers="srvy_id" class="gt_row gt_right">631833809</td>
-<td headers="bts_sh_nm" class="gt_row gt_left">LGUA234H</td></tr>
+    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2023-07-04</td>
+<td headers="msisdn_dd" class="gt_row gt_right">30001118</td>
+<td headers="srvy_id" class="gt_row gt_right">817756887</td>
+<td headers="bts_sh_nm" class="gt_row gt_left">2GUA043C</td></tr>
+    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2023-07-04</td>
+<td headers="msisdn_dd" class="gt_row gt_right">30001118</td>
+<td headers="srvy_id" class="gt_row gt_right">817756887</td>
+<td headers="bts_sh_nm" class="gt_row gt_left">OGUA266B</td></tr>
+    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2023-07-04</td>
+<td headers="msisdn_dd" class="gt_row gt_right">30001118</td>
+<td headers="srvy_id" class="gt_row gt_right">817756887</td>
+<td headers="bts_sh_nm" class="gt_row gt_left">5GUA266B</td></tr>
+    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2023-07-04</td>
+<td headers="msisdn_dd" class="gt_row gt_right">30001118</td>
+<td headers="srvy_id" class="gt_row gt_right">817756887</td>
+<td headers="bts_sh_nm" class="gt_row gt_left">LGUA266I</td></tr>
+    <tr><td headers="fct_srvy_dt" class="gt_row gt_right">2023-07-04</td>
+<td headers="msisdn_dd" class="gt_row gt_right">30001118</td>
+<td headers="srvy_id" class="gt_row gt_right">817756887</td>
+<td headers="bts_sh_nm" class="gt_row gt_left">LGTA601C</td></tr>
   </tbody>
   
   
@@ -1614,14 +1628,14 @@ tbody tr:last-child {
 </div>
 </div>
 </div>
-<p>En la tabla <a href="#tbl-repetidos" class="quarto-xref">Table&nbsp;<span>6.2</span></a> vemos que el identificador único (número de celular del usuario) se repite, debido a que contamos con datos de <a href="https://bit.ly/3PjtasC">perfil</a></p>
+<p>En la tabla <a href="#tbl-repetidos" class="quarto-xref">Table&nbsp;<span>7.2</span></a> vemos que el identificador único (número de celular del usuario) se repite, debido a que contamos con datos de <a href="https://bit.ly/3PjtasC">perfil</a></p>
 </section>
-<section id="valores-faltantes" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="valores-faltantes"><span class="header-section-number">6.3</span> Valores faltantes</h2>
+<section id="valores-faltantes" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="valores-faltantes"><span class="header-section-number">7.3</span> Valores faltantes</h2>
 <div class="cell" data-layout-align="center">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_missing</span>(ctl_01, <span class="at">missing_only =</span> <span class="cn">TRUE</span>,</span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_missing</span>(ctl_train, <span class="at">missing_only =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a> <span class="at">ggtheme =</span> yunkel,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a> <span class="at">title =</span> <span class="st">"Valores Faltantes"</span>,</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a> <span class="at">geom_label_args =</span> <span class="fu">list</span>(<span class="at">label.size =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">8</span>),</span>
@@ -1632,17 +1646,17 @@ tbody tr:last-child {
 <div id="fig-faltantes" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-faltantes-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.2: La mayor cantidad de valores perdidos se encuentra en la columna <code>thp_required_lte</code>. Dependiendo de la distribución de los mismos será posible aplicar técnicas de imputación en la fase de preprocesamiento</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.2: La mayor cantidad de valores perdidos se encuentra en la columna <code>thp_required_lte</code>. Dependiendo de la distribución de los mismos será posible aplicar técnicas de imputación en la fase de preprocesamiento</figcaption>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="resumen-estadístico" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="resumen-estadístico"><span class="header-section-number">6.4</span> Resumen estadístico</h2>
+<section id="resumen-estadístico" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="resumen-estadístico"><span class="header-section-number">7.4</span> Resumen estadístico</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># crear set de datos solo con variables numéricas</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>ctl_n <span class="ot">&lt;-</span> ctl_01 <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>ctl_n <span class="ot">&lt;-</span> ctl_train <span class="sc">|&gt;</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(<span class="fu">where</span>(is.numeric), <span class="sc">-</span><span class="fu">c</span>(msisdn_dd, srvy_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
@@ -2110,7 +2124,7 @@ tbody tr:last-child {
   border-bottom: 2px solid #ffffff00;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>Table&nbsp;6.3:  <p>Resumen estadístico</p> </caption>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>Table&nbsp;7.3:  <p>Resumen estadístico</p> </caption>
   <thead>
     
     <tr class="gt_col_headings">
@@ -2142,50 +2156,50 @@ tbody tr:last-child {
 <td headers="minimo" class="gt_row gt_center">0.00</td>
 <td headers="sd" class="gt_row gt_center">0.29</td></tr>
     <tr><td headers="variable" class="gt_row gt_left">rrc_success_rate</td>
-<td headers="media" class="gt_row gt_center">0.91</td>
+<td headers="media" class="gt_row gt_center">0.90</td>
 <td headers="mediana" class="gt_row gt_center">1.00</td>
 <td headers="maximo" class="gt_row gt_center">1.00</td>
 <td headers="minimo" class="gt_row gt_center">0.00</td>
 <td headers="sd" class="gt_row gt_center">0.29</td></tr>
     <tr><td headers="variable" class="gt_row gt_left">erab_success_rate</td>
-<td headers="media" class="gt_row gt_center">0.91</td>
+<td headers="media" class="gt_row gt_center">0.90</td>
 <td headers="mediana" class="gt_row gt_center">1.00</td>
 <td headers="maximo" class="gt_row gt_center">1.00</td>
 <td headers="minimo" class="gt_row gt_center">0.00</td>
 <td headers="sd" class="gt_row gt_center">0.29</td></tr>
     <tr><td headers="variable" class="gt_row gt_left">l_ul_interference_avg</td>
-<td headers="media" class="gt_row gt_center">−102.47</td>
+<td headers="media" class="gt_row gt_center">−102.20</td>
 <td headers="mediana" class="gt_row gt_center">−113.00</td>
 <td headers="maximo" class="gt_row gt_center">0.00</td>
 <td headers="minimo" class="gt_row gt_center">−122.00</td>
-<td headers="sd" class="gt_row gt_center">32.76</td></tr>
+<td headers="sd" class="gt_row gt_center">33.28</td></tr>
     <tr><td headers="variable" class="gt_row gt_left">thoughput_dl</td>
-<td headers="media" class="gt_row gt_center">5,711.13</td>
-<td headers="mediana" class="gt_row gt_center">4,324.52</td>
+<td headers="media" class="gt_row gt_center">5,660.85</td>
+<td headers="mediana" class="gt_row gt_center">4,284.99</td>
 <td headers="maximo" class="gt_row gt_center">87,106.82</td>
 <td headers="minimo" class="gt_row gt_center">0.00</td>
-<td headers="sd" class="gt_row gt_center">5,679.44</td></tr>
+<td headers="sd" class="gt_row gt_center">5,621.21</td></tr>
     <tr><td headers="variable" class="gt_row gt_left">thpughput_ul</td>
-<td headers="media" class="gt_row gt_center">684.19</td>
-<td headers="mediana" class="gt_row gt_center">541.29</td>
+<td headers="media" class="gt_row gt_center">682.29</td>
+<td headers="mediana" class="gt_row gt_center">539.11</td>
 <td headers="maximo" class="gt_row gt_center">5,118.24</td>
 <td headers="minimo" class="gt_row gt_center">0.00</td>
-<td headers="sd" class="gt_row gt_center">592.48</td></tr>
+<td headers="sd" class="gt_row gt_center">592.96</td></tr>
     <tr><td headers="variable" class="gt_row gt_left">corrected_cqi</td>
-<td headers="media" class="gt_row gt_center">9.22</td>
+<td headers="media" class="gt_row gt_center">9.21</td>
 <td headers="mediana" class="gt_row gt_center">10.00</td>
-<td headers="maximo" class="gt_row gt_center">15.00</td>
+<td headers="maximo" class="gt_row gt_center">14.00</td>
 <td headers="minimo" class="gt_row gt_center">0.00</td>
-<td headers="sd" class="gt_row gt_center">3.23</td></tr>
+<td headers="sd" class="gt_row gt_center">3.27</td></tr>
     <tr><td headers="variable" class="gt_row gt_left">ra_ta_ue_index1</td>
 <td headers="media" class="gt_row gt_center">0.15</td>
 <td headers="mediana" class="gt_row gt_center">0.08</td>
-<td headers="maximo" class="gt_row gt_center">0.88</td>
+<td headers="maximo" class="gt_row gt_center">0.87</td>
 <td headers="minimo" class="gt_row gt_center">0.00</td>
 <td headers="sd" class="gt_row gt_center">0.18</td></tr>
     <tr><td headers="variable" class="gt_row gt_left">ra_ta_ue_index2</td>
 <td headers="media" class="gt_row gt_center">0.25</td>
-<td headers="mediana" class="gt_row gt_center">0.23</td>
+<td headers="mediana" class="gt_row gt_center">0.22</td>
 <td headers="maximo" class="gt_row gt_center">1.00</td>
 <td headers="minimo" class="gt_row gt_center">0.00</td>
 <td headers="sd" class="gt_row gt_center">0.22</td></tr>
@@ -2220,17 +2234,17 @@ tbody tr:last-child {
 <td headers="minimo" class="gt_row gt_center">0.00</td>
 <td headers="sd" class="gt_row gt_center">0.10</td></tr>
     <tr><td headers="variable" class="gt_row gt_left">ra_ta_ue_total</td>
-<td headers="media" class="gt_row gt_center">7,606.28</td>
-<td headers="mediana" class="gt_row gt_center">5,831.00</td>
+<td headers="media" class="gt_row gt_center">7,592.41</td>
+<td headers="mediana" class="gt_row gt_center">5,795.00</td>
 <td headers="maximo" class="gt_row gt_center">231,144.00</td>
 <td headers="minimo" class="gt_row gt_center">0.00</td>
-<td headers="sd" class="gt_row gt_center">7,715.21</td></tr>
+<td headers="sd" class="gt_row gt_center">7,842.25</td></tr>
     <tr><td headers="variable" class="gt_row gt_left">volte_erlang</td>
-<td headers="media" class="gt_row gt_center">3.09</td>
-<td headers="mediana" class="gt_row gt_center">0.90</td>
-<td headers="maximo" class="gt_row gt_center">45.89</td>
+<td headers="media" class="gt_row gt_center">3.08</td>
+<td headers="mediana" class="gt_row gt_center">0.89</td>
+<td headers="maximo" class="gt_row gt_center">41.13</td>
 <td headers="minimo" class="gt_row gt_center">0.00</td>
-<td headers="sd" class="gt_row gt_center">4.49</td></tr>
+<td headers="sd" class="gt_row gt_center">4.52</td></tr>
     <tr><td headers="variable" class="gt_row gt_left">modulation_64qam_ratio</td>
 <td headers="media" class="gt_row gt_center">0.52</td>
 <td headers="mediana" class="gt_row gt_center">0.56</td>
@@ -2239,7 +2253,7 @@ tbody tr:last-child {
 <td headers="sd" class="gt_row gt_center">0.24</td></tr>
     <tr><td headers="variable" class="gt_row gt_left">modulation_16qam_ratio</td>
 <td headers="media" class="gt_row gt_center">0.25</td>
-<td headers="mediana" class="gt_row gt_center">0.27</td>
+<td headers="mediana" class="gt_row gt_center">0.26</td>
 <td headers="maximo" class="gt_row gt_center">0.58</td>
 <td headers="minimo" class="gt_row gt_center">0.00</td>
 <td headers="sd" class="gt_row gt_center">0.12</td></tr>
@@ -2266,19 +2280,25 @@ tbody tr:last-child {
 <td headers="mediana" class="gt_row gt_center">1.00</td>
 <td headers="maximo" class="gt_row gt_center">1.00</td>
 <td headers="minimo" class="gt_row gt_center">0.08</td>
-<td headers="sd" class="gt_row gt_center">0.03</td></tr>
+<td headers="sd" class="gt_row gt_center">0.04</td></tr>
     <tr><td headers="variable" class="gt_row gt_left">avlblty_tckt_2hrs</td>
-<td headers="media" class="gt_row gt_center">0.03</td>
+<td headers="media" class="gt_row gt_center">0.02</td>
 <td headers="mediana" class="gt_row gt_center">0.00</td>
 <td headers="maximo" class="gt_row gt_center">1.00</td>
 <td headers="minimo" class="gt_row gt_center">0.00</td>
 <td headers="sd" class="gt_row gt_center">0.08</td></tr>
     <tr><td headers="variable" class="gt_row gt_left">unvlblty_ttl_hrs_prop</td>
-<td headers="media" class="gt_row gt_center">40.83</td>
-<td headers="mediana" class="gt_row gt_center">3.04</td>
+<td headers="media" class="gt_row gt_center">42.29</td>
+<td headers="mediana" class="gt_row gt_center">3.06</td>
 <td headers="maximo" class="gt_row gt_center">5,185.17</td>
 <td headers="minimo" class="gt_row gt_center">0.00</td>
-<td headers="sd" class="gt_row gt_center">172.22</td></tr>
+<td headers="sd" class="gt_row gt_center">184.97</td></tr>
+    <tr><td headers="variable" class="gt_row gt_left">rain</td>
+<td headers="media" class="gt_row gt_center">132.23</td>
+<td headers="mediana" class="gt_row gt_center">98.25</td>
+<td headers="maximo" class="gt_row gt_center">840.00</td>
+<td headers="minimo" class="gt_row gt_center">0.00</td>
+<td headers="sd" class="gt_row gt_center">128.47</td></tr>
   </tbody>
   
   
@@ -2287,17 +2307,17 @@ tbody tr:last-child {
 </div>
 </div>
 </div>
-<p>En <a href="#tbl-resumen" class="quarto-xref">Table&nbsp;<span>6.3</span></a> se observa que hay valores atípicos en algunas observaciones. Los valores mínimos con valor cero para algunas variables ameritan atención.</p>
+<p>En <a href="#tbl-resumen" class="quarto-xref">Table&nbsp;<span>7.3</span></a> se observa que hay valores atípicos en algunas observaciones. Los valores mínimos con valor cero para algunas variables ameritan atención.</p>
 </section>
-<section id="análisis-univariado" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="análisis-univariado"><span class="header-section-number">6.5</span> Análisis univariado</h2>
-<section id="variable-dependiente" class="level3" data-number="6.5.1">
-<h3 data-number="6.5.1" class="anchored" data-anchor-id="variable-dependiente"><span class="header-section-number">6.5.1</span> Variable dependiente</h3>
+<section id="análisis-univariado" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="análisis-univariado"><span class="header-section-number">7.5</span> Análisis univariado</h2>
+<section id="variable-dependiente" class="level3" data-number="7.5.1">
+<h3 data-number="7.5.1" class="anchored" data-anchor-id="variable-dependiente"><span class="header-section-number">7.5.1</span> Variable dependiente</h3>
 <p>Uno de los primeros pasos del proceso de análisis exploratorios cuando el propósito final es predecir una respuesta es crear visualizaciones que ayuden a dilucidar el conocimiento de la respuesta y luego descubrir relaciones entre los predictores y la respuesta <span class="citation" data-cites="kuhn_feature_2020">(<a href="references.html#ref-kuhn_feature_2020" role="doc-biblioref">Kuhn and Johnson 2020</a>)</span>.</p>
 <div class="cell">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ctl_01 <span class="sc">|&gt;</span> </span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ctl_train <span class="sc">|&gt;</span> </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">barra</span>(diag) <span class="sc">+</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Clasificación variable politómica"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2306,15 +2326,15 @@ tbody tr:last-child {
 <div id="fig-depe" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-depe-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.3: Distribución de la variable dependiente</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.3: Distribución de la variable dependiente</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Tal como se muestra en la <a href="#fig-depe" class="quarto-xref">Figure&nbsp;<span>6.3</span></a> se observa un desbalance en la variable respuesta. Este desequilibrio puede ocasionar que el modelo se sesgue hacia las clases más frecuentes, como “CAPACIDAD” y “PROMOTOR”, lo que podría llevar a un rendimiento deficiente en la clasificación de otras clases. La aplicación de técnicas de remuestreo para balancear las clases será clave en la fase de preprocesamiento.</p>
+<p>Tal como se muestra en la <a href="#fig-depe" class="quarto-xref">Figure&nbsp;<span>7.3</span></a> se observa un desbalance en la variable respuesta. Este desequilibrio puede ocasionar que el modelo se sesgue hacia las clases más frecuentes, como “CAPACIDAD” y “PROMOTOR”, lo que podría llevar a un rendimiento deficiente en la clasificación de otras clases. La aplicación de técnicas de remuestreo para balancear las clases será clave en la fase de preprocesamiento.</p>
 </section>
-<section id="sec-distribuiciones" class="level3" data-number="6.5.2">
-<h3 data-number="6.5.2" class="anchored" data-anchor-id="sec-distribuiciones"><span class="header-section-number">6.5.2</span> Variables numéricas</h3>
+<section id="sec-distribuiciones" class="level3" data-number="7.5.2">
+<h3 data-number="7.5.2" class="anchored" data-anchor-id="sec-distribuiciones"><span class="header-section-number">7.5.2</span> Variables numéricas</h3>
 <p>Analizar la distribución de cada predictor nos puede orientar sobre si necesitamos hacer ingeniería de características mediante transformaciones antes del análisis. <span class="citation" data-cites="kuhn_feature_2020">(<a href="references.html#ref-kuhn_feature_2020" role="doc-biblioref">Kuhn and Johnson 2020</a>)</span></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dob <span class="ot">&lt;-</span> ctl_n <span class="sc">|&gt;</span> </span>
@@ -2340,7 +2360,7 @@ tbody tr:last-child {
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">plot_annotation</span>(<span class="at">title    =</span> <span class="st">"Distribución predictores numéricos"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="eda_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="768"></p>
+<p><img src="eda_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 <ul>
@@ -2349,21 +2369,12 @@ tbody tr:last-child {
 </ul>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="eda_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="768"></p>
-</div>
-</div>
-<ul>
-<li><p><strong>rate_prb_dl:</strong> Sabemos que una alta utilización del PRBs podría indicar una alta demanda de recursos y potencialmente llevar a una degradación del rendimiento de la red. El comportamiento bimodal podría ser un indicio de que hay partes de la red que tienen una utilización de recursos muy baja, es decir, debido a sub-utilización. Sería beneficioso analizar en que partes de la red se tiene este rango (0.00 - 0.05) de utilización como parte del análisis de QA.</p></li>
-<li><p><strong>rrc_success_rate:</strong> En la distribución vemos que la gran mayoría de usuarios presentan una alta tasa de éxito en cuanto a las conexiones RRC (Radio Resource Control) entre su dispositivo móvil y la red.</p></li>
-</ul>
-<div class="cell">
-<div class="cell-output-display">
 <p><img src="eda_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 <ul>
-<li><p><strong>erab_success_rate:</strong> Mide la tasa de éxito en la configuración, modificación y liberación de los portadores de servicio de acceso radioeléctrico (E-RAB) en una red LTE. Básicamente, muestra qué tan bien la red está asignando recursos a los usuarios para establecer conexiones de datos y voz. La distribución es la esperada con un sesgo positivo muy pronunciado, lo cual es un indicador de que la mayor parte del tiempo este indicador se encuentra en un rango saludable.</p></li>
-<li><p><strong>l_ul_interferance_avg:</strong> Representa la interferencia promedio en el enlace ascendente (UL) de una celda LTE. Se mide en decibelios-milivatios (dBm) y sirve para evaluar el nivel de ruido o interferencia que podría estar afectando la calidad del enlace ascendente. Altos niveles de interferencia pueden llevar a una degradación de la calidad de la llamada, reducir el rendimiento del enlace de datos y afectar negativamente la experiencia general del usuario. Un número menor (más negativo) generalmente indica menos interferencia, lo cual es positivo para el rendimiento de la red. Se aprecia un comportamiento bimodal lo que podría ser un indicio de celdas problemas muy serios o que están desconfiguradas. Se debe investigar si es un error en los datos o si son casos particulares.</p></li>
+<li><p><strong>rate_prb_dl:</strong> Sabemos que una alta utilización del PRBs podría indicar una alta demanda de recursos y potencialmente llevar a una degradación del rendimiento de la red. El comportamiento bimodal podría ser un indicio de que hay partes de la red que tienen una utilización de recursos muy baja, es decir, debido a sub-utilización. El comportamiento bimodal es correcto posterior a la entrevista con los SMEs.</p></li>
+<li><p><strong>rrc_success_rate:</strong> En la distribución vemos que la gran mayoría de usuarios presentan una alta tasa de éxito en cuanto a las conexiones RRC (Radio Resource Control) entre su dispositivo móvil y la red.</p></li>
 </ul>
 <div class="cell">
 <div class="cell-output-display">
@@ -2371,8 +2382,8 @@ tbody tr:last-child {
 </div>
 </div>
 <ul>
-<li><p><strong>throughput_dl:</strong> Mide la velocidad de descarga por Unidad de Equipo de Usuario en una red celular, generalmente en Mbps. Según la gráfica, el downlink se ubica en su mayoría arriba de los 25Mbps, lo cual es esperado. Lo que es necesario analizar es el throughput_dl menor a 2.7 Mbps.</p></li>
-<li><p><strong>throughput_ul:</strong> Mide la velocidad de transmisión de datos del dispositivo móvil a la estación base, generalmente también en Mbps. Es normal observar valores más bajos en el <em>uplink</em> que en el <em>downlink</em>. El sesgo positivo también es adecuado.</p></li>
+<li><p><strong>erab_success_rate:</strong> Mide la tasa de éxito en la configuración, modificación y liberación de los portadores de servicio de acceso radioeléctrico (E-RAB) en una red LTE. Básicamente, muestra qué tan bien la red está asignando recursos a los usuarios para establecer conexiones de datos y voz. La distribución es la esperada con un sesgo positivo muy pronunciado, lo cual es un indicador de que la mayor parte del tiempo este indicador se encuentra en un rango saludable.</p></li>
+<li><p><strong>l_ul_interferance_avg:</strong> Representa la interferencia promedio en el enlace ascendente (UL) de una celda LTE. Se mide en decibelios-milivatios (dBm) y sirve para evaluar el nivel de ruido o interferencia que podría estar afectando la calidad del enlace ascendente. Altos niveles de interferencia pueden llevar a una degradación de la calidad de la llamada, reducir el rendimiento del enlace de datos y afectar negativamente la experiencia general del usuario. Un número menor (más negativo) generalmente indica menos interferencia, lo cual es positivo para el rendimiento de la red. Se aprecia un comportamiento bimodal lo que podría ser un indicio de celdas problemas muy serios o que están desconfiguradas. Se debe investigar si es un error en los datos o si son casos particulares. Los valores atípicos pueden afectar más la transmisión en los escenarios donde esta última va por microondas.</p></li>
 </ul>
 <div class="cell">
 <div class="cell-output-display">
@@ -2380,22 +2391,32 @@ tbody tr:last-child {
 </div>
 </div>
 <ul>
-<li><p><strong>corrected_cqi:</strong> Evalúa la calidad de una celda en una red móvil. Este índice toma en cuenta varios factores como la potencia de la señal, el nivel de interferencia y otros parámetros clave para dar un indicador comprensivo de cómo está funcionando una celda en particular. Aunque los detalles pueden variar según el fabricante y la implementación, en esencia, mide qué tan bien una celda puede manejar el tráfico y proporcionar un servicio de alta calidad a los usuarios. Como política, el departamento de QA definió un umbral crítico de 7, significando que todo lo que esté por debajo de dicho umbral es malo. Debido a la naturaleza discreta de la distribución de estos valores, observamos que la superposición de densidad aparenta multimodalidad, sin embargo, no es así. Se debe investigar las observaciones que tienen un valor de cero en esta métrica, ya que son atípicos importantes.</p></li>
-<li><p><strong>ra_ta_ue_index1:</strong> Es una métrica que, en función de distintos índices, indica tanto la distancia aproximada entre la estación base y el dispositivo móvil, como la cantidad de conexiones realizadas a esas distancias específicas. Se utiliza para evaluar y optimizar la cobertura y la capacidad de la red. El sesgo positivo en este tipo de métrica es esperado en vista de que depende de la cantidad de muestras de dicha celda.</p></li>
+<li><p><strong>throughput_dl:</strong> Mide la velocidad de descarga por Unidad de Equipo de Usuario en una red celular, generalmente en Mbps. Según la gráfica, el downlink se ubica en su mayoría arriba de los 25Mbps, lo cual es esperado. Lo que es necesario analizar es el throughput_dl menor a 2.7 Mbps. Una gran parte de los usuarios se encuentran por debajo de este umbral.</p></li>
+<li><p><strong>throughput_ul:</strong> Mide la velocidad de transmisión de datos del dispositivo móvil a la estación base, generalmente también en Mbps. Es normal observar valores más bajos en el <em>uplink</em> que en el <em>downlink</em>. El sesgo positivo también es adecuado.</p></li>
 </ul>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="eda_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
+<ul>
+<li><p><strong>corrected_cqi:</strong> Evalúa la calidad de una celda en una red móvil. Este índice toma en cuenta varios factores como la potencia de la señal, el nivel de interferencia y otros parámetros clave para dar un indicador comprensivo de cómo está funcionando una celda en particular. Aunque los detalles pueden variar según el fabricante y la implementación, en esencia, mide qué tan bien una celda puede manejar el tráfico y proporcionar un servicio de alta calidad a los usuarios. Como política, el departamento de QA definió un umbral crítico de 7, significando que todo lo que esté por debajo de dicho umbral es malo. Debido a la naturaleza discreta de la distribución de estos valores, observamos que la superposición de densidad aparenta multimodalidad, sin embargo, no es así. Las celdas con valores atípicos inferiores a 1 es porque se encuentran en tunning, normalmente porque empiezan con número o porque aun no le han cambiado la etiqueta.</p></li>
+<li><p><strong>ra_ta_ue_index1:</strong> Es una métrica que, en función de distintos índices, indica tanto la distancia aproximada entre la estación base y el dispositivo móvil, como la cantidad de conexiones realizadas a esas distancias específicas. Se utiliza para evaluar y optimizar la cobertura y la capacidad de la red. El sesgo positivo en este tipo de métrica es esperado en vista de que depende de la cantidad de muestras de dicha celda.</p></li>
+</ul>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="eda_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
+<p>TA 2 está a un radio de 500 mts</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="eda_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="eda_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 <ul>
@@ -2403,7 +2424,7 @@ tbody tr:last-child {
 </ul>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="eda_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="768"></p>
+<p><img src="eda_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 <ul>
@@ -2412,16 +2433,19 @@ tbody tr:last-child {
 </ul>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="eda_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="768"></p>
+<p><img src="eda_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 <ul>
-<li><p><strong>modulation_64qam_ratio:</strong> Se define como el porcentaje de tiempo en que la transferencia de datos usa 64QAM, que es una modulación de alta eficiencia. Esta modulación permite transmitir más bits de información y usa menos bits para la corrección de errores, lo que la hace más eficiente pero también más susceptible a problemas de calidad de señal. Como se aprecia en el histograma, hay un comportamiento bimodal que puede indicar que en ciertas celadas o bien ubicaciones geográficas, hay pocos usuarios utilizando este tipo de modulación de mayor capacidad. Dejando de lado el valor atípico, se observa que la distribución es bastante normal.</p></li>
-<li><p><strong>modulation_16qam_ratio:</strong> Representa el porcentaje de tiempo que la red está utilizando la modulación 16-Quadrature Amplitude Modulation (16QAM) para la transferencia de datos. Esta modulación es intermedia en términos de eficiencia y robustez, permitiendo un balance entre la cantidad de datos transmitidos y la corrección de errores. Es menos eficiente que 64QAM pero más robusta contra errores y condiciones de señal no ideales. La distribución parece normal y se observa, al igual que con 64QAM, un comportamiento bimodal que podría ser indicativo de que hay presente otra población en este tipo de modulación.</p></li>
+<li><strong>modulation_64qam_ratio:</strong> Se define como el porcentaje de tiempo en que la transferencia de datos usa 64QAM, que es una modulación de alta eficiencia. Esta modulación permite transmitir más bits de información y usa menos bits para la corrección de errores, lo que la hace más eficiente pero también más susceptible a problemas de calidad de señal. Como se aprecia en el histograma, hay un comportamiento bimodal que puede indicar que en ciertas celadas o bien ubicaciones geográficas, hay pocos usuarios utilizando este tipo de modulación de mayor capacidad. Dejando de lado el valor atípico, se observa que la distribución es bastante normal.</li>
+</ul>
+<p><strong>Si la última letra termina en UWXYZ entonces la celdas podría estar apagada</strong> Podríamos excluir con base a la tabla de Kenny aquellas celdas que no empiecen con alguno de los prefijos que maneja Kenny. Kenny nos compartirá la tabla. Si aparece en cero en todas las modulaciones, podría ser que no tiene activado los contadores. - No hay modulación para 3G, solo para LTE - Probar una receta filtrando todo los 3G y otra con todos los 3G y LTE.</p>
+<ul>
+<li><strong>modulation_16qam_ratio:</strong> Representa el porcentaje de tiempo que la red está utilizando la modulación 16-Quadrature Amplitude Modulation (16QAM) para la transferencia de datos. Esta modulación es intermedia en términos de eficiencia y robustez, permitiendo un balance entre la cantidad de datos transmitidos y la corrección de errores. Es menos eficiente que 64QAM pero más robusta contra errores y condiciones de señal no ideales. La distribución parece normal y se observa, al igual que con 64QAM, un comportamiento bimodal que podría ser indicativo de que hay presente otra población en este tipo de modulación.</li>
 </ul>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="eda_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="768"></p>
+<p><img src="eda_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 <ul>
@@ -2430,7 +2454,7 @@ tbody tr:last-child {
 </ul>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="eda_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="768"></p>
+<p><img src="eda_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 <ul>
@@ -2439,16 +2463,16 @@ tbody tr:last-child {
 </ul>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="eda_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="768"></p>
+<p><img src="eda_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 <p>-<strong>avlblty_tckt_2hrs y unvlbty_ttl_hrs_prop:</strong> Son métricas complementarias a la de disponibilidad y representan partes de la disponibilidad. Su sesgo es opuesto.</p>
-<p>Como se señaló en la sección <a href="#sec-mr" class="quarto-xref"><span>Section&nbsp;6.2</span></a>, los datos de perfil demandan un preprocesamiento especializado. Los modelos seleccionados deben ser robustos ante este tipo de datos y la presencia de valores atípicos. Por esta razón, es recomendable considerar modelos basados en árboles, que son inherentemente más tolerantes a estas características. Además, se explorarán diversas transformaciones de las variables para evaluar y comparar su impacto en el rendimiento del modelo.</p>
+<p>Como se señaló en la sección <a href="#sec-mr" class="quarto-xref"><span>Section&nbsp;7.2</span></a>, los datos de perfil demandan un preprocesamiento especializado. Los modelos seleccionados deben ser robustos ante este tipo de datos y la presencia de valores atípicos. Por esta razón, es recomendable considerar modelos basados en árboles, que son inherentemente más tolerantes a estas características. Además, se explorarán diversas transformaciones de las variables para evaluar y comparar su impacto en el rendimiento del modelo.</p>
 </section>
-<section id="variables-categóricas" class="level3" data-number="6.5.3">
-<h3 data-number="6.5.3" class="anchored" data-anchor-id="variables-categóricas"><span class="header-section-number">6.5.3</span> Variables categóricas</h3>
+<section id="variables-categóricas" class="level3" data-number="7.5.3">
+<h3 data-number="7.5.3" class="anchored" data-anchor-id="variables-categóricas"><span class="header-section-number">7.5.3</span> Variables categóricas</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ctl_c <span class="ot">&lt;-</span> ctl_01 <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ctl_c <span class="ot">&lt;-</span> ctl_train <span class="sc">|&gt;</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(<span class="fu">where</span>(is.character), <span class="sc">-</span>diag) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
@@ -2462,7 +2486,7 @@ tbody tr:last-child {
 <div id="fig-cardinalidad" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-cardinalidad-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.4: Análisis de cardinalidad de variables categóricas</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.4: Análisis de cardinalidad de variables categóricas</figcaption>
 </figure>
 </div>
 </div>
@@ -2474,15 +2498,16 @@ tbody tr:last-child {
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a> <span class="at">data    =</span> ctl_c, </span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a> <span class="at">ggtheme =</span> yunkel, </span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a> <span class="at">theme_config =</span> <span class="fu">list</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">22</span>)))</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 columns ignored with more than 50 categories.</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cty_nm: 307 categories</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; bts_sh_nm: 16788 categories</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 columns ignored with more than 50 categories.</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cty_nm: 296 categories</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; bts_sh_nm: 11281 categories</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; twr: 3642 categories</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-var-categoricas" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-var-categoricas-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.5: Conteo de variables categóricas</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.5: Conteo de variables categóricas</figcaption>
 </figure>
 </div>
 </div>
@@ -2504,19 +2529,19 @@ tbody tr:last-child {
 <div id="fig-celdas-recurrentes" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-celdas-recurrentes-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.6: Top de celdas recurrentes por usuarios</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.6: Top de celdas recurrentes por usuarios</figcaption>
 </figure>
 </div>
 </div>
 </div>
 </section>
 </section>
-<section id="análisis-bivariado" class="level2" data-number="6.6">
-<h2 data-number="6.6" class="anchored" data-anchor-id="análisis-bivariado"><span class="header-section-number">6.6</span> Análisis bivariado</h2>
-<section id="dependiente-vs-numéricas" class="level3" data-number="6.6.1">
-<h3 data-number="6.6.1" class="anchored" data-anchor-id="dependiente-vs-numéricas"><span class="header-section-number">6.6.1</span> Dependiente vs numéricas</h3>
-<section id="gráficos-de-confianza" class="level4" data-number="6.6.1.1">
-<h4 data-number="6.6.1.1" class="anchored" data-anchor-id="gráficos-de-confianza"><span class="header-section-number">6.6.1.1</span> Gráficos de confianza</h4>
+<section id="análisis-bivariado" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="análisis-bivariado"><span class="header-section-number">7.6</span> Análisis bivariado</h2>
+<section id="dependiente-vs-numéricas" class="level3" data-number="7.6.1">
+<h3 data-number="7.6.1" class="anchored" data-anchor-id="dependiente-vs-numéricas"><span class="header-section-number">7.6.1</span> Dependiente vs numéricas</h3>
+<section id="gráficos-de-confianza" class="level4" data-number="7.6.1.1">
+<h4 data-number="7.6.1.1" class="anchored" data-anchor-id="gráficos-de-confianza"><span class="header-section-number">7.6.1.1</span> Gráficos de confianza</h4>
 <p>Debido al desbalance de clases presente en la variable respuesta, será necesario reflejar claramente el grado de incertidumbre que esto ocasiona. Si una clase tiene más observaciones que otra entonces la comparación no sería justa y la variabilidad podría tener que ver con esto más que con la variabilidad inherente que intentamos capturar. Para hacer esto, primero recordemos que una estimación de intervalo describe un rango de valores dentro del cual es posible que esté un parámetro de la población y un intervalo de confianza es la probabilidad que asociamos con una estimación de intervalo <span class="citation" data-cites="levin_statistics_1998">(<a href="references.html#ref-levin_statistics_1998" role="doc-biblioref">Levin and Rubin 1998</a>)</span>.</p>
 <p>En este sentido, los gráficos de confianza son esenciales para entender no solo la relación de la variable categórica <code>diag</code> con las métricas numéricas, sino también para capturar el grado de incertidumbre asociado con estas métricas. Estos gráficos nos permiten ir más allá de las simples medias y observar cómo la variabilidad en los datos afecta nuestras conclusiones.</p>
 <p>Los gráficos de confianza nos permiten ver cómo cada métrica, se relaciona directamente con las categorías de <code>diag</code>. Por ejemplo, si observamos que los intervalos de confianza para <code>thp_required_lte</code> son significativamente bajos en la categoría “CAPACIDAD”, podemos inferir con cierto grado de confianza que un <code>thp_required_lte</code> bajo generalmente indica un problema de capacidad.</p>
@@ -2527,7 +2552,7 @@ tbody tr:last-child {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-¿Por qué no solo usar boxplots?
+¿Por qué no solo usar únicamente boxplots?
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -2548,7 +2573,7 @@ tbody tr:last-child {
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Función para crear un dataframe con los intervalos por cada métrica</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>calcular_ci <span class="ot">&lt;-</span> <span class="cf">function</span>(kpi) {</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a> ctl_01 <span class="sc">|&gt;</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a> ctl_train <span class="sc">|&gt;</span> </span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">group_by</span>(diag) <span class="sc">%&gt;%</span></span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">do</span>(<span class="fu">mean_ci</span>(., kpi)) <span class="sc">%&gt;%</span></span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
@@ -2574,47 +2599,48 @@ tbody tr:last-child {
 <span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>)) <span class="sc">+</span></span>
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a> <span class="fu">xlab</span>(<span class="st">"Diagnóstico"</span>) <span class="sc">+</span></span>
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a> <span class="fu">labs</span>(<span class="at">title =</span> .y) <span class="sc">+</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a> drako)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a> drako) <span class="sc">|&gt;</span> </span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a> <span class="fu">discard_at</span>(<span class="st">"ra_ta_ue_total"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-thp-required-lte" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-thp-required-lte-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.7: Porcentaje de tiempo que mantiene el throughput requerido en LTE</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.7: Porcentaje de tiempo que mantiene el throughput requerido en LTE</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Tal como se ilustra en la figura <a href="#fig-thp-required-lte" class="quarto-xref">Figure&nbsp;<span>6.7</span></a> el intervalo de confianza para la categoría “CAPACIDAD” va de aproximadamente 0.85 a 0.861. Esto significa que, con un 95% de confianza, se puede decir que la la verdadera media de <code>thp_required_lte</code> se encuentra en este rango.</p>
+<p>Tal como se ilustra en la figura <a href="#fig-thp-required-lte" class="quarto-xref">Figure&nbsp;<span>7.7</span></a> el intervalo de confianza para la categoría “CAPACIDAD” va de aproximadamente 0.85 a 0.861. Esto significa que, con un 95% de confianza, se puede decir que la la verdadera media de <code>thp_required_lte</code> se encuentra en este rango.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-cll-prctg" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-cll-prctg-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.8: Porcentaje de tiempo que el usuario estuvo conectado a la celda.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.8: Porcentaje de tiempo que el usuario estuvo conectado a la celda.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Los resultados observados en la <a href="#fig-cll-prctg" class="quarto-xref">Figure&nbsp;<span>6.8</span></a> son consistentes con las expectativas. Vemos que la categoría “PROMOTOR” muestra un alto porcentaje de tiempo de conexión a la red, lo cual es congruente con la naturaleza de esta categoría. Los intervalos altos pueden deberse a una alta variabilidad en los datos.</p>
+<p>Los resultados observados en la <a href="#fig-cll-prctg" class="quarto-xref">Figure&nbsp;<span>7.8</span></a> son consistentes con las expectativas. Vemos que la categoría “PROMOTOR” muestra un alto porcentaje de tiempo de conexión a la red, lo cual es congruente con la naturaleza de esta categoría. Los intervalos altos pueden deberse a una alta variabilidad en los datos.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-rate-prb-dl" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-rate-prb-dl-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.9: Porcentaje de bloques físicos utilizados para transmitir datos desde la RBS hacia los terminales. Una alta tasa de utilización de PRB podría generar problemas de capacidad.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.9: Porcentaje de bloques físicos utilizados para transmitir datos desde la RBS hacia los terminales. Una alta tasa de utilización de PRB podría generar problemas de capacidad.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Esta métrica es utilizada principalmente por el equipo CTL para determinar problemas de capacidad en la red LTE. Vemos en la <a href="#fig-rate-prb-dl" class="quarto-xref">Figure&nbsp;<span>6.9</span></a> que hay una diferencia grande entre esta medición y el resto de categorías, es decir, niveles altos de <code>rate-prb-dl</code> se asocian con problemas de capacidad en la celda.</p>
+<p>Esta métrica es utilizada principalmente por el equipo CTL para determinar problemas de capacidad en la red LTE. Vemos en la <a href="#fig-rate-prb-dl" class="quarto-xref">Figure&nbsp;<span>7.9</span></a> que hay una diferencia grande entre esta medición y el resto de categorías, es decir, niveles altos de <code>rate-prb-dl</code> se asocian con problemas de capacidad en la celda.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-rrc-success-rate" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-rrc-success-rate-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.10: Eficiencia en el establecimiento de una conexión RRC</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.10: Eficiencia en el establecimiento de una conexión RRC</figcaption>
 </figure>
 </div>
 </div>
@@ -2625,7 +2651,7 @@ tbody tr:last-child {
 <div id="fig-erab-success-rate" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-erab-success-rate-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.11: Tasa de éxito en la configuración, liberación y modficación de portadoras de servicio de accesso radioeléctrico (E-RAB)</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.11: Tasa de éxito en la configuración, liberación y modficación de portadoras de servicio de accesso radioeléctrico (E-RAB)</figcaption>
 </figure>
 </div>
 </div>
@@ -2636,40 +2662,40 @@ tbody tr:last-child {
 <div id="fig-interference" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-interference-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.12: Interferencia promedio del enlace ascendente (uplink) de la celda</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.12: Interferencia promedio del enlace ascendente (uplink) de la celda</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>En la <a href="#fig-interference" class="quarto-xref">Figure&nbsp;<span>6.12</span></a> se aprecia que valores mayores de interferencia podrían ocasionar problemas de cobertura. Esta métrica en particular puede interactuar con muchas otras métricas para determinar otro tipos de problemas en la red como por ejemplo optimización.</p>
+<p>En la <a href="#fig-interference" class="quarto-xref">Figure&nbsp;<span>7.12</span></a> se aprecia que valores mayores de interferencia podrían ocasionar problemas de cobertura. Esta métrica en particular puede interactuar con muchas otras métricas para determinar otro tipos de problemas en la red como por ejemplo optimización.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-throuput-dl" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-throuput-dl-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.13: Velocidad de descarga por Unidad de Equipo de Usuario en una red celular, generalmente en Mbps.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.13: Velocidad de descarga por Unidad de Equipo de Usuario en una red celular, generalmente en Mbps.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>CTL describe esta métrica principalmente en términos de capacidad, sin embargo, se observa que la estimación puntual de la media para cobertura se encuentra muy cercana. En este caso, amerita evaluar si esta diferencia es significativa.</p>
-<div class="cell" data-hash="eda_cache/html/fig-throuput-dl-anova_6d78d9eaa98f09071d24cc4284ec5812">
+<div class="cell" data-hash="eda_cache/html/fig-throuput-dl-anova_2f15199c03428b98b73a1c3a5531c215">
 <div class="cell-output-display">
 <div id="fig-throuput-dl-anova" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-throuput-dl-anova-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.14: ANOVA entre-sujetos</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.14: ANOVA entre-sujetos</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>En la parte superior de la <a href="#fig-throuput-dl-anova" class="quarto-xref">Figure&nbsp;<span>6.14</span></a> vemos el resultado de la prueba estadística de Fisher. El p-valor indica que si hay diferencias significativas con un tamaño de efecto de <span class="math inline">\(\widehat{\omega_{p}^{2}} = 0.09\)</span>. Este tamaño de efecto se puede medir como 9% lo cual es bajo. Se ve en las comparaciones por pares que capacidad y cobertura presentan diferencias estadísticamente significativas.</p>
+<p>En la parte superior de la <a href="#fig-throuput-dl-anova" class="quarto-xref">Figure&nbsp;<span>7.14</span></a> vemos el resultado de la prueba estadística de Fisher. El p-valor indica que si hay diferencias significativas con un tamaño de efecto de <span class="math inline">\(\widehat{\omega_{p}^{2}} = 0.09\)</span>. Este tamaño de efecto se puede medir como 9% lo cual es bajo. Se ve en las comparaciones por pares que capacidad y cobertura presentan diferencias estadísticamente significativas.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-throuput-ul" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-throuput-ul-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.15: Velocidad de transmisión de datos del dispositivo móvil a la estación base, generalmente también en Mbps.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.15: Velocidad de transmisión de datos del dispositivo móvil a la estación base, generalmente también en Mbps.</figcaption>
 </figure>
 </div>
 </div>
@@ -2680,18 +2706,18 @@ tbody tr:last-child {
 <div id="fig-corrected-cqi" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-corrected-cqi-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.16: Índice de calidad general de la celda</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.16: Índice de calidad general de la celda</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>La <a href="#fig-corrected-cqi" class="quarto-xref">Figure&nbsp;<span>6.16</span></a> muestra los diferentes índices para cada una de las categorías. Todo lo que esté por arriba de 7 se considera bueno. Aunque el equipo CTL indica que esta métrica tiene más utilidad para determinar problemas de optimización, lo que destaca a simple vista es que valores bajos de esta métrica se asocian más con problemas de cobertura.</p>
+<p>La <a href="#fig-corrected-cqi" class="quarto-xref">Figure&nbsp;<span>7.16</span></a> muestra los diferentes índices para cada una de las categorías. Todo lo que esté por arriba de 7 se considera bueno. Aunque el equipo CTL indica que esta métrica tiene más utilidad para determinar problemas de optimización, lo que destaca a simple vista es que valores bajos de esta métrica se asocian más con problemas de cobertura.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-index-1-1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-index-1-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.17: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.17: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.</figcaption>
 </figure>
 </div>
 </div>
@@ -2699,7 +2725,7 @@ tbody tr:last-child {
 <div id="fig-index-1-2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-index-1-2.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.18: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.18: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.</figcaption>
 </figure>
 </div>
 </div>
@@ -2707,7 +2733,7 @@ tbody tr:last-child {
 <div id="fig-index-1-3" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-index-1-3.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.19: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.19: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.</figcaption>
 </figure>
 </div>
 </div>
@@ -2715,7 +2741,7 @@ tbody tr:last-child {
 <div id="fig-index-1-4" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-index-1-4.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.20: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.20: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.</figcaption>
 </figure>
 </div>
 </div>
@@ -2723,7 +2749,7 @@ tbody tr:last-child {
 <div id="fig-index-1-5" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-index-1-5.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.21: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.21: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.</figcaption>
 </figure>
 </div>
 </div>
@@ -2731,7 +2757,7 @@ tbody tr:last-child {
 <div id="fig-index-1-6" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-index-1-6.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.22: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.22: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.</figcaption>
 </figure>
 </div>
 </div>
@@ -2739,26 +2765,108 @@ tbody tr:last-child {
 <div id="fig-index-1-7" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-index-1-7.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.23: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div id="fig-index-1-8" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="eda_files/figure-html/fig-index-1-8.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.24: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.23: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>Lo observado es consistente con lo esperado. En el caso del índice 1, un porcentaje bajo de conexiones en este índice podría indicar que el resto de muestras se están obteniendo de índices más lejanos. Se observa que a partir del índice 4 el porcentaje empieza a ser diferente entre capacidad y cobertura. En el índice 5 cobertura y capacidad tienen un porcentaje cercano, pero siempre cobertura es menor, hasta que finalmente en índice 6 ciertas conexiones se pueden etiquetar tanto como problemas de capacidad como de cobertura.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-modulation-qam-1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="eda_files/figure-html/fig-modulation-qam-1.png" class="img-fluid figure-img" width="768"></p>
+<figcaption class="figure-caption">Figure&nbsp;7.24: Índice de calidad general de la celda</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div id="fig-modulation-qam-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="eda_files/figure-html/fig-modulation-qam-2.png" class="img-fluid figure-img" width="768"></p>
+<figcaption class="figure-caption">Figure&nbsp;7.25: Índice de calidad general de la celda</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-modulation-qpsk-1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="eda_files/figure-html/fig-modulation-qpsk-1.png" class="img-fluid figure-img" width="768"></p>
+<figcaption class="figure-caption">Figure&nbsp;7.26: Índice de calidad general de la celda</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div id="fig-modulation-qpsk-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="eda_files/figure-html/fig-modulation-qpsk-2.png" class="img-fluid figure-img" width="768"></p>
+<figcaption class="figure-caption">Figure&nbsp;7.27: Índice de calidad general de la celda</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-time-lte-1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="eda_files/figure-html/fig-time-lte-1.png" class="img-fluid figure-img" width="768"></p>
+<figcaption class="figure-caption">Figure&nbsp;7.28: Índice de calidad general de la celda</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div id="fig-time-lte-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="eda_files/figure-html/fig-time-lte-2.png" class="img-fluid figure-img" width="768"></p>
+<figcaption class="figure-caption">Figure&nbsp;7.29: Índice de calidad general de la celda</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-disponibilidad-1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="eda_files/figure-html/fig-disponibilidad-1.png" class="img-fluid figure-img" width="768"></p>
+<figcaption class="figure-caption">Figure&nbsp;7.30: Índice de calidad general de la celda</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div id="fig-disponibilidad-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="eda_files/figure-html/fig-disponibilidad-2.png" class="img-fluid figure-img" width="768"></p>
+<figcaption class="figure-caption">Figure&nbsp;7.31: Índice de calidad general de la celda</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-rain-1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="eda_files/figure-html/fig-rain-1.png" class="img-fluid figure-img" width="768"></p>
+<figcaption class="figure-caption">Figure&nbsp;7.32: Índice de calidad general de la celda</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div id="fig-rain-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="eda_files/figure-html/fig-rain-2.png" class="img-fluid figure-img" width="768"></p>
+<figcaption class="figure-caption">Figure&nbsp;7.33: Índice de calidad general de la celda</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="variabilidad-y-rango" class="level4" data-number="6.6.1.2">
-<h4 data-number="6.6.1.2" class="anchored" data-anchor-id="variabilidad-y-rango"><span class="header-section-number">6.6.1.2</span> Variabilidad y rango</h4>
+<section id="variabilidad-y-rango" class="level4" data-number="7.6.1.2">
+<h4 data-number="7.6.1.2" class="anchored" data-anchor-id="variabilidad-y-rango"><span class="header-section-number">7.6.1.2</span> Variabilidad y rango</h4>
 <p>Debido a que</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>ctl_normalized <span class="ot">&lt;-</span> ctl_01 <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>ctl_normalized <span class="ot">&lt;-</span> ctl_train <span class="sc">|&gt;</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(<span class="fu">where</span>(is.numeric), </span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span><span class="fu">c</span>(msisdn_dd, srvy_id), diag) <span class="sc">|&gt;</span> </span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">recipe</span>(diag <span class="sc">~</span> ., <span class="at">data =</span> _) <span class="sc">|&gt;</span> </span>
@@ -2778,7 +2886,7 @@ tbody tr:last-child {
 <div id="fig-boxplots-1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-boxplots-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.25: Análisis de variabilidad, rango y atípicos</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.34: Análisis de variabilidad, rango y atípicos</figcaption>
 </figure>
 </div>
 </div>
@@ -2786,7 +2894,7 @@ tbody tr:last-child {
 <div id="fig-boxplots-2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-boxplots-2.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.26: Análisis de variabilidad, rango y atípicos</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.35: Análisis de variabilidad, rango y atípicos</figcaption>
 </figure>
 </div>
 </div>
@@ -2794,62 +2902,86 @@ tbody tr:last-child {
 <div id="fig-boxplots-3" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-boxplots-3.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.27: Análisis de variabilidad, rango y atípicos</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.36: Análisis de variabilidad, rango y atípicos</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Usamos el paquete {bestNormalize} para transformar los datos y mejorar la visualización de los boxplots. Aunque los gráficos de confianza son más detallados, los boxplots también muestran variaciones importantes dentro de cada categoría. El rango intercuartil (IQR) nos indica que hay más variabilidad en ciertos features. En particular, las variables <code>corrected_cqi</code>, <code>interferencia</code> y <code>time_cl</code> muestran menos variación. Como se discutió en la sección <a href="#sec-distribuiciones" class="quarto-xref"><span>Section&nbsp;6.5.2</span></a>, la variable 64QAM sigue una distribución cercana a la normal. Para tratar los valores atípicos podemos considerar el aplicar una transformación llamada <em>spatial sign</em> <span class="citation" data-cites="kuhn_feature_2020">(ver <a href="references.html#ref-kuhn_feature_2020" role="doc-biblioref">Kuhn and Johnson 2020</a>)</span> y <span class="citation" data-cites="kuhn_applied_2013">(<a href="references.html#ref-kuhn_applied_2013" role="doc-biblioref">Kuhn and Johnson 2013</a>)</span> o bien usar modelos robustos a valores atípicos.</p>
+<p>Usamos el paquete {bestNormalize} para transformar los datos y mejorar la visualización de los boxplots. Aunque los gráficos de confianza son más detallados, los boxplots también muestran variaciones importantes dentro de cada categoría. El rango intercuartil (IQR) nos indica que hay más variabilidad en ciertos features. En particular, las variables <code>corrected_cqi</code>, <code>interferencia</code> y <code>time_cl</code> muestran menos variación. Como se discutió en la sección <a href="#sec-distribuiciones" class="quarto-xref"><span>Section&nbsp;7.5.2</span></a>, la variable 64QAM sigue una distribución cercana a la normal. Para tratar los valores atípicos podemos considerar el aplicar una transformación llamada <em>spatial sign</em> <span class="citation" data-cites="kuhn_feature_2020">(ver <a href="references.html#ref-kuhn_feature_2020" role="doc-biblioref">Kuhn and Johnson 2020</a>)</span> y <span class="citation" data-cites="kuhn_applied_2013">(<a href="references.html#ref-kuhn_applied_2013" role="doc-biblioref">Kuhn and Johnson 2013</a>)</span> o bien usar modelos robustos a valores atípicos.</p>
 </section>
 </section>
-<section id="dependiente-vs-categóricas" class="level3" data-number="6.6.2">
-<h3 data-number="6.6.2" class="anchored" data-anchor-id="dependiente-vs-categóricas"><span class="header-section-number">6.6.2</span> Dependiente vs categóricas</h3>
+<section id="analizar-interacciones" class="level3" data-number="7.6.2">
+<h3 data-number="7.6.2" class="anchored" data-anchor-id="analizar-interacciones"><span class="header-section-number">7.6.2</span> Analizar interacciones</h3>
+<p>Según los SMEs entrevistados, la categoría <strong>optimización</strong> por lo general depende de un par de variables, es decir, que esta categoría podría ser el resultado de interacciones entre variables. Las métricas que principalmente se utilizan para determinar esto son:</p>
+<ul>
+<li>erab_success_rate</li>
+<li>rrc_success_rate</li>
+<li>corrected_cqi</li>
+<li>l_ul_interference_avg</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Seleccionar predictores de tipo factor y dejar top-10 para ciudad</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>ctl_fc <span class="ot">&lt;-</span> ctl_01 <span class="sc">|&gt;</span> </span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(<span class="fu">where</span>(is.character), <span class="sc">-</span>bts_sh_nm, time_cl) <span class="sc">|&gt;</span> </span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">mutate</span>(<span class="at">ciudad =</span> <span class="fu">fct_lump</span>(cty_nm, <span class="at">n =</span> <span class="dv">10</span>, <span class="at">other_level =</span> <span class="st">"OTRO"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(<span class="sc">-</span>cty_nm) <span class="sc">|&gt;</span> </span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a> rrc_success_rate <span class="sc">~</span> l_ul_interference_avg <span class="sc">*</span> diag, </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a> <span class="at">data =</span> ctl_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular combinaciones para tree-maps</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>nx <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">names</span>(ctl_fc <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>time_cl)))</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">choose</span>(nx, <span class="dv">2</span>)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">interact_plot</span>(modelo, <span class="at">pred =</span> l_ul_interference_avg, <span class="at">modx =</span> diag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="eda_files/figure-html/unnamed-chunk-57-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>Dado que las lineas son casi paralelas se puede concluir que no hay una interacción entre los factores</p>
+<p>La interacción entre factores se puede observar cuando las líneas del diagrama se cruzan o tienen pendientes muy diferentes lo cual indica que la variable respuesta se comporta diferente al variar un factor dependiendo del valor del otro factor.</p>
+</section>
+<section id="dependiente-vs-categóricas" class="level3" data-number="7.6.3">
+<h3 data-number="7.6.3" class="anchored" data-anchor-id="dependiente-vs-categóricas"><span class="header-section-number">7.6.3</span> Dependiente vs categóricas</h3>
+<p>Utilizar ambos indicadores para todas las regiones. Va a depender si el CVE al que le estamos apuntando es urbano (time_lte) o rural (time_cl).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Seleccionar predictores de tipo factor y dejar top-10 para ciudad</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>ctl_fc <span class="ot">&lt;-</span> ctl_train <span class="sc">|&gt;</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(<span class="fu">where</span>(is.character), <span class="sc">-</span>bts_sh_nm, time_cl) <span class="sc">|&gt;</span> </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">mutate</span>(<span class="at">ciudad =</span> <span class="fu">fct_lump</span>(cty_nm, <span class="at">n =</span> <span class="dv">10</span>, <span class="at">other_level =</span> <span class="st">"OTRO"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(<span class="sc">-</span>cty_nm) <span class="sc">|&gt;</span> </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear combinaciones</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>comb <span class="ot">&lt;-</span> <span class="fu">combinations</span>(nx, <span class="dv">2</span>, <span class="fu">names</span>(ctl_fc <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>time_cl)), <span class="at">repeats =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular combinaciones para tree-maps</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>nx <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">names</span>(ctl_fc <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>time_cl)))</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">choose</span>(nx, <span class="dv">2</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 15</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear objeto con combinaciones</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>nm <span class="ot">&lt;-</span> <span class="fu">map2_chr</span>(comb[, <span class="dv">1</span>], comb[, <span class="dv">2</span>], <span class="sc">~</span> <span class="fu">str_c</span>(.x, .y, <span class="at">sep =</span> <span class="st">"_"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear combinaciones</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>comb <span class="ot">&lt;-</span> <span class="fu">combinations</span>(nx, <span class="dv">2</span>, <span class="fu">names</span>(ctl_fc <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>time_cl)), <span class="at">repeats =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Función para dejar únicamente las combinaciones con diagnóstico</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>tiene_diag <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">str_detect</span>(x, <span class="at">pattern =</span> <span class="st">"diag"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear objeto con combinaciones</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>nm <span class="ot">&lt;-</span> <span class="fu">map2_chr</span>(comb[, <span class="dv">1</span>], comb[, <span class="dv">2</span>], <span class="sc">~</span> <span class="fu">str_c</span>(.x, .y, <span class="at">sep =</span> <span class="st">"_"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar mosaicos</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>lista_mosaicos <span class="ot">&lt;-</span> <span class="fu">map2</span>(</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a> <span class="at">.x =</span> comb[, <span class="dv">1</span>],</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a> <span class="at">.y =</span> comb[, <span class="dv">2</span>], </span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a> <span class="sc">~</span> <span class="fu">graficar_mosaicos</span>(</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> ctl_fc,</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">f1 =</span> .x,</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">f2 =</span> .y,</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">ra =</span> <span class="fl">0.3</span>,</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">leyenda =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a> <span class="fu">set_names</span>(nm) <span class="sc">|&gt;</span> </span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a> <span class="fu">keep_at</span>(tiene_diag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Función para dejar únicamente las combinaciones con diagnóstico</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>tiene_diag <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">str_detect</span>(x, <span class="at">pattern =</span> <span class="st">"diag"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar mosaicos</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>lista_mosaicos <span class="ot">&lt;-</span> <span class="fu">map2</span>(</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a> <span class="at">.x =</span> comb[, <span class="dv">1</span>],</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a> <span class="at">.y =</span> comb[, <span class="dv">2</span>], </span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a> <span class="sc">~</span> <span class="fu">graficar_mosaicos</span>(</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> ctl_fc,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">f1 =</span> .x,</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">f2 =</span> .y,</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">ra =</span> <span class="fl">0.3</span>,</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">leyenda =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a> <span class="fu">set_names</span>(nm) <span class="sc">|&gt;</span> </span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a> <span class="fu">keep_at</span>(tiene_diag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-mosaico-municipio" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-mosaico-municipio-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.28: Mayor time-cl por municipio</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.37: Mayor time-cl por municipio</figcaption>
 </figure>
 </div>
 </div>
@@ -2859,7 +2991,7 @@ tbody tr:last-child {
 <div id="fig-mosaico-departamento" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-mosaico-departamento-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.29: Mayor time-cl por departamento</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.38: Mayor time-cl por departamento</figcaption>
 </figure>
 </div>
 </div>
@@ -2869,7 +3001,7 @@ tbody tr:last-child {
 <div id="fig-mosaico-region" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-mosaico-region-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.30: Mayor time-cl por región comercial</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.39: Mayor time-cl por región comercial</figcaption>
 </figure>
 </div>
 </div>
@@ -2879,74 +3011,74 @@ tbody tr:last-child {
 <div id="fig-mosaico-region-rf" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-mosaico-region-rf-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.31: Mayor time-cl por región rf-planning</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.40: Mayor time-cl por región rf-planning</figcaption>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="análisis-de-correlación" class="level3" data-number="6.6.3">
-<h3 data-number="6.6.3" class="anchored" data-anchor-id="análisis-de-correlación"><span class="header-section-number">6.6.3</span> Análisis de correlación</h3>
+<section id="análisis-de-correlación" class="level3" data-number="7.6.4">
+<h3 data-number="7.6.4" class="anchored" data-anchor-id="análisis-de-correlación"><span class="header-section-number">7.6.4</span> Análisis de correlación</h3>
 <p>Se debe realizar la inspección de las correlaciones que se encuentren arriba de 0.75 en valor absoluto. Este umbral es sugerido por algunos autores <span class="citation" data-cites="kuhn_applied_2013">(<a href="references.html#ref-kuhn_applied_2013" role="doc-biblioref">Kuhn and Johnson 2013</a>, pag 87)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># La correlación de Spearman es más sólida para los valores</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"># atípicos que la correlación de Pearson.</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>corm <span class="ot">&lt;-</span> ctl_n <span class="sc">|&gt;</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">correlate</span>(</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">use    =</span> <span class="st">"pairwise.complete.obs"</span>, </span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"spearman"</span>, </span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">quiet  =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># La correlación de Spearman es más sólida para los valores</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co"># atípicos que la correlación de Pearson.</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>corm <span class="ot">&lt;-</span> ctl_n <span class="sc">|&gt;</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">correlate</span>(</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">use    =</span> <span class="st">"pairwise.complete.obs"</span>, </span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"spearman"</span>, </span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">quiet  =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <details>
 <summary>Mostrar Código</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>corm <span class="sc">|&gt;</span> </span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">rearrange</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">shave</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">rplot</span>(<span class="at">colours =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"green"</span>)) <span class="sc">+</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Matriz de correlación"</span>, </span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">subtitle =</span> <span class="st">"Correlaciones mayores a 0.75"</span>) <span class="sc">+</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a> yunkel <span class="sc">+</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a> <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">13</span>),</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">13</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>corm <span class="sc">|&gt;</span> </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">rearrange</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">shave</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">rplot</span>(<span class="at">colours =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"green"</span>)) <span class="sc">+</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Matriz de correlación"</span>, </span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">subtitle =</span> <span class="st">"Correlaciones mayores a 0.75"</span>) <span class="sc">+</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a> yunkel <span class="sc">+</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a> <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-correlacion" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="eda_files/figure-html/fig-correlacion-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption">Figure&nbsp;6.32: Análisis de correlación</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7.41: Análisis de correlación</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>matriz_reducida <span class="ot">&lt;-</span> corm <span class="sc">|&gt;</span> </span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">rearrange</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">shave</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">stretch</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">filter</span>(<span class="fu">abs</span>(r) <span class="sc">&gt;=</span> .<span class="dv">75</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>matriz_reducida <span class="ot">&lt;-</span> corm <span class="sc">|&gt;</span> </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">rearrange</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">shave</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">stretch</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">filter</span>(<span class="fu">abs</span>(r) <span class="sc">&gt;=</span> .<span class="dv">75</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <details>
 <summary>Mostrar Código</summary>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>matriz_reducida <span class="sc">|&gt;</span> </span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">arrange</span>(r) <span class="sc">|&gt;</span> </span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">gt_theme_538</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">tab_header</span>(</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="fu">html</span>(<span class="st">"&lt;p style='color:#25a7f0;'&gt;&lt;strong&gt;Correlaciones altas&lt;/strong&gt;&lt;/p&gt;"</span>),</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">md</span>(<span class="st">"Mayores a 0.75"</span>)</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a> <span class="fu">data_color</span>(</span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> r,</span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"numeric"</span>,</span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette =</span> <span class="st">"RdYlGn"</span>, </span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">reverse =</span> <span class="cn">TRUE</span></span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a> <span class="fu">tab_style</span>(</span>
-<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">list</span>(<span class="fu">cell_text</span>(<span class="at">align =</span> <span class="st">"center"</span>), <span class="at">v_align =</span> <span class="st">"top"</span>),</span>
-<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>(<span class="at">columns =</span> <span class="fu">everything</span>())</span>
-<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>matriz_reducida <span class="sc">|&gt;</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">arrange</span>(r) <span class="sc">|&gt;</span> </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">gt_theme_538</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">tab_header</span>(</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="fu">html</span>(<span class="st">"&lt;p style='color:#25a7f0;'&gt;&lt;strong&gt;Correlaciones altas&lt;/strong&gt;&lt;/p&gt;"</span>),</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">md</span>(<span class="st">"Mayores a 0.75"</span>)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a> <span class="fu">data_color</span>(</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> r,</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"numeric"</span>,</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette =</span> <span class="st">"RdYlGn"</span>, </span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">reverse =</span> <span class="cn">TRUE</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a> <span class="fu">tab_style</span>(</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">list</span>(<span class="fu">cell_text</span>(<span class="at">align =</span> <span class="st">"center"</span>), <span class="at">v_align =</span> <span class="st">"top"</span>),</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>(<span class="at">columns =</span> <span class="fu">everything</span>())</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="tbl-altas-correlaciones" class="anchored">
@@ -3398,7 +3530,7 @@ tbody tr:last-child {
   border-bottom: 2px solid #ffffff00;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>Table&nbsp;6.4:  <p>high-r</p> </caption>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>Table&nbsp;7.4:  <p>high-r</p> </caption>
   <thead>
     <tr class="gt_heading">
       <td colspan="3" class="gt_heading gt_title gt_font_normal" style="font-family: Chivo; font-weight: 700;"><p style="color:#25a7f0;"><strong>Correlaciones altas</strong></p></td>
@@ -3415,22 +3547,22 @@ tbody tr:last-child {
   <tbody class="gt_table_body">
     <tr><td headers="x" class="gt_row gt_left">ra_ta_ue_index5</td>
 <td headers="y" class="gt_row gt_left">ra_ta_ue_index6</td>
-<td headers="r" class="gt_row gt_right" style="background-color: #006837; color: #FFFFFF;">0.7702640</td></tr>
+<td headers="r" class="gt_row gt_right" style="background-color: #006837; color: #FFFFFF;">0.7701307</td></tr>
     <tr><td headers="x" class="gt_row gt_left">rrc_success_rate</td>
 <td headers="y" class="gt_row gt_left">thpughput_ul</td>
-<td headers="r" class="gt_row gt_right" style="background-color: #016B39; color: #FFFFFF;">0.7716593</td></tr>
+<td headers="r" class="gt_row gt_right" style="background-color: #026C39; color: #FFFFFF;">0.7719502</td></tr>
     <tr><td headers="x" class="gt_row gt_left">erab_success_rate</td>
 <td headers="y" class="gt_row gt_left">thpughput_ul</td>
-<td headers="r" class="gt_row gt_right" style="background-color: #108546; color: #FFFFFF;">0.7832002</td></tr>
+<td headers="r" class="gt_row gt_right" style="background-color: #148C4A; color: #FFFFFF;">0.7860535</td></tr>
     <tr><td headers="x" class="gt_row gt_left">modulation_16qam_ratio</td>
 <td headers="y" class="gt_row gt_left">modulation_qpsk_ratio</td>
-<td headers="r" class="gt_row gt_right" style="background-color: #AADB6D; color: #000000;">0.8351814</td></tr>
+<td headers="r" class="gt_row gt_right" style="background-color: #AFDD6F; color: #000000;">0.8370045</td></tr>
     <tr><td headers="x" class="gt_row gt_left">rrc_success_rate</td>
 <td headers="y" class="gt_row gt_left">erab_success_rate</td>
-<td headers="r" class="gt_row gt_right" style="background-color: #F26941; color: #FFFFFF;">0.9403228</td></tr>
+<td headers="r" class="gt_row gt_right" style="background-color: #F26941; color: #FFFFFF;">0.9406787</td></tr>
     <tr><td headers="x" class="gt_row gt_left">modulation_64qam_ratio</td>
 <td headers="y" class="gt_row gt_left">corrected_cqi</td>
-<td headers="r" class="gt_row gt_right" style="background-color: #A50026; color: #FFFFFF;">0.9809342</td></tr>
+<td headers="r" class="gt_row gt_right" style="background-color: #A50026; color: #FFFFFF;">0.9813649</td></tr>
   </tbody>
   
   
@@ -3440,6 +3572,9 @@ tbody tr:last-child {
 </div>
 </div>
 <p>La correlación de Pearson es mayor que la de Spearman, lo que podría significar que existan correlaciones no lineales entre los predictores y la variable objetivo. Las interacciones complejas entre predictores es parte de lo esperado dado el contexto brindado por los SMEs.</p>
+</section>
+<section id="mutual-information" class="level3" data-number="7.6.5">
+<h3 data-number="7.6.5" class="anchored" data-anchor-id="mutual-information"><span class="header-section-number">7.6.5</span> Mutual information</h3>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
@@ -3761,8 +3896,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./data-prep.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data prep</span></span>
+      <a href="./split.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Split</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

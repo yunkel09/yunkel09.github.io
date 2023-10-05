@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./eda.html" rel="next">
+<link href="./split.html" rel="next">
 <link href="./visualize.html" rel="prev">
 <link href="./fav.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js"></script>
@@ -201,8 +201,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./split.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Split</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./eda.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">EDA</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">EDA</span></span></a>
   </div>
 </li>
       </ul>
@@ -216,12 +222,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./split.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Split</span></span></a>
-  </div>
-</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cross-validation.html" class="sidebar-item-text sidebar-link">
@@ -282,7 +282,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#colapso-respuesta" id="toc-colapso-respuesta" class="nav-link" data-scroll-target="#colapso-respuesta"><span class="header-section-number">5.4</span> Colapso respuesta</a></li>
   <li><a href="#métricas" id="toc-métricas" class="nav-link" data-scroll-target="#métricas"><span class="header-section-number">5.5</span> Métricas</a></li>
   <li><a href="#disponibilidad" id="toc-disponibilidad" class="nav-link" data-scroll-target="#disponibilidad"><span class="header-section-number">5.6</span> Disponibilidad</a></li>
-  <li><a href="#unión" id="toc-unión" class="nav-link" data-scroll-target="#unión"><span class="header-section-number">5.7</span> Unión</a></li>
+  <li><a href="#precipitación" id="toc-precipitación" class="nav-link" data-scroll-target="#precipitación"><span class="header-section-number">5.7</span> Precipitación</a></li>
+  <li><a href="#unión" id="toc-unión" class="nav-link" data-scroll-target="#unión"><span class="header-section-number">5.8</span> Unión</a></li>
   </ul>
 </nav>
     </div>
@@ -1027,7 +1028,7 @@ tbody tr:last-child {
 <span id="annotated-cell-8-11"><a href="#annotated-cell-8-11" aria-hidden="true" tabindex="-1"></a> <span class="fu">across</span>(diag,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="9" onclick="event.preventDefault();">9</a><span id="annotated-cell-8-12" class="code-annotation-target"><a href="#annotated-cell-8-12" aria-hidden="true" tabindex="-1"></a>  \(x) <span class="fu">case_match</span>(x, <span class="st">"NO_DIAG"</span> <span class="sc">~</span> <span class="st">"PROMOTOR"</span>, <span class="at">.default =</span> diag))) <span class="sc">|&gt;</span></span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="10" onclick="event.preventDefault();">10</a><span id="annotated-cell-8-13" class="code-annotation-target"><a href="#annotated-cell-8-13" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(<span class="sc">-</span>class_desc) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="11" onclick="event.preventDefault();">11</a><span id="annotated-cell-8-14" class="code-annotation-target"><a href="#annotated-cell-8-14" aria-hidden="true" tabindex="-1"></a> <span class="fu">distinct</span>(msisdn_dd, srvy_id, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="11" onclick="event.preventDefault();">11</a><span id="annotated-cell-8-14" class="code-annotation-target"><a href="#annotated-cell-8-14" aria-hidden="true" tabindex="-1"></a> <span class="fu">distinct</span>(msisdn_dd, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
@@ -1072,9 +1073,22 @@ tbody tr:last-child {
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="11">11</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="14" data-code-annotation="11">Remover duplicados, dejando únicamente un usuario y una encuesta única.</span>
+<span data-code-cell="annotated-cell-8" data-code-lines="14" data-code-annotation="11">Remover duplicados, dejando únicamente un usuario.</span>
 </dd>
 </dl>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Importante
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En la etapa de segmentación de datos en conjuntos de entrenamiento, validación y prueba, así como durante la validación cruzada, se presentan complicaciones si un usuario individual (identificado por <code>msisdn_dd</code>) posee múltiples categorías en la variable <code>diag</code>. Para llevar a cabo una estratificación precisa, es esencial que cada valor único de la unidad experimental (en este contexto, el usuario o <code>msisdn_dd</code>) tenga asignado un único valor en la variable <code>diag</code>. Si esta condición no se satisface, se producirá un error en las tareas de segmentación y validación cruzada.</p>
 </div>
 </div>
 </section>
@@ -1097,22 +1111,35 @@ tbody tr:last-child {
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(<span class="sc">-</span>time_thrgpt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="unión" class="level2" data-number="5.7">
-<h2 data-number="5.7" class="anchored" data-anchor-id="unión"><span class="header-section-number">5.7</span> Unión</h2>
-<p>Para la unión utilizaremos una llave compuesta por el número de teléfono del usuario representado por la variable <code>msisdn_dd</code> y el número de encuesta <code>srvy_id</code>.</p>
-<p>La primera unión a realizar es entre las métricas de red y la disponibilidad</p>
+<section id="precipitación" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="precipitación"><span class="header-section-number">5.7</span> Precipitación</h2>
+<p>La columna <code>fct_srvy_15_mnt</code> es una columna que se utilizó en el ETL para poder calcular el mes al que debía asociar la precipitación promedio. En este momento ya no es relevante para el análisis, por lo que se debe eliminar. Se aprovecha para poder convertir la variable <code>fct_srvy_dt</code> en tipo fecha.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ctl_00 <span class="ot">&lt;-</span> metr_01 <span class="sc">|&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">inner_join</span>(disp_01, <span class="fu">join_by</span>(msisdn_dd, srvy_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>lluv_01 <span class="ot">&lt;-</span> lluv_00 <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(<span class="sc">-</span>fct_srvy_15_mnth) <span class="sc">|&gt;</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">mutate</span>(<span class="fu">across</span>(fct_srvy_dt, ymd))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="unión" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="unión"><span class="header-section-number">5.8</span> Unión</h2>
+<p>Para la unión utilizaremos una llave compuesta por el número de teléfono del usuario representado por la variable <code>msisdn_dd</code> y el número de encuesta <code>srvy_id</code>.</p>
+<p>La primera unión a realizar es entre las métricas de red, disponibilidad y cantidad de precipitación promedio.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ctl_00 solo disp_00: 273,434 x30</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>ctl_00 <span class="ot">&lt;-</span> metr_01 <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">inner_join</span>(disp_01, <span class="fu">join_by</span>(msisdn_dd, srvy_id)) <span class="sc">|&gt;</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">inner_join</span>(lluv_01, <span class="fu">join_by</span>(msisdn_dd, srvy_id, fct_srvy_dt, bts_sh_nm))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>La siguiente unión será contra la tabla maestra <code>diag_03</code>. Posteriormente aplicaremos transformaciones relacionadas a la posición de las columnas y convertir a tipo entero las variables identificadoras.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ctl_01 <span class="ot">&lt;-</span> diag_03 <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">inner_join</span>(ctl_00, <span class="fu">join_by</span>(msisdn_dd, srvy_id, fct_srvy_dt)) <span class="sc">|&gt;</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">relocate</span>(diag, <span class="at">.after =</span> <span class="fu">last_col</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(<span class="sc">-</span>r1) <span class="sc">|&gt;</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(msisdn_dd, srvy_id), as.integer))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 26,559 x 35</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>ctl_01 <span class="ot">&lt;-</span> diag_03 <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">inner_join</span>(ctl_00, <span class="fu">join_by</span>(msisdn_dd, srvy_id, fct_srvy_dt)) <span class="sc">|&gt;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">relocate</span>(diag, <span class="at">.after =</span> <span class="fu">last_col</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(<span class="sc">-</span>r1) <span class="sc">|&gt;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(msisdn_dd, srvy_id), as.integer))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Se completó el proceso de limpieza, transformación y <em>data blending</em> inicial. En la siguiente sección, se procederá a realizar la división de los datos para poder proseguir con el EDA.</p>
 
 
 </section>
@@ -1427,8 +1454,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./eda.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">EDA</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./split.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Split</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

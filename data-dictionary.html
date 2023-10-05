@@ -69,6 +69,8 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -167,8 +169,14 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./split.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Split</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./eda.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">EDA</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">EDA</span></span></a>
   </div>
 </li>
       </ul>
@@ -182,12 +190,6 @@ ul.task-list li input[type="checkbox"] {
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./split.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Split</span></span></a>
-  </div>
-</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cross-validation.html" class="sidebar-item-text sidebar-link">
@@ -495,6 +497,62 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="tbl-lluvia-table" class="anchored">
+<table class="table table-sm table-striped small">
+<caption>Table&nbsp;4.3: Cantidad de precipitación.</caption>
+<colgroup>
+<col style="width: 14%">
+<col style="width: 11%">
+<col style="width: 59%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">feature</th>
+<th style="text-align: left;">tipo_dato</th>
+<th style="text-align: left;">descripcion</th>
+<th style="text-align: left;">tabla</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">fct_srvy_dt</td>
+<td style="text-align: left;">date</td>
+<td style="text-align: left;">Día en que fue llenada la encuesta por el usuario</td>
+<td style="text-align: left;">Diagnóstico</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">bts_sh_nm</td>
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">Identificador de celda</td>
+<td style="text-align: left;">Métricas</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">msisdn_dd</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">Número de teléfono</td>
+<td style="text-align: left;">Diagnóstico</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">srvy_id</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">Identificador de encuesta</td>
+<td style="text-align: left;">Diagnóstico</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">rain</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">Cantidad de lluvia en mm cúbicos</td>
+<td style="text-align: left;">Diagnóstico</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>La <a href="#tbl-lluvia-table" class="quarto-xref">Table&nbsp;<span>4.3</span></a> muestra los <span class="math inline">\(mm^{3}\)</span> promedio que cayeron sobre una celda específica.</p>
 
 
 
