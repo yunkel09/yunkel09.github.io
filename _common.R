@@ -51,6 +51,7 @@ pacman::p_load(
  paletteer,
  scales,
  janitor,
+ interactions,
  gt,
  gtExtras,
  glue,

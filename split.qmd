@@ -67,6 +67,31 @@ ctl_split <- ctl_01 |>
 ctl_split
 ```
 
+```{r}
+#| code-fold: true
+list(train = training(ctl_split), 
+     validation = validation(ctl_split), 
+     test = testing(ctl_split)) |> 
+ map(\(x) nrow(x)) |> 
+ as_tibble() |> 
+ pivot_longer(cols = everything(), 
+              names_to = "division", values_to = "observaciones") |> 
+ mutate(prop = observaciones / sum(observaciones)) |> 
+ gt() |> 
+ tab_header(
+    title = md("**Three-Way Split**"),
+    subtitle = md("Distribución basada en la cantidad disponible de datos")
+  ) |> 
+ gt_theme_538() |> 
+ fmt_number(columns = observaciones, decimals = 0) |> 
+ fmt_percent(
+    columns = prop,
+    decimals = 1
+  )
+```
+
+En la tabla anterior se observa como quedó la distribución.
+
 Podemos acceder a estos conjuntos de la siguiente manera:
 
 ```{r}
@@ -81,6 +106,8 @@ datos_split <- board_folder(path = "split_data")
 
 ```{r}
 #| echo: false
+#| message: false
+#| warning: false
 pin_write(
  board = datos_split,
  x     = ctl_split,

@@ -29,17 +29,22 @@ métricas del NPS transaccional.
 erDiagram
   DIAGNOSTICO ||--o{ METRICAS : has
   DIAGNOSTICO ||--o{ DISPONIBILIDAD : has
+  DIAGNOSTICO ||--o{ LLUVIA : has
   DIAGNOSTICO {
-    integer msisdn_dd
-    integer srvy_id
+    int msisdn_dd
+    int srvy_id
   }
   METRICAS {
-    integer msisdn_dd
-    integer srvy_id
+    int msisdn_dd
+    int srvy_id
   }
   DISPONIBILIDAD {
-    integer msisdn_dd
-    integer srvy_id
+    int msisdn_dd
+    int srvy_id
+  }
+  LLUVIA {
+    int msisdn_dd
+    int srvy_id
   }
 ```
 

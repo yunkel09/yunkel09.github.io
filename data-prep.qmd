@@ -199,15 +199,15 @@ de la columna `diag`
 
 ::: {.callout-important}
 #### Importante
-Si en aras de obtener más muestras se dejan usuarios que hayan contestado más
-de una vez una encuesta, entonces tendremos una categorías diferentes por
-usuario. Esto plantearía un problema tanto a nivel de división de los datos en
-entrenamiento, validación y prueba, como en cross-validación.  Si se desea
-estratificar es necesario que para cada valor único de nuestra unidad
-experimental (usuario - msisdn_dd) la variable `diag` debe tener un solo valor
-único. Si esto no se cumple obtendremos un error. 
+En la etapa de segmentación de datos en conjuntos de entrenamiento, validación y
+prueba, así como durante la validación cruzada, se presentan complicaciones si
+un usuario individual (identificado por `msisdn_dd`) posee múltiples categorías
+en la variable `diag`. Para llevar a cabo una estratificación precisa, es
+esencial que cada valor único de la unidad experimental (en este contexto, el
+usuario o `msisdn_dd`) tenga asignado un único valor en la variable `diag`. Si
+esta condición no se satisface, se producirá un error en las tareas de
+segmentación y validación cruzada.
 :::
-
 
 ## Métricas
 
@@ -232,6 +232,11 @@ disp_01 <- disp_00 |>
 ```
 
 ## Precipitación
+
+La columna `fct_srvy_15_mnt` es una columna que se utilizó en el ETL para poder
+calcular el mes al que debía asociar la precipitación promedio.  En este
+momento ya no es relevante para el análisis, por lo que se debe eliminar. Se
+aprovecha para poder convertir la variable `fct_srvy_dt` en tipo fecha.
 
 ```{r}
 lluv_01 <- lluv_00 |>
@@ -268,6 +273,10 @@ ctl_01 <- diag_03 |>
  select(-r1) |>
  mutate(across(c(msisdn_dd, srvy_id), as.integer))
 ```
+
+Se completó el proceso de limpieza, transformación y *data blending* inicial.
+En la siguiente sección, se procederá a realizar la división de los datos
+para poder proseguir con el EDA.
 
 
 ```{r}

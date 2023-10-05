@@ -550,7 +550,7 @@ El intervalo da una idea de dónde podrían caer las verdaderas medias de
 en lugar de solo una muestra.
 
 ::: {.callout-note}
-#### ¿Por qué no solo usar boxplots?
+#### ¿Por qué no solo usar únicamente boxplots?
 Aunque los boxplots ofrecen una visión más completa de la distribución de los
 datos, no proporcionan el mismo nivel de detalle sobre la incertidumbre en torno
 a la media que los gráficos de confianza. Usar ambos proporciona una visión más
@@ -878,6 +878,36 @@ la normal.  Para tratar los valores atípicos podemos considerar el aplicar una
 transformación llamada *spatial sign* [ver @kuhn_feature_2020] y
 [@kuhn_applied_2013] o bien usar modelos robustos a valores atípicos.
 
+### Analizar interacciones
+
+Según los SMEs entrevistados, la categoría **optimización** por lo general
+depende de un par de variables, es decir, que esta categoría podría ser el
+resultado de interacciones entre variables.  Las métricas que principalmente se
+utilizan para determinar esto son:
+
+- erab_success_rate
+- rrc_success_rate
+- corrected_cqi
+- l_ul_interference_avg
+
+```{r}
+modelo <- lm(
+ rrc_success_rate ~ l_ul_interference_avg * diag, 
+ data = ctl_train)
+```
+
+```{r}
+interact_plot(modelo, pred = l_ul_interference_avg, modx = diag)
+```
+
+Dado que las lineas son casi paralelas se puede concluir que no hay una
+interacción entre los factores
+
+La interacción entre factores se puede observar cuando las líneas del diagrama
+se cruzan o tienen pendientes muy diferentes lo cual indica que la variable
+respuesta se comporta diferente al variar un factor dependiendo del valor del
+otro factor.
+
 ### Dependiente vs categóricas
 
 Utilizar ambos indicadores para todas las regiones.
@@ -1038,6 +1068,8 @@ La correlación de Pearson es mayor que la de Spearman, lo que podría significa
 que existan correlaciones no lineales entre los predictores y la variable
 objetivo.  Las interacciones complejas entre predictores es parte de lo
 esperado dado el contexto brindado por los SMEs.
+
+### Mutual information
 
 
 

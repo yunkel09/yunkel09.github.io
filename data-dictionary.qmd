@@ -33,3 +33,14 @@ read_csv("diccionarios/dic_02.csv") |>
   knitr::kable()
 ```
 
+```{r}
+#| label: tbl-lluvia-table
+#| echo: false
+#| message: false
+#| tbl-cap: Cantidad de precipitación.
+read_csv("diccionarios/dic_03.csv") |>
+  knitr::kable()
+```
+
+La @tbl-lluvia-table muestra los $mm^{3}$ promedio que cayeron sobre
+una celda específica.
