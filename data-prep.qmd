@@ -180,7 +180,7 @@ diag_03 <- diag_02 |>
  across(diag,
   \(x) case_match(x, "NO_DIAG" ~ "PROMOTOR", .default = diag))) |>  # <9>
  select(-class_desc) |>                                             # <10>
- distinct(msisdn_dd, srvy_id, .keep_all = TRUE)                     # <11>
+ distinct(msisdn_dd, .keep_all = TRUE)                     # <11>
 ```
 
 1. Dejar únicamente las etiquetas seleccionadas por los SME
@@ -195,7 +195,18 @@ de la columna `diag`
 8. Unir la lista en un único dataframe
 9. Cambiar la etiqueta `NO_DIAG` por `PROMOTOR`.
 10. Remover la columna `class_desc` ya que puede causar *data leakage*.
-11. Remover duplicados, dejando únicamente un usuario y una encuesta única.
+11. Remover duplicados, dejando únicamente un usuario.
+
+::: {.callout-important}
+#### Importante
+Si en aras de obtener más muestras se dejan usuarios que hayan contestado más
+de una vez una encuesta, entonces tendremos una categorías diferentes por
+usuario. Esto plantearía un problema tanto a nivel de división de los datos en
+entrenamiento, validación y prueba, como en cross-validación.  Si se desea
+estratificar es necesario que para cada valor único de nuestra unidad
+experimental (usuario - msisdn_dd) la variable `diag` debe tener un solo valor
+único. Si esto no se cumple obtendremos un error. 
+:::
 
 
 ## Métricas

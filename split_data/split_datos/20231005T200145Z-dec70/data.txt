@@ -1,0 +1,9 @@
+file: split_datos.rds
+file_size: 3253141
+pin_hash: dec703e53e440c4c
+type: rds
+title: division_datos_ctl
+description: three_way_split
+tags: ~
+created: 20231005T200145Z
+api_version: 1

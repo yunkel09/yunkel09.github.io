@@ -1,3 +1,4 @@
+
 # Cross-validation {#sec-cross-validation}
 
 ```{r}
@@ -27,11 +28,63 @@ grupo queda fuera a la vez. Un uso común de este tipo de remuestreo es cuando
 se tienen medidas repetidas del mismo tema.
 
 ```{r}
-# ctl_folds <- group_vfold_cv(
-#  data = ctl_train, 
-#  group = "msisdn_dd", 
-#  v = 5,
-#  balance = "observations",
-#  strata = "diag")
+# 31.22 seg
+tictoc::tic()
+ctl_folds <- group_vfold_cv(
+ data    = ctl_train,             # <1>
+ group   = "msisdn_dd",           # <2>
+ v       = 10,                    # <3>
+ balance = "observations",        # <4>
+ strata  = "diag")                # <5>
+tictoc::toc()
 ```
+
+1. Usar el conjunto de datos de entrenamiento.
+2. Se define la unidad experimental, que en este caso es el usuario como la
+variable de agrupación. El objetivo es garantizar que todas las observaciones
+para un usuario específico estén en el mismo *fold*.
+3. Número de particiones (pliegos). Es el número de valores únicos en la
+variable de agrupación. Debido a que tenemos un conjunto grande de
+observaciones, elegiremos `v = 10`.
+4. Intenta equilibrar el número de observaciones en cada *fold*.  La función
+`group_vfold_cv()` intentará asignar aproximadamente el mismo número de
+observaciones a cada *fold*, lo que podría ayudar a mitigar el impacto del
+desbalanceo en la validación cruzada.
+5. Estratificar es apropiado si se quiere asegurar que cada *fold* tenga una
+distribución similar de la variable de diagnóstico. 
+
+
+```{r}
+ctl_folds
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

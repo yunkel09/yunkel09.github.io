@@ -602,7 +602,8 @@ analisis_bivariado <- lista_ci |>
  theme(axis.text = element_text(size = 8)) +
  xlab("Diagnóstico") +
  labs(title = .y) +
- drako)
+ drako) |> 
+ discard_at("ra_ta_ue_total")
 ```
 
 ```{r}
@@ -755,7 +756,7 @@ de esta métrica se asocian más con problemas de cobertura.
 #| fig-width: 8
 #| label: fig-index-1
 #| fig-cap: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.
-walk(analisis_bivariado[10:17], ~ print(.x))
+walk(analisis_bivariado[10:16], ~ print(.x))
 ```
 
 Lo observado es consistente con lo esperado.  En el caso del índice 1, un
@@ -766,6 +767,61 @@ cobertura. En el índice 5 cobertura y capacidad tienen un porcentaje cercano,
 pero siempre cobertura es menor, hasta que finalmente en índice 6 ciertas
 conexiones se pueden etiquetar tanto como problemas de capacidad como de
 cobertura.
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+#| label: fig-modulation-qam
+#| fig-cap: Índice de calidad general de la celda
+walk(analisis_bivariado[17:18], ~ print(.x))
+```
+
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+#| label: fig-modulation-qpsk
+#| fig-cap: Índice de calidad general de la celda
+walk(analisis_bivariado[19:20], ~ print(.x))
+```
+
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+#| label: fig-time-lte
+#| fig-cap: Índice de calidad general de la celda
+walk(analisis_bivariado[21:22], ~ print(.x))
+```
+
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+#| label: fig-disponibilidad
+#| fig-cap: Índice de calidad general de la celda
+walk(analisis_bivariado[23:24], ~ print(.x))
+```
+
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+#| label: fig-rain
+#| fig-cap: Índice de calidad general de la celda
+walk(analisis_bivariado[25:26], ~ print(.x))
+```
+
+
 
 #### Variabilidad y rango
 

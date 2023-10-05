@@ -26,7 +26,31 @@ ctl_01 <- read_fst("data/ctl_01.fst") |> as_tibble()
 
 ## Data spending
 
-Con la función `initial_validation_split()` se puede crear una división triple
+En el contexto del análisis de datos utilizando métodos de resampling agrupados,
+como `group_initial_validation_split` en el paquete `rsample`, se asume que
+todas las observaciones dentro de un grupo son interdependientes y comparten
+características similares. Por lo tanto, se requiere que cada unidad
+experimental y de agrupamiento, en este caso, cada usuario, tenga un único valor
+para la variable de estratificación, en este caso, el diagnóstico. La presencia
+de múltiples valores de diagnóstico para un solo usuario violaría la suposición
+de homogeneidad dentro del grupo, lo cual podría llevar a estimaciones sesgadas
+y resultados poco fiables en el análisis posterior. Además, la interpretación de
+los resultados y la aplicabilidad del modelo podrían verse complicadas. Por lo
+tanto, se establece que la homogeneidad dentro de cada grupo es esencial para
+mantener la integridad del análisis y la validez de los resultados.
+
+Se debe validar que los datos contienen un valor único en `diag` para
+cada usuario `msisdn_nd`
+
+```{r}
+ctl_01 |> 
+ summarise(distintos = n_distinct(srvy_id), .by = msisdn_dd) |> 
+ filter(distintos > 1)
+```
+
+La validación indica que hay un solo diagnóstico por usuario.
+
+Con la función `group_initial_validation_split()` se creará una división triple
 de los datos en un conjunto de entrenamiento, validación y prueba. Se realizará
 estratificación sobre nuestra variable objetivo `diag`. Dejaremos las
 proporciones por defecto debido a que tenemos `r nrow(ctl_01)` observaciones.
@@ -36,7 +60,7 @@ los datos se asignarán al conjunto de entrenamiento, un 20% a validación y el
 
 ```{r}
 ctl_split <- ctl_01 |> 
- initial_validation_split(strata = diag)
+ group_initial_validation_split(group = msisdn_dd, strata = diag)
 ```
 
 ```{r}
