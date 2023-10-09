@@ -33,6 +33,7 @@ vignettes/*.pdf
 *.drawio
 *.fst
 *.gz
+*.rds
 *.jpg
 *.log
 *.pdf
