@@ -39,17 +39,6 @@ los resultados y la aplicabilidad del modelo podrían verse complicadas. Por lo
 tanto, se establece que la homogeneidad dentro de cada grupo es esencial para
 mantener la integridad del análisis y la validez de los resultados.
 
-Se debe validar que los datos contienen un valor único en `diag` para
-cada usuario `msisdn_nd`
-
-```{r}
-ctl_01 |> 
- summarise(distintos = n_distinct(srvy_id), .by = msisdn_dd) |> 
- filter(distintos > 1)
-```
-
-La validación indica que hay un solo diagnóstico por usuario.
-
 Con la función `group_initial_validation_split()` se creará una división triple
 de los datos en un conjunto de entrenamiento, validación y prueba. Se realizará
 estratificación sobre nuestra variable objetivo `diag`. Dejaremos las
@@ -101,7 +90,7 @@ training(ctl_split) |>
 
 ```{r}
 #| echo: false
-datos_split <- board_folder(path = "split_data")
+tablero_ctl <- board_folder(path = "tablero_ctl")
 ```
 
 ```{r}
@@ -109,11 +98,28 @@ datos_split <- board_folder(path = "split_data")
 #| message: false
 #| warning: false
 pin_write(
- board = datos_split,
- x     = ctl_split,
- name  = "split_datos",
- type  = "rds",
- title = "division_datos_ctl",
- description = "three_way_split")
+ board       = tablero_ctl,
+ x           = ctl_split,
+ name        = "ctl_split", 
+ type        = "rds", 
+ title       = "Three-way split", 
+ description = "División aleatoria de tres vías")
 ```
+
+```{r}
+#| eval: false
+#| echo: false
+tablero_ctl |> pin_meta("ctl_split")
+pin_list(tablero_ctl)
+```
+
+
+
+
+
+
+
+
+
+
 

@@ -9,13 +9,12 @@ source("_load.R")
 
 ```{r}
 #| echo: false
-datos_split <- board_folder(path = "split_data")
+tablero_ctl <- board_folder(path = "tablero_ctl")
 ```
-
 
 ```{r}
 #| echo: false
-ctl_split <- pin_read(board = datos_split, name = "split_datos")
+ctl_split <- pin_read(board = tablero_ctl, name = "ctl_split")
 ctl_train <- training(ctl_split)
 ```
 
@@ -76,7 +75,7 @@ ctl_train |>
  get_dupes(msisdn_dd) |> 
  head(5) |> 
  select(
-  fct_srvy_dt, msisdn_dd, srvy_id, bts_sh_nm) |> 
+  fct_srvy_dt, msisdn_dd, bts_sh_nm) |> 
  gt() |> 
  tab_header(
   title = md("**Datos de Perfil**"),
@@ -113,7 +112,7 @@ plot_missing(ctl_train, missing_only = TRUE,
 ```{r}
 # crear set de datos solo con variables numéricas
 ctl_n <- ctl_train |>
- select(where(is.numeric), -c(msisdn_dd, srvy_id))
+ select(where(is.numeric), -msisdn_dd)
 ```
 
 </br>
@@ -496,7 +495,8 @@ ctl_c |>
 plot_bar(
  data    = ctl_c, 
  ggtheme = yunkel, 
- theme_config = list(strip.text = element_text(size = 22)))
+ theme_config = list(strip.text = element_text(size = 22))) |> 
+ suppressMessages()
 ```
 
 ```{r}
@@ -831,7 +831,7 @@ Debido a que
 #| eval: false
 ctl_normalized <- ctl_train |>
  select(where(is.numeric), 
-  -c(msisdn_dd, srvy_id), diag) |> 
+  -c(msisdn_dd, diag) |> 
  recipe(diag ~ ., data = _) |> 
  step_best_normalize(all_predictors(), -all_nominal())  |> 
  ver()
@@ -885,28 +885,62 @@ depende de un par de variables, es decir, que esta categoría podría ser el
 resultado de interacciones entre variables.  Las métricas que principalmente se
 utilizan para determinar esto son:
 
-- erab_success_rate
-- rrc_success_rate
-- corrected_cqi
-- l_ul_interference_avg
+```{r}
+optim_vars <- c(
+ "erab_success_rate", 
+ "rrc_success_rate", 
+ "corrected_cqi", 
+ "l_ul_interference_avg")
+```
+
 
 ```{r}
-modelo <- lm(
- rrc_success_rate ~ l_ul_interference_avg * diag, 
- data = ctl_train)
+ctl_interact <- ctl_train |> 
+  select(all_of(optim_vars), diag) |> 
+  filter(diag %in% c("OPTIMIZACION", "CAPACIDAD", "COBERTURA")) |> 
+  mutate(across(diag, as_factor))
 ```
 
 ```{r}
-interact_plot(modelo, pred = l_ul_interference_avg, modx = diag)
+modelo_multinom <- multinom(
+ diag ~ erab_success_rate * rrc_success_rate, data = ctl_interact)
 ```
 
-Dado que las lineas son casi paralelas se puede concluir que no hay una
-interacción entre los factores
 
-La interacción entre factores se puede observar cuando las líneas del diagrama
-se cruzan o tienen pendientes muy diferentes lo cual indica que la variable
-respuesta se comporta diferente al variar un factor dependiendo del valor del
-otro factor.
+```{r}
+n1 <-  seq(min(ctl_interact$erab_success_rate), 
+           max(ctl_interact$erab_success_rate), 
+           length.out = 4) |> round(2)
+
+n2 <- seq(min(ctl_interact$rrc_success_rate), 
+                          max(ctl_interact$rrc_success_rate), 
+                          length.out = 4) |> round(2)
+
+```
+
+
+```{r}
+# Visualizar las interacciones
+efectos_prediccion <- predictorEffects(
+ modelo_multinom, ~ erab_success_rate + rrc_success_rate,
+ xlevels = list(
+   erab_success_rate = n1,
+   rrc_success_rate =  n2))
+```
+
+```{r}
+# Crear gráfico de efectos de predictor
+plot(
+ efectos_prediccion,
+ axes = list(grid = TRUE, x = list(rug = FALSE,
+ erab_success_rate = list(ticks = list(at = n1)),
+ rrc_success_rate  = list(ticks = list(at = n2))),
+                 y = list(style = "stacked")),
+ lines = list(col = c("blue", "red", "orange", "brown", "black")),
+ lattice = list(key.args = list(columns = 1),
+                strip = list(factor.names = FALSE)))
+```
+
 
 ### Dependiente vs categóricas
 
@@ -1013,17 +1047,33 @@ corm <- ctl_n |>
 ```
 
 ```{r}
+metodos <- c("pearson", "spearman")
+```
+
+
+```{r}
+lista_corr <- metodos |> 
+ map(~ ctl_n |>
+  correlate(
+   use    = "pairwise.complete.obs", 
+   method = .x, 
+   quiet  = TRUE)) |> 
+ set_names(metodos)
+```
+
+
+```{r}
 #| fig-height: 6
 #| fig-width: 8
 #| code-fold: true
 #| code-summary: "Mostrar Código"
 #| label: fig-correlacion
 #| fig-cap: Análisis de correlación
-corm |> 
+lista_corr[["spearman"]] |> 
  rearrange() |> 
  shave() |> 
  rplot(colours = c("red", "green")) +
- labs(title = "Matriz de correlación", 
+ labs(title = "Matriz de correlación - Spearman", 
       subtitle = "Correlaciones mayores a 0.75") +
  yunkel +
  theme(axis.text.y = element_text(size = 14),
@@ -1031,29 +1081,59 @@ corm |>
 ```
 
 ```{r}
-matriz_reducida <- corm |> 
- rearrange() |> 
- shave() |> 
- stretch(na.rm = TRUE) |> 
- filter(abs(r) >= .75)
+matrices_corr <- lista_corr |> 
+ map2(.y = metodos, ~ .x |> 
+  rearrange() |> 
+  shave() |> 
+  stretch(remove.dups = TRUE, na.rm = TRUE) |> 
+  filter(abs(r) >= .75) |> 
+  rename(!!sym(.y) := r)
+ )
 ```
 
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Mostrar Código"
-#| label: tbl-altas-correlaciones
+#| label: tbl-altas-correlaciones-pearson
 #| tbl-cap: "high-r"
-matriz_reducida |> 
- arrange(r) |> 
+matrices_corr |> 
+ pluck("pearson") |> 
+ arrange(pearson) |> 
  gt() |> 
  gt_theme_538() |> 
  tab_header(
-  title = html("<p style='color:#25a7f0;'><strong>Correlaciones altas</strong></p>"),
+  title = html("<p style='color:#25a7f0;'><strong>Correlaciones altas Pearson</strong></p>"),
     subtitle = md("Mayores a 0.75")
   ) |> 
  data_color(
-    columns = r,
+    columns = pearson,
+    method = "numeric",
+    palette = "RdYlGn", 
+    reverse = TRUE
+  ) |> 
+ tab_style(
+    style = list(cell_text(align = "center"), v_align = "top"),
+    locations = cells_column_labels(columns = everything())
+ )
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Mostrar Código"
+#| label: tbl-altas-correlaciones-spearman
+#| tbl-cap: "high-r"
+matrices_corr |> 
+ pluck("spearman") |> 
+ arrange(spearman) |> 
+ gt() |> 
+ gt_theme_538() |> 
+ tab_header(
+  title = html("<p style='color:#25a7f0;'><strong>Correlaciones altas Spearman</strong></p>"),
+    subtitle = md("Mayores a 0.75")
+  ) |> 
+ data_color(
+    columns = spearman,
     method = "numeric",
     palette = "RdYlGn", 
     reverse = TRUE
@@ -1071,9 +1151,214 @@ esperado dado el contexto brindado por los SMEs.
 
 ### Mutual information
 
+Al enfrentarnos a un nuevo conjunto de datos, especialmente uno con cientos o
+miles de características, el proceso puede sentirse abrumador. Un excelente
+primer paso es utilizar una métrica de utilidad de características para
+clasificar la importancia de cada una en relación con la variable objetivo. Esto
+permite enfocar los esfuerzos iniciales en un subconjunto más pequeño de
+características, asegurando que el tiempo invertido sea productivo.
+
+Una métrica particularmente útil para este propósito es la "Información Mutua"
+(MI, por sus siglas en inglés). A diferencia de la correlación, que solo detecta
+relaciones lineales, la Información Mutua puede capturar cualquier tipo de
+relación entre las variables. Es fácil de usar, eficiente desde el punto de
+vista computacional, bien fundamentada teóricamente y resistente al sobreajuste.
+La MI mide cómo el conocimiento de una característica reduce la incertidumbre
+sobre la variable objetivo, lo que la convierte en una herramienta valiosa,
+especialmente en las etapas iniciales del desarrollo de características.
+
+It's possible for a feature to be very informative when interacting with other
+features, but not so informative all alone. MI can't detect interactions
+between features. It is a univariate metric.
 
 
 
+
+
+
+```{r}
+source("_python.R")
+```
+
+
+```{python}
+from sklearn.datasets import load_iris
+from sklearn.feature_selection import mutual_info_classif
+import pandas as pd
+
+# Cargar el conjunto de datos
+iris = load_iris()
+X = pd.DataFrame(iris.data, columns=iris.feature_names)
+y = iris.target
+
+# Convertir una columna numérica en categórica y otra en entera
+X['sepal length (cm)'] = pd.cut(X['sepal length (cm)'], bins=3, labels=["low", "medium", "high"])
+X['sepal width (cm)'] = X['sepal width (cm)'].astype(int)
+
+# Calcular la información mutua
+# Aquí, establecemos discrete_features para manejar variables mixtas
+mi = mutual_info_classif(X, y, discrete_features=[True, True, False, False])
+mi_df = pd.DataFrame({'attributes': X.columns, 'importance': mi})
+print(mi_df)
+
+```
+
+
+```{python}
+from sklearn.datasets import load_iris
+from sklearn.feature_selection import mutual_info_classif
+import pandas as pd
+
+# Cargar el conjunto de datos
+iris = load_iris()
+X = pd.DataFrame(iris.data, columns=iris.feature_names)
+y = iris.target
+
+# Convertir las columnas numéricas en categóricas
+X = X.apply(lambda x: pd.cut(x, bins=3, labels=["low", "medium", "high"]))
+
+# Calcular la información mutua
+mi = mutual_info_classif(X, y, discrete_features=True)
+mi_df = pd.DataFrame({'attributes': X.columns, 'importance': mi})
+print(mi_df)
+
+```
+
+```{r}
+
+data(iris)
+# Convertir las columnas numéricas en categóricas
+iris[, 1:4] = lapply(iris[, 1:4], function(x) cut(x, breaks = 3, labels = c("low", "medium", "high")))
+
+# Calcular la información mutua
+result = information_gain(Species ~ ., data = iris)
+print(result)
+
+```
+
+
+
+```{python}
+import pandas as pd
+from sklearn.feature_selection import mutual_info_classif
+from sklearn.datasets import load_iris
+
+# Cargar el conjunto de datos Iris
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# Calcular la Información Mutua
+mi = mutual_info_classif(X, y)
+
+# Crear un DataFrame de pandas
+mi_df = pd.DataFrame({
+    'attributes': iris.feature_names,
+    'importance': mi
+})
+
+print(mi_df)
+
+
+```
+
+```{python}
+from sklearn.datasets import load_iris
+from sklearn.feature_selection import mutual_info_classif
+import pandas as pd
+
+# Cargar el conjunto de datos Iris
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Calcular la información mutua
+mi = mutual_info_classif(X, y, discrete_features=False)
+
+# Mostrar los resultados
+print("Información Mutua con sklearn:")
+print(mi)
+
+```
+
+
+
+```{r}
+irisX <- iris[-5]
+y <- iris$Species
+```
+
+```{r}
+information_gain(formula = Species ~ ., data = iris)
+```
+
+
+
+```{r}
+# Cargar el conjunto de datos Iris
+data(iris)
+
+# Calcular la información mutua
+result = information.gain(Species~., iris)
+
+# Mostrar los resultados
+print("Información Mutua con FSelector:")
+print(result)
+```
+
+
+```{r}
+library(magrittr)
+library(FSelectorRcpp)
+```
+
+```{r}
+information_gain(               # Calculate the score for each attribute
+    formula = Species ~ .,      # that is on the right side of the formula.
+    data = iris,                # Attributes must exist in the passed data.
+    type  = "infogain"          # Choose the type of a score to be calculated.
+  ) %>%                          
+  cut_attrs(                    # Then take attributes with the highest rank.
+    k = 2                       # For example: 2 attrs with the higehst rank.
+  ) %>%                         
+  to_formula(                   # Create a new formula object with 
+    attrs = .,                  # the most influencial attrs.
+    class = "Species"           
+  ) %>%
+  glm(
+    formula = .,                # Use that formula in any classification algorithm.
+    data = iris,                
+    family = "binomial"         
+  )
+```
+
+```{r}
+evaluator_R2_lm <-    # Create a scorer function.
+  function(
+    attributes,       # That takes the currently considered subset of attributes
+    data,             # from a specified dataset.
+    dependent = 
+      names(data)[1]  # To find features that best describe the dependent variable.
+  ) {
+    summary(          # In this situation we take the r.squared statistic
+      lm(             # from the summary of a linear model object.
+        to_formula(   # This is the score to use to choose between considered 
+          attributes, # subsets of attributes.
+          dependent
+        ),
+        data = data)
+    )$r.squared
+  }
+
+feature_search(          # feature_search work in 2 modes - 'exhaustive' and 'greedy'
+  attributes = 
+    names(iris)[-1],     # It takes attribues and creates combinations of it's subsets.
+  fun = evaluator_R2_lm, # And it calculates the score of a subset that depends on the 
+  data = iris,           # evaluator function passed in the `fun` parameter.
+  mode = "exhaustive",   # exhaustive - means to check all possible 
+  sizes =                # attributes' subset combinations 
+    1:length(attributes) # of sizes passed in sizes.
+)$all
+```
 
 
 

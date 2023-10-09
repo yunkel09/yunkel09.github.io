@@ -1,0 +1,9 @@
+file: ctl_split.rds
+file_size: 3059823
+pin_hash: 8bc8a67af5d0b420
+type: rds
+title: Three-way split
+description: División aleatoria de tres vías
+tags: ~
+created: 20231008T063735Z
+api_version: 1

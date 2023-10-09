@@ -240,7 +240,7 @@ aprovecha para poder convertir la variable `fct_srvy_dt` en tipo fecha.
 
 ```{r}
 lluv_01 <- lluv_00 |>
- select(-fct_srvy_15_mnth) |> 
+ select(-fct_srvy_15_mnth, -twr) |> 
  mutate(across(fct_srvy_dt, ymd))
 ```
 
@@ -269,9 +269,12 @@ convertir a tipo entero las variables identificadoras.
 # 26,559 x 35
 ctl_01 <- diag_03 |>
  inner_join(ctl_00, join_by(msisdn_dd, srvy_id, fct_srvy_dt)) |>
- relocate(diag, .after = last_col()) |>
- select(-r1) |>
- mutate(across(c(msisdn_dd, srvy_id), as.integer))
+ relocate(diag, .before = fct_srvy_dt) |>
+ relocate(thp_required_lte, .after = bts_sh_nm) |>
+ select(-c(r1, srvy_id)) |>
+ mutate(across(msisdn_dd, as.integer)) |> 
+ filter(!if_all(rate_prb_dl:modulation_qpsk_ratio, ~ .x == 0))
+ 
 ```
 
 Se completó el proceso de limpieza, transformación y *data blending* inicial.

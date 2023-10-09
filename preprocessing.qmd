@@ -1,1 +1,188 @@
 # Preprocessing {#sec-preprocessing}
+
+```{r}
+#| echo: false
+source("_common.R")
+source("_functions.R")
+source("_load.R")
+```
+
+```{r}
+#| echo: false
+tablero_ctl <- board_folder(path = "tablero_ctl")
+```
+
+```{r}
+#| echo: false
+ctl_split <- pin_read(board = tablero_ctl, name = "ctl_split")
+ctl_folds <- pin_read(board = tablero_ctl, name = "ctl_folds")
+ctl_train <- training(ctl_split)
+```
+
+
+Una variedad de opciones y pasos adicionales a menudo ocurren antes de ajustar
+los modelos.
+
+La ingeniería de características implica reformatear los valores de los
+predictores para que un modelo los utilice de manera más efectiva. Esto incluye
+transformaciones y codificaciones que resalten las características importantes
+de los datos. Por ejemplo, se podría crear un nuevo predictor a partir de la
+relación entre dos predictores existentes. La elección de cómo codificar los
+datos, ya sea numéricamente o categóricamente, también es crucial.
+
+Otros métodos de preprocesamiento incluyen la reducción de la correlación entre
+predictores mediante la extracción de características o la eliminación de
+algunos predictores, la imputación de valores faltantes y la transformación de
+predictores sesgados para hacer que su distribución sea simétrica. Además,
+algunos modelos requieren que los predictores numéricos estén centrados y
+escalados para evitar sesgos en las métricas de distancia. En resumen, la
+ingeniería de características y el preprocesamiento de datos son pasos
+esenciales para mejorar el rendimiento del modelo.
+
+## Recetas
+
+```{r}
+sencillo <- recipe(diag ~ ., data = ctl_train) |> 
+ step_rm(all_nominal_predictors()) |> 
+ step_rm(fct_srvy_dt) |> 
+ update_role(msisdn_dd, new_role = "user_id") |> 
+ step_impute_median(all_numeric_predictors()) |> 
+ step_nzv(all_predictors()) |> 
+ step_normalize(all_predictors()) |> 
+ step_corr(all_predictors()) |> 
+ # step_best_normalize(all_numeric_predictors(), -all_nominal()) |> 
+ step_smote(diag, skip = TRUE)
+```
+
+```{r}
+tic()
+sencillo |> ver() %>% select(order(colnames(.))) %>% glimpse(width = 95)
+toc()
+```
+
+
+```{r}
+poly_recipe <- 
+   normalized_rec %>% 
+   step_poly(all_predictors()) %>% 
+   step_interact(~ all_predictors():all_predictors())
+```
+
+## Motores
+
+```{r}
+xgboost_spec <- boost_tree(
+  tree_depth     = tune(), 
+  learn_rate     = tune(), 
+  loss_reduction = tune(), 
+  min_n          = tune(), 
+  sample_size    = tune(), 
+  trees          = tune()
+ ) |> 
+ set_mode("classification") |> 
+ set_engine("xgboost")
+```
+
+```{r}
+rf_spec <- rand_forest(
+ trees = 100, 
+ # mtry  = tune(), 
+ # min_n = tune()
+ ) %>%
+ set_engine("ranger") %>%
+ set_mode("classification")
+```
+
+### Workflowset
+
+
+```{r}
+mset <- metric_set(precision, recall, f_meas)
+```
+
+
+```{r}
+ctl_set <- workflow_set(
+ preproc = list(simple  = sencillo), 
+ models  = list(
+ xgboost       = xgboost_spec)) 
+ # random_forest = rf_spec))
+```
+
+```{r}
+ctl_set
+```
+
+
+```{r}
+# definir race control para búsqueda de hiperparámetros
+race_ctrl <- control_race(
+ save_pred     = TRUE,
+ parallel_over = "everything",
+ save_workflow = TRUE)
+```
+
+```{r}
+# habilitar cluster para procesamiento paralelo
+cl <- makePSOCKcluster(10)
+registerDoParallel(cl)
+```
+
+
+```{r}
+# 32.36 seg (xgboost + rf)
+tic()
+tune_res <- ctl_set %>% 
+ workflow_map(
+ fn        = "tune_race_anova", 
+ verbose   = TRUE,
+ resamples = ctl_folds,
+ control   = race_ctrl,
+ seed      = 2023,
+ metrics   = mset,
+ grid      = 20)
+toc()
+```
+
+```{r}
+stopCluster(cl)
+unregister()
+```
+
+```{r}
+tune_res
+```
+
+```{r}
+# 190 modelos
+(tm <- nrow(collect_metrics(tune_res, summarize = FALSE)))
+```
+
+
+```{r}
+tune_rank <- tune_res %>%
+ rank_results(select_best = TRUE, rank_metric = "f_meas") %>% 
+ select(modelo = wflow_id, .metric, mean, rank) %>% 
+ pivot_wider(names_from = .metric, values_from = mean)
+```
+
+```{r}
+tune_rank
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

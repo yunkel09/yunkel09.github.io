@@ -39,16 +39,21 @@ import::from(fst,           read_fst, write_fst)
 import::from(cowplot,       .except = "stamp")
 import::from(conectigo,     cargar_fuentes)
 import::from(skimr,         skim, skim_with, sfl)
-# import::from(moments,       skewness, kurtosis)
 import::from(patchwork,     plot_layout, plot_annotation)
 import::from(ggstatsplot,   ggbetweenstats)
 import::from(viridis,       scale_fill_viridis)
 import::from(gtools,        combinations)
 import::from(colorblindr,   scale_fill_OkabeIto)
 import::from(bestNormalize, bestNormalize, step_best_normalize)
+import::from(doParallel,    registerDoParallel)
+import::from(nnet,          multinom)
+import::from(effects,       predictorEffects)
+import::from(parallel,      detectCores, makePSOCKcluster, stopCluster)
 pacman::p_load(
  knitr,
  paletteer,
+ tictoc,
+ themis,
  scales,
  janitor,
  interactions,
@@ -60,6 +65,8 @@ pacman::p_load(
  DataExplorer,
  ggpackets,
  pins,
+ bonsai,
+ finetune,
  tidymodels,
  tidyverse)
 

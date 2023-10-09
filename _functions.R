@@ -196,7 +196,11 @@ graficar_mosaicos <- function(df, f1, f2, leyenda = F, ra = 0.4) {
 # preparar y desplegar receta
 ver <- . %>% prep() %>% juice()
 
-
+# detener el backend
+unregister <- function() {
+ env <- foreach:::.foreachGlobals
+ rm(list=ls(name=env), pos=env)
+}
 
 
 

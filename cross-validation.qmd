@@ -10,13 +10,12 @@ source("_load.R")
 
 ```{r}
 #| echo: false
-datos_split <- board_folder(path = "split_data")
+tablero_ctl <- board_folder(path = "tablero_ctl")
 ```
-
 
 ```{r}
 #| echo: false
-ctl_split <- pin_read(board = datos_split, name = "split_datos")
+ctl_split <- pin_read(board = tablero_ctl, name = "ctl_split")
 ctl_train <- training(ctl_split)
 ```
 
@@ -33,7 +32,7 @@ tictoc::tic()
 ctl_folds <- group_vfold_cv(
  data    = ctl_train,             # <1>
  group   = "msisdn_dd",           # <2>
- v       = 10,                    # <3>
+ v       = 5,                     # <3>
  balance = "observations",        # <4>
  strata  = "diag")                # <5>
 tictoc::toc()
@@ -58,7 +57,18 @@ distribución similar de la variable de diagnóstico.
 ctl_folds
 ```
 
-
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+pin_write(
+ board       = tablero_ctl,
+ x           = ctl_folds,
+ name        = "ctl_folds", 
+ type        = "rds", 
+ title       = "Grouped cross-validation", 
+ description = "Splited data based on userid variable")
+```
 
 
 

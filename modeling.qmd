@@ -8,5 +8,7 @@ Esta integración de preprocesamiento permite que todo el feature-engineering
 se realice en algo llamado receta, a lo que después se le pueden pasar las
 especificaciones de modelos que sean necesarias. 
 
+![Modelado y preprocesamiento](imagenes/data_analysis_process.png)
+
 
 ![Modelado y preprocesamiento](imagenes/proper-workflow.svg)
