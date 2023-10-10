@@ -574,20 +574,39 @@ en relación con la variable objetivo. No puede detectar interacciones entre
 características, pero sigue siendo una herramienta extremadamente útil para una
 primera ronda de selección de características.
 
+Para poder tener un dataset más amplio en cuanto a *features*, realizaremos
+un procedimiento con la fecha llamado *feature template*
+[@duboue_art_2020, pag. 30]. En este caso, lo que se realizará es la
+descomposición de la fecha en sus parte constituyentes.
+
 ```{r}
 ctl_expanded <- ctl_train |>
+ drop_na() |> 
  mutate(fecha_15dias = fct_srvy_dt - days(15)) |> 
  recipe(diag ~ ., data = _) |> 
+ # step_best_normalize(all_numeric_predictors(), -all_nominal()) |> 
  step_timeseries_signature(fecha_15dias) |> 
  ver() |> 
- select(diag, -c(msisdn_dd, fct_srvy_dt, fecha_15dias))
+ select(!where(is.ordered), -c(msisdn_dd, fct_srvy_dt, fecha_15dias)) |> 
+ mutate(across(starts_with("fecha"), as_factor))
 ```
 
 ```{r}
 tic()
-mi <- information_gain(diag ~ ., data = ctl_expanded)
+mi <- information_gain(
+ formula      = diag ~ ., 
+ data         = ctl_expanded, 
+ type         = "symuncert",
+ discIntegers = FALSE) |> 
+ as_tibble() |> 
+ arrange(-importance)
 toc()
 ```
+
+```{r}
+mi
+```
+
 
 
 ### Dependiente vs numéricas
