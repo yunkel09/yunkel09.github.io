@@ -48,7 +48,9 @@ import::from(bestNormalize, bestNormalize, step_best_normalize)
 import::from(doParallel,    registerDoParallel)
 import::from(nnet,          multinom)
 import::from(effects,       predictorEffects)
+import::from(FSelectorRcpp, information_gain)
 import::from(parallel,      detectCores, makePSOCKcluster, stopCluster)
+import::from(timetk,        step_timeseries_signature)
 pacman::p_load(
  knitr,
  paletteer,

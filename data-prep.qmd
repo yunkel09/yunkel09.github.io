@@ -216,7 +216,7 @@ metr_01 <- metr_00 |>
  mutate(across(fct_srvy_dt, ymd)) |>
  relocate(fct_srvy_dt, msisdn_dd, srvy_id, r1, bts_sh_nm) |>
  arrange(fct_srvy_dt, msisdn_dd) |>
- select(-c(cell_load, service_drop_rate))
+ select(-cell_load)
 ```
 
 ## Disponibilidad
@@ -239,10 +239,37 @@ momento ya no es relevante para el análisis, por lo que se debe eliminar. Se
 aprovecha para poder convertir la variable `fct_srvy_dt` en tipo fecha.
 
 ```{r}
+lv <- lluv_00 |> 
+  slice_head(n = 10) |> 
+  mutate(across(starts_with("fct"), ymd)) |> 
+  select(starts_with("fct"))
+```
+
+```{r}
+lv |> 
+ mutate(
+  diff_andre = difftime(time1 = fct_srvy_dt, time2 = fct_srvy_15_mnth),
+  resta_15dias = fct_srvy_dt - days(15))
+```
+
+
+```{r}
+mutate(
+    across(starts_with("fct"), ymd),
+    diff_andre = difftime(time1 = fct_srvy_15_mnth, time2 = fct_srvy_dt),
+    delta = fct_srvy_dt - days(15), .after = fct_srvy_15_mnth)
+```
+
+
+
+```{r}
 lluv_01 <- lluv_00 |>
  select(-fct_srvy_15_mnth, -twr) |> 
  mutate(across(fct_srvy_dt, ymd))
 ```
+
+
+
 
 ## Unión
 

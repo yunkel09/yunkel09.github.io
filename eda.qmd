@@ -107,7 +107,7 @@ plot_missing(ctl_train, missing_only = TRUE,
   axis.text = element_text(size = 40)))
 ```
 
-## Resumen estadístico
+## Resumen estadístico {#sec-estadisticas}
 
 ```{r}
 # crear set de datos solo con variables numéricas
@@ -137,7 +137,8 @@ ctl_n |>
 
 En @tbl-resumen se observa que hay valores atípicos en algunas
 observaciones.  Los valores mínimos con valor cero para algunas variables
-ameritan atención.  
+ameritan atención.  La diferencia en la media y la media indica sesgo en la
+distribución de los datos generado por los valores atípicos. 
 
 ## Análisis univariado
 
@@ -247,6 +248,24 @@ voz. La distribución es la esperada con un sesgo positivo muy pronunciado, lo
 cual es un indicador de que la mayor parte del tiempo este indicador se
 encuentra en un rango saludable.
 
+- **service_drop_rate:** Es el porcentaje de caídas o pérdidas en el servicio
+de comunicación, específicamente en los recursos de portadora evolucionados
+(ERAB, por sus siglas en inglés Evolved Radio Access Bearer). Estas pérdidas
+pueden ocurrir por diversas razones como interferencia, baja señal, o problemas
+en el backhaul, entre otros. Esta métrica es crucial para evaluar la
+optimización de la red. Un alto "Service Drop Rate" puede indicar problemas que
+necesitan ser resueltos para mejorar la experiencia del usuario. Si hay un
+aumento súbito o si la métrica se mantiene por encima del 1%, se considera un
+problema que requiere atención.
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+dist_predictores[7:8] |>
+ reduce(.f = `+`)
+```
+
 - **l_ul_interferance_avg:** Representa la interferencia promedio en el enlace
 ascendente (UL) de una celda LTE. Se mide en decibelios-milivatios (dBm) y
 sirve para evaluar el nivel de ruido o interferencia que podría estar afectando
@@ -260,25 +279,11 @@ desconfiguradas. Se debe investigar si es un error en los datos o si son casos
 particulares.  Los valores atípicos pueden afectar más la transmisión en los
 escenarios donde esta última va por microondas.
 
-```{r}
-#| echo: false
-#| fig-height: 6
-#| fig-width: 8
-dist_predictores[7:8] |>
- reduce(.f = `+`)
-```
-
 - **throughput_dl:** Mide la velocidad de descarga por Unidad de Equipo de 
 Usuario en una red celular, generalmente en Mbps. Según la gráfica, el downlink
 se ubica en su mayoría arriba de los 25Mbps, lo cual es esperado.  Lo que es
 necesario analizar es el throughput_dl menor a 2.7 Mbps. Una gran parte de
 los usuarios se encuentran por debajo de este umbral.
-
-- **throughput_ul:** Mide la velocidad de transmisión de datos del dispositivo
-móvil a la estación base, generalmente también en Mbps. Es normal observar
-valores más bajos en el *uplink* que en el *downlink*. El sesgo positivo
-también es adecuado.
-
 
 ```{r}
 #| echo: false
@@ -287,6 +292,11 @@ también es adecuado.
 dist_predictores[9:10] |>
  reduce(.f = `+`)
 ```
+
+- **throughput_ul:** Mide la velocidad de transmisión de datos del dispositivo
+móvil a la estación base, generalmente también en Mbps. Es normal observar
+valores más bajos en el *uplink* que en el *downlink*. El sesgo positivo
+también es adecuado.
 
 - **corrected_cqi:** Evalúa la calidad de una celda en una red móvil. Este
 índice toma en cuenta varios factores como la potencia de la señal, el nivel de
@@ -302,12 +312,30 @@ no es así.  Las celdas con valores atípicos inferiores a 1 es porque se
 encuentran en tunning, normalmente porque empiezan con número o porque aun no
 le han cambiado la etiqueta.
 
-- **ra_ta_ue_index1:** Es una métrica que, en función de distintos índices,
-indica tanto la distancia aproximada entre la estación base y el dispositivo
-móvil, como la cantidad de conexiones realizadas a esas distancias específicas.
-Se utiliza para evaluar y optimizar la cobertura y la capacidad de la red. El
-sesgo positivo en este tipo de métrica es esperado en vista de que depende de
-la cantidad de muestras de dicha celda.
+```{r}
+#| echo: false
+data_ta <- data.frame(
+ Index = 0:11,
+ Distancia = c(
+ "0-156", "156-234", "234-546", "546-1,014", "1,014-1950", "1,950-3510",
+ "3,510-6,630", "6,630-14,430", "14,430-30,030", "30,030-53,430", "53,430-76,830",
+ ">76,830")
+)
+```
+
+```{r}
+#| echo: false
+data_ta |>
+ gt() |> 
+ tab_header(
+   title = md("**Timing Advance**"),
+   subtitle = md("Rangos de distancias para LTE en metros")
+ ) |> 
+ gt_theme_538() |> 
+ cols_align(align = "center", columns = where(~ is.numeric(.x)))
+
+```
+
 
 ```{r}
 #| echo: false
@@ -317,7 +345,12 @@ dist_predictores[11:12] |>
  reduce(.f = `+`)
 ```
 
-TA 2 está a un radio de 500 mts
+- **ra_ta_ue_index1:** Es una métrica que, en función de distintos índices,
+indica tanto la distancia aproximada entre la estación base y el dispositivo
+móvil, como la cantidad de conexiones realizadas a esas distancias específicas.
+Se utiliza para evaluar y optimizar la cobertura y la capacidad de la red. El
+sesgo positivo en este tipo de métrica es esperado en vista de que depende de
+la cantidad de muestras de dicha celda.
 
 ```{r}
 #| echo: false
@@ -336,14 +369,6 @@ dist_predictores[15:16] |>
  reduce(.f = `+`)
 ```
 
-- **ra_ta_ue_index2-7:** Al igual que con ra_ta_ue_index1, el timing advanced
-del 2 al 7 representan la cantidad de conexiones realizadas a una determinada
-distancia. Lo importante es ver que existen más muestras en los
-índices más próximos a 1 y deberían existir pocas conexiones en los índices más
-altos. Muchas conexiones en índices más altos indicaría que muchos usuarios se
-están conectando a las celdas desde lugares muy lejanos o hay otros problemas
-como obstáculos u optimización.
-
 ```{r}
 #| echo: false
 #| fig-height: 6
@@ -355,12 +380,6 @@ dist_predictores[17:18] |>
 - **ra_ta_ue_total:** Cantidad total de conexiones de datos o llamadas. Pueden
 ser del mismo terminal. Pocas celdas tendran muestras muy elevadas.
 
-- **volte_erlang:** Mide el volumen de tráfico VoLTE (Voice over LTE) en la
-red. Se expresa en "erlangs", que es una unidad de medida de carga de tráfico
-telefónico. Si cualquier otra banda supera 1/3 del tráfico VoLTE de la banda
-850, se considera una situación crítica. Es necesario tener visibilidad del
-tráfico VoLTE en todas las bandas utilizadas para VoLTE, no solo la 850.
-
 ```{r}
 #| echo: false
 #| fig-height: 6
@@ -368,6 +387,12 @@ tráfico VoLTE en todas las bandas utilizadas para VoLTE, no solo la 850.
 dist_predictores[19:20] |>
  reduce(.f = `+`)
 ```
+
+- **volte_erlang:** Mide el volumen de tráfico VoLTE (Voice over LTE) en la
+red. Se expresa en "erlangs", que es una unidad de medida de carga de tráfico
+telefónico. Si cualquier otra banda supera 1/3 del tráfico VoLTE de la banda
+850, se considera una situación crítica. Es necesario tener visibilidad del
+tráfico VoLTE en todas las bandas utilizadas para VoLTE, no solo la 850.
 
 - **modulation_64qam_ratio:** Se define como el porcentaje de tiempo en que la
 transferencia de datos usa 64QAM, que es una modulación de alta eficiencia.
@@ -379,13 +404,14 @@ ubicaciones geográficas, hay pocos usuarios utilizando este tipo de modulación
 de mayor capacidad.  Dejando de lado el valor atípico, se observa que la
 distribución es bastante normal.
 
-**Si la última letra termina en UWXYZ entonces la celdas podría estar apagada**
-Podríamos excluir con base a la tabla de Kenny aquellas celdas que no empiecen
-con alguno de los prefijos que maneja Kenny.  Kenny nos compartirá la tabla.
-Si aparece en cero en todas las modulaciones, podría ser que no tiene activado
-los contadores.
-- No hay modulación para 3G, solo para LTE
-- Probar una receta filtrando todo los 3G y otra con todos los 3G y LTE.
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+dist_predictores[21:22] |>
+ reduce(.f = `+`)
+```
 
 - **modulation_16qam_ratio:** Representa el porcentaje de tiempo que la red
 está utilizando la modulación 16-Quadrature Amplitude Modulation (16QAM) para
@@ -396,15 +422,6 @@ robusta contra errores y condiciones de señal no ideales.  La distribución
 parece normal y se observa, al igual que con 64QAM, un comportamiento bimodal
 que podría ser indicativo de que hay presente otra población en este tipo de
 modulación.
-
-
-```{r}
-#| echo: false
-#| fig-height: 6
-#| fig-width: 8
-dist_predictores[21:22] |>
- reduce(.f = `+`)
-```
 
 - **modulation_qpsk_ratio:** Representa el porcentaje de tiempo en que la red
 utiliza la modulación Quadrature Phase Shift Keying (QPSK) para la
@@ -417,12 +434,6 @@ exponencial.  Podría hacer sentido si el objetivo del departamento de QA es
 utilizar este tipo de modulación como último recurso en caso de que no se
 tengan las condiciones adecuadas en términos de interferencia o cobertura.
 
-- **time_cl:** Es una medida fabricada que toma en cuenta la utilización de
-PRBs, el CQI, y la velocidad target de la celda, para determinar el grado de
-cumplimiento de esa velocidad. Porcentaje de tiempo en buen cell_load, va tanto
-3G como LTE. El sesgo negativo es correcto en vista de que se espera que la
-mayor parte de las conexiones se encuentren con un buen `cell_load`.
-
 ```{r}
 #| echo: false
 #| fig-height: 6
@@ -431,18 +442,18 @@ dist_predictores[23:24] |>
  reduce(.f = `+`)
 ```
 
+- **time_cl:** Es una medida fabricada que toma en cuenta la utilización de
+PRBs, el CQI, y la velocidad target de la celda, para determinar el grado de
+cumplimiento de esa velocidad. Porcentaje de tiempo en buen cell_load, va tanto
+3G como LTE. El sesgo negativo es correcto en vista de que se espera que la
+mayor parte de las conexiones se encuentren con un buen `cell_load`.
+
 - **time_lte:** Porcentaje de tiempo que permanece conectado a la tecnología
 LTE. Entre más tiempo permanece un usuario conectado a la red LTE, podemos
 decir que es bueno.  Abajo del 80% podría indicar que las celdas tienen un alto
 cell_load lo que indicaría que el terminal hizo el cambio automático a 3G.
 Navegar en 3G por lo general se traduce en una experiencia más pobre.  El sesgo
 de la distribución es plausible.
-
-- **avlblty:** Porcentaje de tiempo de navegación sin falla. Esto aplica por
-usuario y representa un medida de que tanto un usuario navegó la cantidad de Mb
-esperados con base a su mediana de consumo. La distribución con sesgo negativo
-es consistente con la definición de la métrica.
-
 
 ```{r}
 #| echo: false
@@ -452,9 +463,22 @@ dist_predictores[25:26] |>
  reduce(.f = `+`)
 ```
 
--**avlblty_tckt_2hrs y unvlbty_ttl_hrs_prop:** Son métricas complementarias a
+- **avlblty:** Porcentaje de tiempo de navegación sin falla. Esto aplica por
+usuario y representa un medida de que tanto un usuario navegó la cantidad de Mb
+esperados con base a su mediana de consumo. La distribución con sesgo negativo
+es consistente con la definición de la métrica.
+
+-**avlblty_tckt_2hrs:** Son métricas complementarias a
 la de disponibilidad y representan partes de la disponibilidad. Su sesgo es
 opuesto.
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+dist_predictores[27:28] |>
+ reduce(.f = `+`)
+```
 
 
 Como se señaló en la sección @sec-mr, los datos de perfil demandan un
@@ -519,6 +543,53 @@ ctl_c |>
 
 ## Análisis bivariado
 
+Aunque los boxplots ofrecen una visión más completa de la distribución de los
+datos, no proporcionan el mismo nivel de detalle sobre la incertidumbre en torno
+a la media que los gráficos de confianza o el MI. Usar tanto MI, como gráficos
+de confianza y boxplot, proporcionará una visión más completa de los datos. Los
+gráficos de confianza dan detalles sobre la media y su incertidumbre, mientras
+que los boxplots muestran la distribución completa.
+
+### Mutual information
+
+La Información Mutua es una métrica de utilidad de características que va más
+allá de las correlaciones convencionales de Pearson y Spearman. Mientras que
+estas últimas son excelentes para detectar relaciones lineales o monótonas,
+tienen sus limitaciones. Por ejemplo, no pueden capturar relaciones más
+complejas o no lineales entre variables. Además, las correlaciones tradicionales
+suelen centrarse en variables numéricas, dejando de lado las categóricas.
+
+En contraste, la Información Mutua es una herramienta poderosa que puede
+capturar cualquier tipo de relación entre variables, ya sean numéricas o
+categóricas. Funciona evaluando cómo el conocimiento de una característica
+reduce la incertidumbre sobre la variable objetivo. En otras palabras, si
+conoces el valor de una característica, ¿cuánto más seguro te sentirías sobre el
+valor de la variable objetivo? Esta capacidad la convierte en una métrica
+invaluable, especialmente en las etapas iniciales del desarrollo de
+características, donde aún no sabemos qué modelo vamos a utilizar.
+
+Es importante tener en cuenta que la Información Mutua es una métrica
+univariada, lo que significa que evalúa cada característica de forma individual
+en relación con la variable objetivo. No puede detectar interacciones entre
+características, pero sigue siendo una herramienta extremadamente útil para una
+primera ronda de selección de características.
+
+```{r}
+ctl_expanded <- ctl_train |>
+ mutate(fecha_15dias = fct_srvy_dt - days(15)) |> 
+ recipe(diag ~ ., data = _) |> 
+ step_timeseries_signature(fecha_15dias) |> 
+ ver() |> 
+ select(diag, -c(msisdn_dd, fct_srvy_dt, fecha_15dias))
+```
+
+```{r}
+tic()
+mi <- information_gain(diag ~ ., data = ctl_expanded)
+toc()
+```
+
+
 ### Dependiente vs numéricas
 
 #### Gráficos de confianza
@@ -549,31 +620,82 @@ El intervalo da una idea de dónde podrían caer las verdaderas medias de
 `thp_required_lte` para cada categoría si tuvieras acceso a toda la población,
 en lugar de solo una muestra.
 
-::: {.callout-note}
-#### ¿Por qué no solo usar únicamente boxplots?
-Aunque los boxplots ofrecen una visión más completa de la distribución de los
-datos, no proporcionan el mismo nivel de detalle sobre la incertidumbre en torno
-a la media que los gráficos de confianza. Usar ambos proporciona una visión más
-completa de los datos. Los gráficos de confianza dan detalles sobre la media y
-su incertidumbre, mientras que los boxplots muestran la distribución completa.
-:::
+En el análisis univariado de la sección @sec-distribuiciones, así como en el
+resumen estadístico @sec-estadisticas observamos que las distribuciones se
+encuentran con mucho sesgo.
+
+En el análisis exploratorio de datos (EDA), la presencia de valores atípicos
+puede distorsionar significativamente las interpretaciones y conclusiones. Los
+valores atípicos pueden tener un impacto desproporcionado en la media y la
+varianza, lo que a su vez afectará las visualizaciones y las medidas de
+tendencia central y dispersión. En este contexto, la transformación de variables
+se convierte en una herramienta invaluable para mitigar estos efectos y permitir
+un análisis más robusto.
+
+El paquete bestNormalize en R [@R-bestNormalize] es especialmente útil para este
+propósito. Según su documentación [@bestNormalize2021], el paquete intenta
+encontrar la mejor transformación para normalizar una variable numérica. Utiliza
+una variedad de transformaciones, como transformación de Box-Cox, transformación
+de Yeo-Johnson, transformación de logaritmo, entre otras, y selecciona la que
+minimiza algún criterio de ajuste, como el error cuadrático medio (MSE) o el
+estadístico de Shapiro-Wilk para la normalidad.
+
+Una de las ventajas de utilizar bestNormalize es que realiza una búsqueda
+exhaustiva a través de múltiples métodos y selecciona la transformación más
+óptima para cada característica. Esto es especialmente útil cuando se trabaja
+con conjuntos de datos con múltiples características que pueden requerir
+diferentes tipos de transformaciones.
+
+Al aplicar la transformación más adecuada, las visualizaciones de los datos
+transformados ofrecen una representación más precisa de las relaciones
+subyacentes entre las variables. Esto es especialmente útil para técnicas que
+asumen la normalidad de los datos. Además, al reducir el impacto de los valores
+atípicos, las transformaciones permiten que las métricas como la media y la
+varianza sean más representativas del conjunto de datos, lo que facilita la
+interpretación y el análisis posterior.
+
+En resumen, la transformación de variables utilizando bestNormalize mejora la
+calidad del análisis exploratorio al hacer que las visualizaciones y las
+métricas sean más robustas y representativas, permitiendo así una mejor
+comprensión de la estructura subyacente de los datos.
 
 ```{r}
 # Función para calcular la media y el intervalo de confianza
 mean_ci <- function(df, metrica, conf.level = 0.95) {
  x  <- df[[metrica]][!is.na(df[[metrica]])]
- n  <- length(x)
  m  <- mean(x)
- se <- sd(x) / sqrt(n)
  ci <- t.test(x)$conf.int
  data.frame(media = m, lower = ci[1], upper = ci[2])
 }
 ```
 
 ```{r}
+#| eval: false
+ctl_normalizados <- ctl_train |>
+ select(diag, where(is.numeric), -msisdn_dd) |> 
+ relocate(diag) |> 
+ recipe(diag ~ ., data = _) |> 
+ step_best_normalize(all_predictors(), -all_nominal()) |> 
+ ver()
+```
+
+
+```{r}
+#| eval: false
+#| echo: false
+write_fst(ctl_normalizados, path = "data/ctl_normalizados.fst", compress = 0)
+```
+
+```{r}
+#| echo: false
+ctl_normalizados <- read_fst("data/ctl_normalizados.fst") |> 
+ as_tibble()
+```
+
+```{r}
 # Función para crear un dataframe con los intervalos por cada métrica
 calcular_ci <- function(kpi) {
- ctl_train |> 
+ ctl_normalizados |> 
  group_by(diag) %>%
  do(mean_ci(., kpi)) %>%
  ungroup() %>%
@@ -583,28 +705,52 @@ calcular_ci <- function(kpi) {
 
 ```{r}
 # Guardar las métricas que vamos a comparar
-network_metrics <- names(ctl_n)
+nm <- names(ctl_normalizados)[-length(ctl_normalizados)]
 ```
 
 ```{r}
 # Crear lista de dataframes con intervalos de confianza
-lista_ci <- network_metrics |> 
+lista_ci <- nm |> 
  map(~ calcular_ci(kpi = .x)) |> 
- set_names(network_metrics)
+ set_names(nm)
 ```
 
 ```{r}
 # Crear una lista con las gráficas de cada métrica
 analisis_bivariado <- lista_ci |> 
- map2(.y = network_metrics, ~ ggplot(.x, aes(x = diag, y = media)) +
+ map2(.y = nm, ~ ggplot(.x, aes(x = diag, y = media)) +
  geom_point() +
  geom_errorbar(aes(ymin = lower, ymax = upper), width = .1) +
  theme(axis.text = element_text(size = 8)) +
  xlab("Diagnóstico") +
  labs(title = .y) +
- drako) |> 
- discard_at("ra_ta_ue_total")
+ drako)
 ```
+
+Aplicar la transformación antes de realizar los gráficos de confianza puede
+ser beneficioso por las siguientes razones:
+
+1. **Robustez frente a Atípicos:** Como se mencionó anteriormente, los valores
+atípicos pueden tener un impacto significativo en la media. Al transformar los
+datos, se reduce la influencia de estos puntos extremos, lo que resulta en
+intervalos de confianza más robustos.
+
+2. **Mejora de la Interpretación:** Los datos transformados pueden hacer que las
+diferencias o similitudes entre grupos sean más claras y fáciles de interpretar
+en los gráficos de confianza.
+
+3. **Normalidad Aproximada:** Muchas técnicas estadísticas, incluida la
+estimación de intervalos de confianza, asumen que los datos son aproximadamente
+normales. Las transformaciones pueden ayudar a cumplir con este supuesto.
+
+4. **Consistencia en el Análisis:** Si ya se han transformado las variables para
+otros aspectos del análisis exploratorio de datos, mantener esa transformación
+para los gráficos de confianza asegura que se están evaluando las mismas
+distribuciones a lo largo de todo el análisis.
+
+5. **Claridad en la Presentación:** Los gráficos de datos transformados pueden
+ser más fáciles de entender y comunicar, especialmente si reducen la asimetría o
+la escala de los datos originales.
 
 ```{r}
 #| echo: false
@@ -616,9 +762,11 @@ walk(analisis_bivariado[1], ~ print(.x))
 ```
 
 Tal como se ilustra en la figura @fig-thp-required-lte el intervalo de confianza
-para la categoría "CAPACIDAD" va de aproximadamente 0.85 a 0.861.  Esto
-significa que, con un 95% de confianza, se puede decir que la la verdadera
-media de `thp_required_lte` se encuentra en este rango. 
+para la categoría "CAPACIDAD" es relativamente pequeño, lo que sugiere que hay
+menos incertidumbre en la estimación de la media para esta categoría.  Esto
+podría significar que `thp_required_lte` es una predictor fuerte para predecir
+la categoría de capacidad. Es decir, este predictor es importante para ayudar
+a distinguir la categoría "capacidad" de las demás.
 
 ```{r}
 #| echo: false
@@ -659,11 +807,28 @@ celda.
 walk(analisis_bivariado[4], ~ print(.x))
 ```
 
-Sabemos que una métrica puede impactar múltiples categorías. El equipo CTL
-utiliza esta métrica principalmente para determinar problemas de optimización,
-sin embargo, también puede asociarse a problemas de cobertura. La explicación
-es que si la tasa de éxito de RRC es baja, esto podría deberse a áreas con
-señal débil o a problemas con la infraestructura de la red.  
+Dado que `rrc_success_rate` es un indicador de rendimiento que mide la
+eficiencia en el establecimiento de una conexión RRC, es lógico pensar que
+podría ser más relevante para categorías como "optimización". Sin embargo, si en
+la gráfica aparece más cercano a "capacidad" y "cobertura". Podría haber varias
+razones para ello.
+
+Una posibilidad es que esta métrica esté interactuando con otra métrica para
+proporcionar una mejor separación entre las categorías. En el mundo real, las
+métricas raramente operan en aislamiento; a menudo interactúan con otras
+variables de formas que pueden ser difíciles de capturar en un análisis
+univariado. Por ejemplo, `rrc_success_rate` podría tener un impacto más
+significativo en "optimización" cuando se combina con otra variable, como la
+calidad de la señal o el ancho de banda disponible.
+
+Si los expertos normalmente usan esta métrica para categorizar "optimización",
+pero los datos muestran una relación más fuerte con "capacidad" y "cobertura",
+podría ser útil investigar más a fondo.
+
+En resumen, es muy posible que `rrc_success_rate` interactúe con otra métrica
+para proporcionar una mejor separación entre las categorías. Este es un buen
+ejemplo de por qué a menudo es útil ir más allá del análisis univariado y
+considerar interacciones entre variables.
 
 ```{r}
 #| echo: false
@@ -682,9 +847,23 @@ más relacionada a problemas con cobertura.
 #| echo: false
 #| fig-height: 6
 #| fig-width: 8
-#| label: fig-interference
-#| fig-cap: Interferencia promedio del enlace ascendente (uplink) de la celda
+#| label: fig-service-drop-rate
+#| fig-cap: Pérdida de comunicación
 walk(analisis_bivariado[6], ~ print(.x))
+```
+
+En la gráfica @fig-service-drop-rate se esperaría que la clase de optimización
+estuviera más separada del resto de categorías, sin embargo no es así, lo
+que podría indicar que esta métrica podría estar interactuando con otra métrica
+para proporcionar una mejor separación entre las categorías.
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+#| label: fig-interference
+#| fig-cap: Interferencia
+walk(analisis_bivariado[7], ~ print(.x))
 ```
 
 En la @fig-interference se aprecia que valores mayores de interferencia podrían
@@ -692,22 +871,9 @@ ocasionar problemas de cobertura.  Esta métrica en particular puede
 interactuar con muchas otras métricas para determinar otro tipos de problemas
 en la red como por ejemplo optimización.
 
-```{r}
-#| echo: false
-#| fig-height: 6
-#| fig-width: 8
-#| label: fig-throuput-dl
-#| fig-cap: Velocidad de descarga por Unidad de Equipo de Usuario en una red celular, generalmente en Mbps. 
-walk(analisis_bivariado[7], ~ print(.x))
-```
-
-CTL describe esta métrica principalmente en términos de capacidad, sin embargo,
-se observa que la estimación puntual de la media para cobertura se encuentra
-muy cercana.  En este caso, amerita evaluar si esta diferencia es significativa.
-
 ```{r, anova-una-via}
 #| echo: false
-#| cache: true
+#| eval: false
 #| fig-height: 6
 #| fig-width: 8
 #| label: fig-throuput-dl-anova
@@ -715,24 +881,36 @@ muy cercana.  En este caso, amerita evaluar si esta diferencia es significativa.
 bx(.df = ctl_train, .x = diag, .y = thoughput_dl)
 ```
 
-En la parte superior de la @fig-throuput-dl-anova vemos el resultado de la
-prueba estadística de Fisher.  El p-valor indica que si hay diferencias
-significativas con un tamaño de efecto de $\widehat{\omega_{p}^{2}} = 0.09$.
-Este tamaño de efecto se puede medir como 9% lo cual es bajo. Se ve en las
-comparaciones por pares que capacidad y cobertura presentan diferencias
-estadísticamente significativas.
+<!-- En la parte superior de la @fig-throuput-dl-anova vemos el resultado de la -->
+<!-- prueba estadística de Fisher.  El p-valor indica que si hay diferencias -->
+<!-- significativas con un tamaño de efecto de $\widehat{\omega_{p}^{2}} = 0.09$. -->
+<!-- Este tamaño de efecto se puede medir como 9% lo cual es bajo. Se ve en las -->
+<!-- comparaciones por pares que capacidad y cobertura presentan diferencias -->
+<!-- estadísticamente significativas. -->
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+#| label: fig-throuput-dl
+#| fig-cap: Velocidad de transmisión de datos del dispositivo móvil a la estación base, generalmente también en Mbps.
+walk(analisis_bivariado[8], ~ print(.x))
+```
+
+CTL describe esta métrica principalmente en términos de capacidad. Aquí la
+separación de clases es clara y al parecer la métrica describe muy bien casos
+de capacidad.
 
 ```{r}
 #| echo: false
 #| fig-height: 6
 #| fig-width: 8
 #| label: fig-throuput-ul
-#| fig-cap: Velocidad de transmisión de datos del dispositivo móvil a la estación base, generalmente también en Mbps.
-walk(analisis_bivariado[8], ~ print(.x))
+#| fig-cap: Throuput Uplink
+walk(analisis_bivariado[9], ~ print(.x))
 ```
 
-El equipo CTL no utiliza esta métrica como parte de su proceso de etiquetado,
-sin embargo, la hemos colocado ya que puede ser útil en algunos contextos.
+CTL no utiliza esta métrica para realizar la categorización.
 
 ```{r}
 #| echo: false
@@ -740,15 +918,14 @@ sin embargo, la hemos colocado ya que puede ser útil en algunos contextos.
 #| fig-width: 8
 #| label: fig-corrected-cqi
 #| fig-cap: Índice de calidad general de la celda
-walk(analisis_bivariado[9], ~ print(.x))
+walk(analisis_bivariado[10], ~ print(.x))
 ```
 
 La @fig-corrected-cqi muestra los diferentes índices para cada una de las
 categorías. Todo lo que esté por arriba de 7 se considera bueno.  Aunque el 
 equipo CTL indica que esta métrica tiene más utilidad para determinar
 problemas de optimización, lo que destaca a simple vista es que valores bajos
-de esta métrica se asocian más con problemas de cobertura.
-
+de esta métrica se asocian más con problemas de capacidad.
 
 ```{r}
 #| echo: false
@@ -756,8 +933,9 @@ de esta métrica se asocian más con problemas de cobertura.
 #| fig-width: 8
 #| label: fig-index-1
 #| fig-cap: Cantidad de conexiones realizadas a distancias específicas dadas por el índice.
-walk(analisis_bivariado[10:16], ~ print(.x))
+walk(analisis_bivariado[11:17], ~ print(.x))
 ```
+
 
 Lo observado es consistente con lo esperado.  En el caso del índice 1, un
 porcentaje bajo de conexiones en este índice podría indicar que el resto de
@@ -772,11 +950,46 @@ cobertura.
 #| echo: false
 #| fig-height: 6
 #| fig-width: 8
-#| label: fig-modulation-qam
-#| fig-cap: Índice de calidad general de la celda
-walk(analisis_bivariado[17:18], ~ print(.x))
+#| label: fig-total-ta
+#| fig-cap: Muestras totales de Timing Advance
+walk(analisis_bivariado[18], ~ print(.x))
 ```
 
+Total de muestras en TA
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+#| label: fig-volte-erlang
+#| fig-cap: Volte Erlang
+walk(analisis_bivariado[19], ~ print(.x))
+```
+
+Hay una separación más clara para temas de capacidad.
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+#| label: fig-modulation-qam64
+#| fig-cap: Modulación 64QAM
+walk(analisis_bivariado[20], ~ print(.x))
+```
+
+Hay una separación más clara para temas de capacidad.
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+#| label: fig-modulation-qam16
+#| fig-cap: Modulación 16QAM
+walk(analisis_bivariado[21], ~ print(.x))
+```
+
+Hay una separación más clara para temas de capacidad.
 
 
 ```{r}
@@ -784,10 +997,18 @@ walk(analisis_bivariado[17:18], ~ print(.x))
 #| fig-height: 6
 #| fig-width: 8
 #| label: fig-modulation-qpsk
-#| fig-cap: Índice de calidad general de la celda
-walk(analisis_bivariado[19:20], ~ print(.x))
+#| fig-cap: Modulación QPSK
+walk(analisis_bivariado[22], ~ print(.x))
 ```
 
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+#| label: fig-time-cl
+#| fig-cap: Tiempo con buen Cell Load
+walk(analisis_bivariado[23], ~ print(.x))
+```
 
 
 ```{r}
@@ -795,60 +1016,67 @@ walk(analisis_bivariado[19:20], ~ print(.x))
 #| fig-height: 6
 #| fig-width: 8
 #| label: fig-time-lte
-#| fig-cap: Índice de calidad general de la celda
-walk(analisis_bivariado[21:22], ~ print(.x))
+#| fig-cap: Tiempo con buen LTE
+walk(analisis_bivariado[24], ~ print(.x))
 ```
-
 
 
 ```{r}
 #| echo: false
 #| fig-height: 6
 #| fig-width: 8
-#| label: fig-disponibilidad
-#| fig-cap: Índice de calidad general de la celda
-walk(analisis_bivariado[23:24], ~ print(.x))
+#| label: fig-avlblty
+#| fig-cap: Disponibilidad
+walk(analisis_bivariado[25], ~ print(.x))
 ```
 
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+#| label: fig-unvlblty-2hrs
+#| fig-cap: Disponibilidad cada 2hrs
+walk(analisis_bivariado[26], ~ print(.x))
+```
 
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+#| label: fig-unvlblty-prop
+#| fig-cap: Proporción de indisponibilidad
+walk(analisis_bivariado[27], ~ print(.x))
+```
 
 ```{r}
 #| echo: false
 #| fig-height: 6
 #| fig-width: 8
 #| label: fig-rain
-#| fig-cap: Índice de calidad general de la celda
-walk(analisis_bivariado[25:26], ~ print(.x))
+#| fig-cap: Proporción de indisponibilidad
+walk(analisis_bivariado[28], ~ print(.x))
 ```
 
-
-
-#### Variabilidad y rango
-
-Debido a que 
+#### Boxplots
 
 ```{r}
-#| eval: false
-ctl_normalized <- ctl_train |>
- select(where(is.numeric), 
-  -c(msisdn_dd, diag) |> 
- recipe(diag ~ ., data = _) |> 
- step_best_normalize(all_predictors(), -all_nominal())  |> 
- ver()
-```
-
-
-```{r}
-#| eval: false
-#| echo: false
-write_fst(ctl_normalized, path = "data/ctl_normalized.fst", compress = 0)
+ctl_pivoted <- ctl_normalizados |>
+ pivot_longer(
+  cols      = thp_required_lte:rain,
+  names_to  = "metric", 
+  values_to = "value") |> 
+ filter(!is.na(value))
 ```
 
 ```{r}
-#| echo: false
-ctl_normalized <- read_fst("data/ctl_normalized.fst") |> 
- as_tibble()
+ctl_pivoted |>
+ ggplot(aes(value, fill = diag)) +
+ geom_density(alpha = .5) +
+ facet_wrap(~ metric, scales = "free") +
+ drako
 ```
+
+
 
 
 ```{r}
@@ -1148,217 +1376,6 @@ La correlación de Pearson es mayor que la de Spearman, lo que podría significa
 que existan correlaciones no lineales entre los predictores y la variable
 objetivo.  Las interacciones complejas entre predictores es parte de lo
 esperado dado el contexto brindado por los SMEs.
-
-### Mutual information
-
-Al enfrentarnos a un nuevo conjunto de datos, especialmente uno con cientos o
-miles de características, el proceso puede sentirse abrumador. Un excelente
-primer paso es utilizar una métrica de utilidad de características para
-clasificar la importancia de cada una en relación con la variable objetivo. Esto
-permite enfocar los esfuerzos iniciales en un subconjunto más pequeño de
-características, asegurando que el tiempo invertido sea productivo.
-
-Una métrica particularmente útil para este propósito es la "Información Mutua"
-(MI, por sus siglas en inglés). A diferencia de la correlación, que solo detecta
-relaciones lineales, la Información Mutua puede capturar cualquier tipo de
-relación entre las variables. Es fácil de usar, eficiente desde el punto de
-vista computacional, bien fundamentada teóricamente y resistente al sobreajuste.
-La MI mide cómo el conocimiento de una característica reduce la incertidumbre
-sobre la variable objetivo, lo que la convierte en una herramienta valiosa,
-especialmente en las etapas iniciales del desarrollo de características.
-
-It's possible for a feature to be very informative when interacting with other
-features, but not so informative all alone. MI can't detect interactions
-between features. It is a univariate metric.
-
-
-
-
-
-
-```{r}
-source("_python.R")
-```
-
-
-```{python}
-from sklearn.datasets import load_iris
-from sklearn.feature_selection import mutual_info_classif
-import pandas as pd
-
-# Cargar el conjunto de datos
-iris = load_iris()
-X = pd.DataFrame(iris.data, columns=iris.feature_names)
-y = iris.target
-
-# Convertir una columna numérica en categórica y otra en entera
-X['sepal length (cm)'] = pd.cut(X['sepal length (cm)'], bins=3, labels=["low", "medium", "high"])
-X['sepal width (cm)'] = X['sepal width (cm)'].astype(int)
-
-# Calcular la información mutua
-# Aquí, establecemos discrete_features para manejar variables mixtas
-mi = mutual_info_classif(X, y, discrete_features=[True, True, False, False])
-mi_df = pd.DataFrame({'attributes': X.columns, 'importance': mi})
-print(mi_df)
-
-```
-
-
-```{python}
-from sklearn.datasets import load_iris
-from sklearn.feature_selection import mutual_info_classif
-import pandas as pd
-
-# Cargar el conjunto de datos
-iris = load_iris()
-X = pd.DataFrame(iris.data, columns=iris.feature_names)
-y = iris.target
-
-# Convertir las columnas numéricas en categóricas
-X = X.apply(lambda x: pd.cut(x, bins=3, labels=["low", "medium", "high"]))
-
-# Calcular la información mutua
-mi = mutual_info_classif(X, y, discrete_features=True)
-mi_df = pd.DataFrame({'attributes': X.columns, 'importance': mi})
-print(mi_df)
-
-```
-
-```{r}
-
-data(iris)
-# Convertir las columnas numéricas en categóricas
-iris[, 1:4] = lapply(iris[, 1:4], function(x) cut(x, breaks = 3, labels = c("low", "medium", "high")))
-
-# Calcular la información mutua
-result = information_gain(Species ~ ., data = iris)
-print(result)
-
-```
-
-
-
-```{python}
-import pandas as pd
-from sklearn.feature_selection import mutual_info_classif
-from sklearn.datasets import load_iris
-
-# Cargar el conjunto de datos Iris
-iris = load_iris()
-X, y = iris.data, iris.target
-
-# Calcular la Información Mutua
-mi = mutual_info_classif(X, y)
-
-# Crear un DataFrame de pandas
-mi_df = pd.DataFrame({
-    'attributes': iris.feature_names,
-    'importance': mi
-})
-
-print(mi_df)
-
-
-```
-
-```{python}
-from sklearn.datasets import load_iris
-from sklearn.feature_selection import mutual_info_classif
-import pandas as pd
-
-# Cargar el conjunto de datos Iris
-iris = load_iris()
-X = iris.data
-y = iris.target
-
-# Calcular la información mutua
-mi = mutual_info_classif(X, y, discrete_features=False)
-
-# Mostrar los resultados
-print("Información Mutua con sklearn:")
-print(mi)
-
-```
-
-
-
-```{r}
-irisX <- iris[-5]
-y <- iris$Species
-```
-
-```{r}
-information_gain(formula = Species ~ ., data = iris)
-```
-
-
-
-```{r}
-# Cargar el conjunto de datos Iris
-data(iris)
-
-# Calcular la información mutua
-result = information.gain(Species~., iris)
-
-# Mostrar los resultados
-print("Información Mutua con FSelector:")
-print(result)
-```
-
-
-```{r}
-library(magrittr)
-library(FSelectorRcpp)
-```
-
-```{r}
-information_gain(               # Calculate the score for each attribute
-    formula = Species ~ .,      # that is on the right side of the formula.
-    data = iris,                # Attributes must exist in the passed data.
-    type  = "infogain"          # Choose the type of a score to be calculated.
-  ) %>%                          
-  cut_attrs(                    # Then take attributes with the highest rank.
-    k = 2                       # For example: 2 attrs with the higehst rank.
-  ) %>%                         
-  to_formula(                   # Create a new formula object with 
-    attrs = .,                  # the most influencial attrs.
-    class = "Species"           
-  ) %>%
-  glm(
-    formula = .,                # Use that formula in any classification algorithm.
-    data = iris,                
-    family = "binomial"         
-  )
-```
-
-```{r}
-evaluator_R2_lm <-    # Create a scorer function.
-  function(
-    attributes,       # That takes the currently considered subset of attributes
-    data,             # from a specified dataset.
-    dependent = 
-      names(data)[1]  # To find features that best describe the dependent variable.
-  ) {
-    summary(          # In this situation we take the r.squared statistic
-      lm(             # from the summary of a linear model object.
-        to_formula(   # This is the score to use to choose between considered 
-          attributes, # subsets of attributes.
-          dependent
-        ),
-        data = data)
-    )$r.squared
-  }
-
-feature_search(          # feature_search work in 2 modes - 'exhaustive' and 'greedy'
-  attributes = 
-    names(iris)[-1],     # It takes attribues and creates combinations of it's subsets.
-  fun = evaluator_R2_lm, # And it calculates the score of a subset that depends on the 
-  data = iris,           # evaluator function passed in the `fun` parameter.
-  mode = "exhaustive",   # exhaustive - means to check all possible 
-  sizes =                # attributes' subset combinations 
-    1:length(attributes) # of sizes passed in sizes.
-)$all
-```
 
 
 
