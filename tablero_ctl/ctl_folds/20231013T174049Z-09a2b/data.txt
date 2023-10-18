@@ -1,0 +1,9 @@
+file: ctl_folds.rds
+file_size: 8824396
+pin_hash: 09a2b31b3356192c
+type: rds
+title: Grouped cross-validation
+description: Splited data based on userid variable
+tags: ~
+created: 20231013T174049Z
+api_version: 1

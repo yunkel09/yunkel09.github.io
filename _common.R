@@ -6,6 +6,7 @@ knitr::opts_chunk$set(
   # cache = TRUE,
   fig.retina = 2,
   fig.width = 6,
+  fig.align = "center",
   fig.asp = 2/3,
   fig.show = "hold"
 )
@@ -51,6 +52,7 @@ import::from(effects,       predictorEffects)
 import::from(FSelectorRcpp, information_gain)
 import::from(parallel,      detectCores, makePSOCKcluster, stopCluster)
 import::from(timetk,        step_timeseries_signature)
+import::from(ggridges,      geom_density_ridges_gradient, theme_ridges)
 pacman::p_load(
  knitr,
  paletteer,
@@ -68,7 +70,10 @@ pacman::p_load(
  ggpackets,
  pins,
  bonsai,
+ baguette,
  finetune,
+ colino,
+ textrecipes,
  tidymodels,
  tidyverse)
 
@@ -92,6 +97,7 @@ drako <- theme_bw(base_family = "yano", base_size = 14) +
     axis.title    = element_text(size = 30),
     axis.text     = element_text(size = 20),
     plot.title    = element_text(size = 50),
-    plot.subtitle = element_text(size = 18))
+    plot.subtitle = element_text(size = 18),
+    legend.title  = element_blank())
 
 theme_set(yunkel)

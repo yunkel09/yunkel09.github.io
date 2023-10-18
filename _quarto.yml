@@ -50,7 +50,7 @@ book:
     - summary.qmd
     - references.qmd
 
-bibliography: references.bib
+bibliography: [references.bib, paquetes.bib]
 
 format:
   html:

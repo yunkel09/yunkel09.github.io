@@ -238,38 +238,12 @@ calcular el mes al que debía asociar la precipitación promedio.  En este
 momento ya no es relevante para el análisis, por lo que se debe eliminar. Se
 aprovecha para poder convertir la variable `fct_srvy_dt` en tipo fecha.
 
-```{r}
-lv <- lluv_00 |> 
-  slice_head(n = 10) |> 
-  mutate(across(starts_with("fct"), ymd)) |> 
-  select(starts_with("fct"))
-```
-
-```{r}
-lv |> 
- mutate(
-  diff_andre = difftime(time1 = fct_srvy_dt, time2 = fct_srvy_15_mnth),
-  resta_15dias = fct_srvy_dt - days(15))
-```
-
-
-```{r}
-mutate(
-    across(starts_with("fct"), ymd),
-    diff_andre = difftime(time1 = fct_srvy_15_mnth, time2 = fct_srvy_dt),
-    delta = fct_srvy_dt - days(15), .after = fct_srvy_15_mnth)
-```
-
-
 
 ```{r}
 lluv_01 <- lluv_00 |>
  select(-fct_srvy_15_mnth, -twr) |> 
  mutate(across(fct_srvy_dt, ymd))
 ```
-
-
-
 
 ## Unión
 
@@ -299,7 +273,8 @@ ctl_01 <- diag_03 |>
  relocate(diag, .before = fct_srvy_dt) |>
  relocate(thp_required_lte, .after = bts_sh_nm) |>
  select(-c(r1, srvy_id)) |>
- mutate(across(msisdn_dd, as.integer)) |> 
+ mutate(across(msisdn_dd, as.integer),
+        fecha_15dias = fct_srvy_dt - days(15), .after = fct_srvy_dt) |> 
  filter(!if_all(rate_prb_dl:modulation_qpsk_ratio, ~ .x == 0))
  
 ```

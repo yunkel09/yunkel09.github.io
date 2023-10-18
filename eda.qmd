@@ -468,7 +468,7 @@ usuario y representa un medida de que tanto un usuario navegó la cantidad de Mb
 esperados con base a su mediana de consumo. La distribución con sesgo negativo
 es consistente con la definición de la métrica.
 
--**avlblty_tckt_2hrs:** Son métricas complementarias a
+- **avlblty_tckt_2hrs:** Son métricas complementarias a
 la de disponibilidad y representan partes de la disponibilidad. Su sesgo es
 opuesto.
 
@@ -584,7 +584,6 @@ ctl_expanded <- ctl_train |>
  drop_na() |> 
  mutate(fecha_15dias = fct_srvy_dt - days(15)) |> 
  recipe(diag ~ ., data = _) |> 
- # step_best_normalize(all_numeric_predictors(), -all_nominal()) |> 
  step_timeseries_signature(fecha_15dias) |> 
  ver() |> 
  select(!where(is.ordered), -c(msisdn_dd, fct_srvy_dt, fecha_15dias)) |> 
@@ -592,11 +591,22 @@ ctl_expanded <- ctl_train |>
 ```
 
 ```{r}
+ctl_expanded
+```
+
+
+Utilizaremos Symmetrical Uncertainty (SU). SU es una métrica normalizada que cae
+en el rango de 0 a 1, lo que facilita la comparación entre diferentes variables
+que podrían tener diferentes unidades o escalas. Esto es especialmente útil si
+se tienen variables que son fundamentalmente diferentes, como en este caso, en
+términos de su naturaleza o escala de medición.
+
+```{r}
 tic()
 mi <- information_gain(
  formula      = diag ~ ., 
  data         = ctl_expanded, 
- type         = "symuncert",
+ type         = "symuncert", # Symmetrical Uncertainty (SU)
  discIntegers = FALSE) |> 
  as_tibble() |> 
  arrange(-importance)
@@ -604,14 +614,27 @@ toc()
 ```
 
 ```{r}
-mi
+#| fig-height: 20
+#| fig-width: 13
+#| label: fig-mutual-information
+#| fig-cap: Information Gain
+#| warning: false
+#| column: page
+mi |> 
+ slice_head(n = 45) |> 
+ mutate(feature = fct_reorder(attributes, importance, .desc = FALSE)) |> 
+ ggplot(aes(x = importance, y = feature)) +
+ geom_point() +
+ labs(title = "Symmetrical Uncertainty (SU)") +
+ drako +
+ theme(axis.text.y = element_text(size = 20),
+       axis.text.x = element_text(size = 30, face = "bold"))
 ```
-
 
 
 ### Dependiente vs numéricas
 
-#### Gráficos de confianza
+#### Intervalos
 
 Debido al desbalance de clases presente en la variable respuesta, será
 necesario reflejar claramente el grado de incertidumbre que esto ocasiona.  Si
@@ -1076,7 +1099,7 @@ walk(analisis_bivariado[27], ~ print(.x))
 walk(analisis_bivariado[28], ~ print(.x))
 ```
 
-#### Boxplots
+#### Densidad
 
 ```{r}
 ctl_pivoted <- ctl_normalizados |>
@@ -1088,30 +1111,531 @@ ctl_pivoted <- ctl_normalizados |>
 ```
 
 ```{r}
-ctl_pivoted |>
- ggplot(aes(value, fill = diag)) +
- geom_density(alpha = .5) +
- facet_wrap(~ metric, scales = "free") +
- drako
+lista_densidad <- nm |> 
+ map(~ ctl_normalizados |> 
+  ggplot(aes(x  = .data[[.x]], y = diag, fill = after_stat(x))) +
+  geom_density_ridges_gradient(
+   scale = 5, 
+   rel_min_height = 0.01,
+   bandwidth = 0.248
+  ) +
+  scale_fill_viridis_c(name = "Score", option = "C") +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_discrete(expand = c(0, 0)) +
+  coord_cartesian(clip = "off") +
+  labs(title = .x) +
+  theme_ridges(font_size = 18, font_family = "yano", grid = TRUE) +
+  theme(
+   axis.text.y  = element_text(size = 24),
+   axis.text.x  = element_text(size = 24),
+   axis.title.y = element_blank(),
+   axis.title.x = element_blank(),
+   plot.title   = element_text(size = 50))
+ )
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[1], ~ print(.x))
 ```
 
 
 
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[2], ~ print(.x))
+```
+
 
 ```{r}
-#| fig-height: 10
+#| echo: false
+#| fig-height: 6
 #| fig-width: 8
-#| label: fig-boxplots
-#| fig-cap: Análisis de variabilidad, rango y atípicos
-#| warning: false
-ctl_normalized |> 
- select(-c(avlblty, avlblty_tckt_2hrs)) |> 
- plot_boxplot(
-  by = "diag", 
-  ncol = 3,
-  geom_boxplot_args = list("outlier.color" = "red"), 
-  ggtheme = drako, 
-  theme_config = list(strip.text = element_text(size = 30)))	
+walk(lista_densidad[3], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[4], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[5], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[6], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[7], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[8], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[9], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[10], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[11], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[12], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[13], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[14], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[15], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[15], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[16], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[17], ~ print(.x))
+```
+
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[18], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[19], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[20], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[21], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[22], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[23], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[24], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[25], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[26], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[27], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_densidad[28], ~ print(.x))
+```
+
+Tras la construcción de gráficos de densidad con `geom_density_ridges_gradient`,
+se observa que la mayoría de las métricas presentan distribuciones similares
+entre las diferentes categorías de diagnóstico, especialmente después de la
+normalización de los datos. Esto sugiere que estas métricas podrían no ser
+particularmente discriminativas para diferenciar entre las categorías. Sin
+embargo, hay excepciones notables, como las métricas `time_cl` y `time_lte`, que
+muestran variaciones más significativas en sus distribuciones. En particular,
+`time_cl` parece ser bimodal, lo que podría indicar la presencia de subgrupos
+dentro de las categorías que podrían requerir una investigación más detallada.
+Las métricas de modulación, por otro lado, tienden a seguir una distribución
+cercana a la normal en todas las categorías, lo que podría simplificar cualquier
+análisis estadístico posterior. Es importante señalar que, aunque las
+visualizaciones de densidad ofrecen una visión general útil, algunas diferencias
+sutiles entre categorías podrían no ser fácilmente apreciables y podrían
+requerir un análisis más profundo para su completa comprensión.
+
+#### Boxplots
+
+```{r}
+lista_boxplots <- nm |> 
+ map(~ ctl_normalizados |> 
+  drop_na() |> 
+  ggplot(aes(x  = .data[[.x]], y = diag)) +
+  geom_boxplot(aes(fill = diag),
+               outlier.colour = "red",
+               outlier.shape = 16,
+               outlier.size = 2,
+               notch = F)  +
+  labs(title = .x) +
+  drako +
+  theme(legend.position = "none",
+        axis.text.y = element_text(size = 25),
+        axis.title.y = element_blank()) 
+ )
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[1], ~ print(.x))
+```
+
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[2], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[3], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[4], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[5], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[6], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[7], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[8], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[9], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[10], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[11], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[12], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[13], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[14], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[15], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[15], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[16], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[17], ~ print(.x))
+```
+
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[18], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[19], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[20], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[21], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[22], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[23], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[24], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[25], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[26], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[27], ~ print(.x))
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 8
+walk(lista_boxplots[28], ~ print(.x))
 ```
 
 Usamos el paquete {bestNormalize} para transformar los datos
@@ -1125,7 +1649,7 @@ la normal.  Para tratar los valores atípicos podemos considerar el aplicar una
 transformación llamada *spatial sign* [ver @kuhn_feature_2020] y
 [@kuhn_applied_2013] o bien usar modelos robustos a valores atípicos.
 
-### Analizar interacciones
+### Interacciones
 
 Según los SMEs entrevistados, la categoría **optimización** por lo general
 depende de un par de variables, es decir, que esta categoría podría ser el
@@ -1149,6 +1673,7 @@ ctl_interact <- ctl_train |>
 ```
 
 ```{r}
+#| message: false
 modelo_multinom <- multinom(
  diag ~ erab_success_rate * rrc_success_rate, data = ctl_interact)
 ```
@@ -1176,7 +1701,12 @@ efectos_prediccion <- predictorEffects(
 ```
 
 ```{r}
-# Crear gráfico de efectos de predictor
+#| fig-height: 20
+#| fig-width: 13
+#| label: fig-interacciones
+#| fig-cap: Interacciones
+#| warning: false
+#| column: page
 plot(
  efectos_prediccion,
  axes = list(grid = TRUE, x = list(rug = FALSE,

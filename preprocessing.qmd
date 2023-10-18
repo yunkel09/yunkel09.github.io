@@ -39,82 +39,9 @@ escalados para evitar sesgos en las métricas de distancia. En resumen, la
 ingeniería de características y el preprocesamiento de datos son pasos
 esenciales para mejorar el rendimiento del modelo.
 
-## Recetas
-
-```{r}
-sencillo <- recipe(diag ~ ., data = ctl_train) |> 
- step_rm(all_nominal_predictors()) |> 
- step_rm(fct_srvy_dt) |> 
- update_role(msisdn_dd, new_role = "user_id") |> 
- step_impute_median(all_numeric_predictors()) |> 
- step_nzv(all_predictors()) |> 
- step_normalize(all_predictors()) |> 
- step_corr(all_predictors()) |> 
- # step_best_normalize(all_numeric_predictors(), -all_nominal()) |> 
- step_smote(diag, skip = TRUE)
-```
-
-```{r}
-tic()
-sencillo |> ver() %>% select(order(colnames(.))) %>% glimpse(width = 95)
-toc()
-```
-
-
-```{r}
-poly_recipe <- 
-   normalized_rec %>% 
-   step_poly(all_predictors()) %>% 
-   step_interact(~ all_predictors():all_predictors())
-```
-
-## Motores
-
-```{r}
-xgboost_spec <- boost_tree(
-  tree_depth     = tune(), 
-  learn_rate     = tune(), 
-  loss_reduction = tune(), 
-  min_n          = tune(), 
-  sample_size    = tune(), 
-  trees          = tune()
- ) |> 
- set_mode("classification") |> 
- set_engine("xgboost")
-```
-
-```{r}
-rf_spec <- rand_forest(
- trees = 100, 
- # mtry  = tune(), 
- # min_n = tune()
- ) %>%
- set_engine("ranger") %>%
- set_mode("classification")
-```
-
-### Workflowset
-
-
 ```{r}
 mset <- metric_set(precision, recall, f_meas)
-```
 
-
-```{r}
-ctl_set <- workflow_set(
- preproc = list(simple  = sencillo), 
- models  = list(
- xgboost       = xgboost_spec)) 
- # random_forest = rf_spec))
-```
-
-```{r}
-ctl_set
-```
-
-
-```{r}
 # definir race control para búsqueda de hiperparámetros
 race_ctrl <- control_race(
  save_pred     = TRUE,
@@ -122,16 +49,61 @@ race_ctrl <- control_race(
  save_workflow = TRUE)
 ```
 
+## Recetas
+
 ```{r}
-# habilitar cluster para procesamiento paralelo
+tic()
+# Feature engineering
+sencillo <- recipe(diag ~  ., data = ctl_train) |> 
+  update_role(msisdn_dd, new_role = "user_id") |> 
+  step_nzv(all_numeric_predictors()) |> 
+  step_date(
+   fecha_15dias, 
+   features = c("dow", "month", "quarter", "semester"), 
+   label = FALSE, 
+   keep_original_cols = FALSE) |> 
+  step_impute_median(all_numeric_predictors()) |> 
+  step_normalize(all_numeric_predictors()) |> 
+  step_rm(fct_srvy_dt, 
+          bts_sh_nm, 
+          trrtry_tf_nm, 
+          where(is.ordered)) |> 
+  step_rm(all_nominal_predictors()) |> 
+  step_smote(diag, skip = TRUE)
+
+
+# Model Spec
+decision_tree_spec <- decision_tree(
+  tree_depth      = tune(), 
+  min_n           = tune(), 
+  cost_complexity = tune()) %>%
+ set_engine("rpart") %>%
+ set_mode("classification")
+
+
+ctl_set <- workflow_set(
+ preproc = list(receta_simple  = sencillo), 
+ models  = list(
+  # multinom_reg_glmnet = multinom_reg_glmnet_spec,
+  # multinom_reg_brulee = multinom_reg_brulee_spec
+  
+  # mlp_keras = mlp_keras_spec,
+  # multinom_reg_keras = multinom_reg_keras_spec,
+  # nnet = nnet_spec,
+  # svm_poly_kernlab = svm_poly_kernlab_spec
+  
+  rpart      = decision_tree_spec
+  # bag_tree_rpart = bag_tree_rpart_spec,
+  # xgboost    = boost_tree_xgboost_spec
+  # random_forest = rand_forest_ranger_spec
+  # multinom_reg_nnet = multinom_reg_nnet_spec
+ )
+) 
+
 cl <- makePSOCKcluster(10)
 registerDoParallel(cl)
-```
 
 
-```{r}
-# 32.36 seg (xgboost + rf)
-tic()
 tune_res <- ctl_set %>% 
  workflow_map(
  fn        = "tune_race_anova", 
@@ -140,47 +112,20 @@ tune_res <- ctl_set %>%
  control   = race_ctrl,
  seed      = 2023,
  metrics   = mset,
- grid      = 20)
-toc()
-```
+ grid      = 10)
 
-```{r}
+
 stopCluster(cl)
 unregister()
-```
-
-```{r}
-tune_res
-```
-
-```{r}
-# 190 modelos
-(tm <- nrow(collect_metrics(tune_res, summarize = FALSE)))
-```
 
 
-```{r}
-tune_rank <- tune_res %>%
+tune_res %>%
  rank_results(select_best = TRUE, rank_metric = "f_meas") %>% 
  select(modelo = wflow_id, .metric, mean, rank) %>% 
  pivot_wider(names_from = .metric, values_from = mean)
+
+toc()
 ```
-
-```{r}
-tune_rank
-```
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
