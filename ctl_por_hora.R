@@ -20,7 +20,6 @@ etiquetas <- c(
  "NO_DIAG")
 
 lookup <- c(
- # date   = "fecha_metrica",
  interf  = "l_ul_interference_avg",
  user    = "msisdn_dd",
  erab    = "erab_success_rate",
@@ -54,66 +53,46 @@ lookup <- c(
 ##  ............................................................................
 ##  Ingesta                                                                 ####
 
-archivos <- dir_ls(type = "file", path = "data", glob = "*.csv")
 
-c(diag_00, disp_00, metr_00, lluv_00) %<-% (archivos |> map(read_csv))
+# Rutas ------------------------------------------------------------------------
 
-cols_to_remove <- c(
- "tipo_cobertura",   # 97.7% de los datos dicen TBD y el 2% es NA
- "cell_load_3g",     # André indica: "mejor utilizar `cell_load_lte`
- "users_class",      # Ignorar por el momento
- "fct_dt",           # Actualización del registro a nivel de data
- "time_3g",          # Métrica vieja que ya no se le dio seguimiento
- "bs_ln_nm",         # Dejaremos `bs_ln_nm` por contener más información
- "thp_required_3g",  # Demasiados valores faltantes
- "time_lte",         # Demasiados valores faltantes,
- "bs_ln_cd",         # Feature no informativo
- "nps_mdll",         # Genera fuga de datos,
- "bts_sh_nm_1",      # Mejor usar bts_sh_nam
- "cell_load_lte",    # La métrica time_cl y time_lte son mejores
- "trrtry_cmrcl_nm",  # No determina la ubicación de la celda
- "stt_nm",           # No determina la ubicación de la celda
- "trrtry_tf_nm",     # No determina la ubicación de la celda
- "cty_nm",           # No determina la ubicación de la celda
- "thp_required_lte"  # Métrica sumarizada
-)
+
+diag_f <- path("data", "diags", ext = "csv")
+metr_f <- path("data", "metri", ext = "fst")
+sifs_f <- path("data", "sitfs", ext = "fst")
+
+
+# Diagnósticos -----------------------------------------------------------------
+
+# Definir columnas de interés y su tipo correspondiente
+cols_diag <- cols_only(
+ fct_srvy_dt = "c",
+ msisdn_dd   = "c",
+ srvy_id     = "i",
+ class_desc  = "c",
+ diag        = "c")
+
+# Leer el archivo
+diag_00 <- read_csv(diag_f, col_types = cols_diag)
 
 # Métricas por hora ------------------------------------------------------------
 
-parquet_file <- dir_ls(type = "file", path = "data", glob = "*.parquet")
-
-tic()
-# 11,785,380 × 28 (3.36 seg)
-hourly_metrics_raw <- read_parquet(file = parquet_file)
-toc()
+# 16.61 seg
+hourly_metrics_raw <- read_fst(path = metr_f) |> as_tibble()
 
 # Sitios Field Service ---------------------------------------------------------
 
-con <- conectar_msql()
-
-sitiosfs <- tbl(con, in_schema("fieldservice", "site_collate")) |>
- select(
-  twr = cilocation,
-  lat = latitude,
-  lon = longitude,
-  dpto = department,
-  ciudad = municipality) |>
- collect() |>
- distinct(twr, .keep_all = TRUE)
-
-dbDisconnect(con)
+sitiosfs <- read_fst(sifs_f) |> as_tibble()
 
 ##  ............................................................................
 ##  Prep                                                                    ####
+
 
 # Diagnóstico ------------------------------------------------------------------
 
 # # Preprocesamiento y filtrado inicial
 diagnosticos <- diag_00 |>
- select(fct_srvy_dt, msisdn_dd, srvy_id, class_desc, diag) |>
  mutate(
-  across(fct_srvy_dt, \(fecha) ymd(fecha)),
-  across(msisdn_dd:srvy_id, as.integer),
   across(diag, toupper)) |>
  filter(diag %in% etiquetas) |>
 
@@ -154,6 +133,15 @@ metrics_to_remove <- c(
  "modulation_qpsk_ratio",
  "thpughput_ul",
  "volte_erlang")
+
+# Primero delimitar y luego preprocesar
+tic()
+ctl_00 <- diagnosticos |>
+  inner_join(hourly_metrics_raw, join_by(fct_srvy_dt, msisdn_dd, srvy_id))
+toc()
+
+
+
 
 # 29.64 seg
 tic()

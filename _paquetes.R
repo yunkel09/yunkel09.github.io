@@ -1,12 +1,12 @@
 
 
 import::from(zeallot,       `%<-%`)
-import::from(fs,            dir_ls)
+import::from(fs,            dir_ls, path)
 import::from(parallel,      detectCores, makePSOCKcluster, stopCluster)
 import::from(doParallel,    registerDoParallel)
-import::from(conectigo,     conectar_msql, cargar_fuentes)
-import::from(DBI,           dbDisconnect)
-import::from(dbplyr,        in_schema)
+import::from(conectigo,     cargar_fuentes)
+# import::from(DBI,           dbDisconnect)
+# import::from(dbplyr,        in_schema)
 import::from(FSelectorRcpp, information_gain)
 import::from(cowplot,       .except = "stamp")
 
@@ -28,7 +28,7 @@ pacman::p_load(
 
 
 options(pillar.sigfig    = 5,
-        tibble.print_min = 50,
+        tibble.print_min = 10,
         scipen = 999,
         digits = 7,
         tidymodels.dark = TRUE,
