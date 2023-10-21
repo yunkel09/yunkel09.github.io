@@ -28,7 +28,7 @@ pacman::p_load(
 
 
 options(pillar.sigfig    = 5,
-        tibble.print_min = 10,
+        tibble.print_min = 30,
         scipen = 999,
         digits = 7,
         tidymodels.dark = TRUE,
@@ -75,6 +75,8 @@ unregister <- function() {
 
 estandarizar_columnas <- function(columna) {
  columna |>
+  iconv(from = "UTF-8", to = "latin1") |>
+  iconv(from = "latin1", to = "ASCII//TRANSLIT") |>
   toupper() |>
   str_replace_all("[\\s-]", "_")
 }
@@ -124,6 +126,16 @@ summarize_metrics <- function(df) {
   prb_out_of_range_count = sum(prb > 0.85),
   prb_out_of_range_bin = as.integer(mean(prb > 0.85) * 100 >= 3),
 
+  thp_dl_mean = mean(thp_dl),
+  thp_dl_median = median(thp_dl),
+  thp_dl_min = min(thp_dl),
+  thp_dl_max = max(thp_dl),
+  thp_dl_sd = sd(thp_dl),
+  thp_dl_out_of_range_time = mean(thp_dl < 2.7) * 100,
+  thp_dl_out_of_range_count = sum(thp_dl < 2.7),
+  thp_dl_out_of_range_bin = as.integer(mean(thp_dl < 2.7) * 100 >= 3),
+
+
   load_mean = mean(rrc),
   load_median = median(load),
   load_min = min(load),
@@ -169,14 +181,7 @@ summarize_metrics <- function(df) {
   interf_out_of_range_count = sum(interf > -95),
   interf_out_of_range_bin = as.integer(mean(interf > -95) * 100 >= 3),
 
-  thp_dl_mean = mean(thp_dl),
-  thp_dl_median = median(thp_dl),
-  thp_dl_min = min(thp_dl),
-  thp_dl_max = max(thp_dl),
-  thp_dl_sd = sd(thp_dl),
-  thp_dl_out_of_range_time = mean(thp_dl < 2.7) * 100,
-  thp_dl_out_of_range_count = sum(thp_dl < 2.7),
-  thp_dl_out_of_range_bin = as.integer(mean(thp_dl < 2.7) * 100 >= 3),
+
 
   cqi_mean = mean(cqi),
   cqi_median = median(cqi),

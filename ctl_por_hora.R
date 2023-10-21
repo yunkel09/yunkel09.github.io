@@ -12,6 +12,7 @@ source("_paquetes.R")
 ##  ............................................................................
 ##  Variables                                                               ####
 
+# Etiquetas para variable respuesta
 etiquetas <- c(
  "CAPACIDAD",
  "OPTIMIZACION",
@@ -19,48 +20,63 @@ etiquetas <- c(
  "DISPONIBILIDAD",
  "NO_DIAG")
 
+# Tabla par renombrar columnas
 lookup <- c(
- interf  = "l_ul_interference_avg",
- user    = "msisdn_dd",
- erab    = "erab_success_rate",
- # m16qam = "modulation_16qam_ratio",
- # m64qam = "modulation_64qam_ratio",
- # mqpsk  = "modulation_qpsk_ratio",
- bts       = "bts_sh_nm",
- load      = "cell_load",
- # disp_ttks = "avlblty_tckt_2hrs",
- # disp      = "avlblty",
- # disp_prop = "unvlblty_ttl_hrs_prop",
- rrc       = "rrc_success_rate",
- dropr     = "service_drop_rate",
- # thp_lte   = "thp_required_lte",
- # ta1       = "ra_ta_ue_index1",
- # ta2       = "ra_ta_ue_index2",
- # ta3       = "ra_ta_ue_index3",
- # ta4       = "ra_ta_ue_index4",
- # ta5       = "ra_ta_ue_index5",
- ta6       = "ra_ta_ue_index6",
- ta7       = "ra_ta_ue_index7",
- # ta_to     = "ra_ta_ue_total",
- prb       = "rate_prb_dl",
- cqi       = "corrected_cqi",
- thp       = "thoughput_dl"
- # thp_ul    = "thpughput_ul"
- # lluvia  = "rain",
- # time      = "cll_prctg"
-)
+  poll  = "fct_srvy_dt",
+  erf   = "l_ul_interference_avg",
+  user  = "msisdn_dd",
+  erb   = "erab_success_rate",
+  bts   = "bts_sh_nm",
+  lod   = "cell_load",
+  rrc   = "rrc_success_rate",
+  drp   = "service_drop_rate",
+  prb   = "rate_prb_dl",
+  cqi   = "corrected_cqi",
+  thp   = "thoughput_dl",
+  dis   = "cell_unavail",
+  dif   = "cell_unavail_s1fail")
+
+# Remover de métricas
+metrics_to_remove <- c(
+  "srvy_id",
+  "r1",
+  "prttn_hr",
+  "status",
+  "cll_prctg",
+  "ra_ta_ue_index1",
+  "ra_ta_ue_index2",
+  "ra_ta_ue_index3",
+  "ra_ta_ue_index4",
+  "ra_ta_ue_index5",
+  "ra_ta_ue_total",
+  "modulation_64qam_ratio",
+  "modulation_16qam_ratio",
+  "modulation_qpsk_ratio",
+  "thpughput_ul",
+  "volte_erlang")
+
+enteros <- c(
+ "msisdn_dd",
+ "corrected_cqi",
+ "cell_unavail",
+ "cell_unavail_s1fail")
+
+porcentajes <-c(
+ "rate_prb_dl",
+ "cell_load",
+ "rrc_success_rate",
+ "erab_success_rate",
+ "service_drop_rate",
+ "tad")
 
 ##  ............................................................................
 ##  Ingesta                                                                 ####
 
-
 # Rutas ------------------------------------------------------------------------
-
 
 diag_f <- path("data", "diags", ext = "csv")
 metr_f <- path("data", "metri", ext = "fst")
 sifs_f <- path("data", "sitfs", ext = "fst")
-
 
 # Diagnósticos -----------------------------------------------------------------
 
@@ -82,11 +98,11 @@ hourly_metrics_raw <- read_fst(path = metr_f) |> as_tibble()
 
 # Sitios Field Service ---------------------------------------------------------
 
+# 5,412
 sitiosfs <- read_fst(sifs_f) |> as_tibble()
 
 ##  ............................................................................
 ##  Prep                                                                    ####
-
 
 # Diagnóstico ------------------------------------------------------------------
 
@@ -114,94 +130,114 @@ diagnosticos <- diag_00 |>
   select(-class_desc) |>
  distinct(msisdn_dd, .keep_all = TRUE)
 
-# Métricas por hora ------------------------------------------------------------
+# Unir y transformar -----------------------------------------------------------
 
-metrics_to_remove <- c(
- "r1",
- "prttn_hr",
- "hora",
- "cll_prctg",
- "ra_ta_ue_index1",
- "ra_ta_ue_index2",
- "ra_ta_ue_index3",
- "ra_ta_ue_index4",
- "ra_ta_ue_index5",
- "fecha_metrica",
- "ra_ta_ue_total",
- "modulation_64qam_ratio",
- "modulation_16qam_ratio",
- "modulation_qpsk_ratio",
- "thpughput_ul",
- "volte_erlang")
-
-# Primero delimitar y luego preprocesar
-tic()
+# 18.2 seg
 ctl_00 <- diagnosticos |>
   inner_join(hourly_metrics_raw, join_by(fct_srvy_dt, msisdn_dd, srvy_id))
-toc()
+# 32,164,414 × 31
 
 
+# Dataset exploratorio ---------------------------------------------------------
 
+m <- ctl_00 |> slice(1:10)
 
-# 29.64 seg
+# 253 seg (4.23 min)
 tic()
-# 11,589,585 × 30
-hourly_metrics <- hourly_metrics_raw |>
- mutate(
-  fecha_metrica = str_sub(prttn_hr, 1, 8),
-  hora = str_sub(prttn_hr, 9, 10)) |>
- mutate(
-  fecha_metrica = ymd(fecha_metrica),
-  date = str_c(fecha_metrica, hora, sep = " ") |> ymd_h(),
-  across(fct_srvy_dt, ymd),
-  across(c(msisdn_dd, hora), as.integer)
+ctl_01 <- ctl_00 |>
+ filter(
+
+  # Eliminar casos con contadores apagados
+  !if_all(
+   c(rate_prb_dl,
+     cell_load,
+     service_drop_rate,
+     l_ul_interference_avg,
+     thoughput_dl), ~ .x == 0),
+
+  # Los cqis menores a 5 no son de casos normales
+  corrected_cqi > 5
+
  ) |>
- filter(corrected_cqi > 5) |>
- relocate(hora, date, .after = srvy_id) |>
- select(-all_of(metrics_to_remove))
-toc()
+ # Crear columna especial
+ rowwise() |>
+ mutate(tad = ra_ta_ue_index6 + ra_ta_ue_index7, .keep = "unused") |>
+ ungroup() |>
 
-# Unir métricas detalle con diagnóstico ----------------------------------------
-
-# 39.27 seg
-tic()
-# Unir diagnósticos con métricas de red
-ctl <- diagnosticos |>
- inner_join(hourly_metrics, join_by(fct_srvy_dt, msisdn_dd, srvy_id)) |>
-
-# Extraer el siteid y agregar información de ubicación
+ # Crear y transformar columnas
  mutate(
-  twr = str_sub(bts_sh_nm, start = 2, end = 7)) |>
+
+  # fechas
+  met = str_sub(prttn_hr, 1, 8) |> ymd(),
+  hor = str_sub(prttn_hr, 9, 10),
+  date = str_c(met, hor, sep = " ") |> ymd_h(),
+
+  # nuevas
+  twr  = str_sub(bts_sh_nm, start = 2, end = 7),
+
+  # conversiones
+  across(fct_srvy_dt, ymd),                      # convertir a fecha
+  across(all_of(enteros), as.integer),           # convertir a enteros
+  across(thoughput_dl, \(x) x / 1e3),            # convertir a Mbps
+  across(all_of(porcentajes), \(col) col * 100), # convertir a porcentaje
+  across(diag, as_factor)                        # convertir a factor
+
+ ) |>
+
+ # Agregar datos de geografía
  left_join(sitiosfs, join_by(twr)) |>
 
-# Renombrar y remover columnas de enlace
+ # Remover columnas innecesarias y luego renombrar
+ select(-all_of(metrics_to_remove)) |>
  rename(all_of(lookup)) |>
- select(-c(fct_srvy_dt, srvy_id)) |>
 
-# Remover filas que tengan valor cero en varias columnas consecutivas
-filter(
- !if_all(
-  c(prb, load, dropr, interf, thp), ~ .x == 0)) |>
-
-# Transformaciones finales de formato y localización de columnas
- mutate(
-  across(where(is_character), \(col) estandarizar_columnas(col)),
-  across(diag, as_factor)) |>
- relocate(user, where(is.POSIXct), where(is_character),
-  where(is.numeric), where(is.factor)) |>
- rowwise() |>
- mutate(ta = ta6 + ta7, .keep = "unused", .after = cqi) |>
- ungroup() |>
- arrange(user, desc(date))
+ # Reordenar dataset
+ relocate(
+  user,
+  date,
+  poll,
+  met,
+  hor,
+  dpto,
+  city,
+  twr,
+  bts,
+  lat,
+  lon,
+  prb,
+  thp,
+  rrc,
+  erb,
+  drp,
+  tad,
+  lod,
+  erf,
+  cqi,
+  dis,
+  dif,
+  diag)
 toc()
-# 8,383,655 × 18
+# 31,648,712 × 23
 
-# Escribir en un fst para acceso rápido futuro
-# write_fst(ctl, "./preprocessed_data/ctl_final.fst", compress = 0)
+# Guardar dataset preprocesado
+# write_fst(ctl_01, path = cted_f, compress = 0)
 
-# 1.98 seg
-ctl <- read_fst("./preprocessed_data/ctl_final.fst") |> as_tibble()
+# 6.34 seg
+cted_f <- path("data", "ctlexp", ext = "fst")
+ctl_01 <- read_fst(cted_f) |> as_tibble()
 
+##  ............................................................................
+##  PRE-EDA                                                                 ####
+
+# is_whole <- function(x) all(floor(x) == x)
+#
+#
+# ctl_01 |>
+#   select(where(is.numeric)) |>
+#   summarise(across(everything(), is_whole))
+
+ctl_01 |>
+  summarise(across(met:hor, n_distinct), .by = user)
 
 
 # craft -------------------------------------------------------------------
@@ -209,52 +245,110 @@ ctl <- read_fst("./preprocessed_data/ctl_final.fst") |> as_tibble()
 muestra <- c(30001118, 30003353)
 
 anomalias <- tribble(
-  ~user, ~date, ~prb, ~thp,
-  30001118, "2023-07-03 23:00:00", 0.90, 1900,
-  30001118, "2023-07-04 23:00:00", 0.91, 1300,
-  30001118, "2023-07-05 23:00:00", 0.92, 500,
-  30001118, "2023-07-06 22:00:00", 0.93, 800,
-  30001118, "2023-07-07 10:00:00", 0.94, 1241,
-  30001118, "2023-07-08 11:00:00", 0.95, 241,
-  30001118, "2023-07-09 12:00:00", 0.95, 341,
-  30001118, "2023-07-10 13:00:00", 0.95, 141,
-  30003353, "2023-07-03 23:00:00", 0.20, 2400,
-  30003353, "2023-07-04 23:00:00", 0.30, 2300,
-  30003353, "2023-07-05 23:00:00", 0.40, 2200,
-  30003353, "2023-07-06 22:00:00", 0.50, 2100,
-  30003353, "2023-07-07 22:00:00", 0.60, 2000
-) |> mutate(date = ymd_hms(date))
+  ~user,    ~date,                 ~prb, ~thp,
+  30001118, "2023-07-03 23:00:00", 90,   1.900,
+  30001118, "2023-07-03 15:00:00", 91,   1.300,
+  30001118, "2023-07-05 23:00:00", 92,   0.500,
+  30001118, "2023-07-05 22:00:00", 70,   0.800,
+  30001118, "2023-07-06 10:00:00", 94,   1.241,
+  30001118, "2023-07-06 11:00:00", 95,   2.41,
+  30001118, "2023-07-07 12:00:00", 95,   3.41,
+  30001118, "2023-07-08 12:00:00", 95,   1.41,
+  30001118, "2023-07-08 13:00:00", 95,   1.41,
+  30001118, "2023-07-09 14:00:00", 95,   1.41,
+  30001118, "2023-07-09 15:00:00", 95,   1.41,
+  30001118, "2023-07-10 16:00:00", 95,   0.41,
+  30001118, "2023-07-11 17:00:00", 95,   1.41
+  # 30003353, "2023-07-16 23:00:00", 20,   52.400,
+  # 30003353, "2023-07-16 11:00:00", 30,   83.00,
+  # 30003353, "2023-07-05 23:00:00", 40,   2.200,
+  # 30003353, "2023-07-06 22:00:00", 50,   2.100,
+  # 30003353, "2023-07-07 22:00:00", 60,   2.000
+) |> mutate(
+  date = ymd_hms(date))
 
-prueba <- ctl |>
-  filter(user %in% muestra) |>
+prueba <- ctl_01 |>
+  # filter(user %in% muestra) |>
+  filter(user == 30001118) |>
   group_by(user) |>
   slice(1:10) |>
   ungroup() |>
   select(user, date, prb, thp) |>
   bind_rows(anomalias) |>
-  arrange(user, date)
+  mutate(fecha = as.Date(date), .after = date) |>
+  select(-date) |>
+  arrange(user, fecha)
 
-prueba |>
+prueba
 
-  group_by(user) |>
+# Definir listado de funciones básicas
+fun_basicas <- list(
+  mean   = ~mean(.x, na.rm = TRUE),
+  median = ~median(.x, na.rm = TRUE),
+  sd     = ~sd(.x, na.rm = TRUE),
+  mim    = ~min(.x, na.rm = TRUE),
+  max    = ~max(.x, na.rm = TRUE))
+
+
+# Operación con PRB y THP
+ci <- prueba |>
   mutate(
-    prb = prb * 100,
-    thp = thp/1e3,
-    prb_ratio = (prb / thp),
-    prb_out_range = if_else(condition = prb_ratio > 32, 1, 0)) |>
+    capacity_efficienty = (prb / thp),
+    capacity_alert = if_else(condition = capacity_efficienty > 32, 1, 0)) |>
+  group_by(user, fecha) |>
+    summarise(
+      sum_prb_ratio  = sum(capacity_alert),
+      capacity_issue = ifelse(sum_prb_ratio >= 2, 1, 0)) |>
+  group_by(user) |>
+  summarise(capacity_flag = ifelse(sum(capacity_issue) >= 5, 1, 0))
+
+dos_dias <- c(as.Date("2023-04-21"), as.Date("2023-04-22"))
+
+eb <- ctl_01 |>
+ filter(user == 33483697, met %in% dos_dias, bts == "KAVP536A")
+ select(user, bts, date, met, hor, rrc, erb) |>
+ arrange(user, met, hor) |>
+ mutate(rrc = c(rep(75, 12), rep(90, 6)), erb = c(rep(75, 11), rep(90, 7)))
+
+eb1 <- data_edit(eb)
+
+
+eb |>
+  mutate(
+    rrc_alert = as.integer(rrc < 90),
+    erb_alert = as.integer(erb < 90)
+  ) |>
+  group_by(user, met) |>
   summarise(
-    sum_prb_ratio  = sum(prb_out_range),
-    capacity_issue = ifelse(sum_prb_ratio > 5, 1, 0))
 
-
-# 1. Pasar todas las unidades a porcentaje y no a proporción: multiplicar x 100
-# 2. Pasar el thp a mbps
-# 3. Crear los nuevos features con base a las reglas de ctl
-
+    sum_rrc_alert  = sum(rrc_alert),
+    sum_erb_alert  = sum(erb_alert),
+    rrc_issue = ifelse(sum_rrc_alert >= 12, 1, 0),
+    erb_issue = ifelse(sum_erb_alert >= 12, 1, 0))
 
 
 
-##  ............................................................................
+  prueba |>
+    group_by(user) |>
+
+    summarise(
+
+      across(prb, fun_basicas),
+      prb_out_of_range_time = mean(prb > 80),
+      prb_out_of_range_count = sum(prb > 80),
+
+      across(thp, fun_basicas),
+      thp_out_of_range_time = mean(thp < 2.5),
+      thp_out_of_range_count = sum(thp < 2.5)
+  ) |>
+  left_join(ci, join_by(user))
+
+
+
+
+
+
+
 ##  Resumir                                                                 ####
 
 # Crear dos datasets
