@@ -140,8 +140,6 @@ ctl_00 <- diagnosticos |>
 
 # Dataset exploratorio ---------------------------------------------------------
 
-m <- ctl_00 |> slice(1:10)
-
 # 253 seg (4.23 min)
 tic()
 ctl_01 <- ctl_00 |>
@@ -222,6 +220,9 @@ toc()
 # Guardar dataset preprocesado
 # write_fst(ctl_01, path = cted_f, compress = 0)
 
+
+# Cargar dataset preprocesado --------------------------------------------------
+
 # 6.34 seg
 cted_f <- path("data", "ctlexp", ext = "fst")
 ctl_01 <- read_fst(cted_f) |> as_tibble()
@@ -237,11 +238,17 @@ ctl_01 <- read_fst(cted_f) |> as_tibble()
 #   summarise(across(everything(), is_whole))
 
 ctl_01 |>
-  summarise(across(met:hor, n_distinct), .by = user)
+ summarise(across(c(met:hor, bts), n_distinct), .by = user)
 
 
 # craft -------------------------------------------------------------------
 
+
+
+# Datasets de prueba ------------------------------------------------------
+
+
+# thp y prb
 muestra <- c(30001118, 30003353)
 
 anomalias <- tribble(
@@ -281,6 +288,19 @@ prueba <- ctl_01 |>
 
 prueba
 
+# erab y rrc
+eb <- ctl_01 |>
+  filter(user == 30001118) |>
+  slice(1:18) |>
+  select(user, met, hor, rrc, erb) |>
+  arrange(user, met) |>
+  mutate(
+    met = as.Date("2023-04-22"),
+    rrc = c(rep(75, 12), rep(90, 6)), erb = c(rep(75, 11), rep(90, 7)))
+
+
+# Funciones básicas ------------------------------------------------------------
+
 # Definir listado de funciones básicas
 fun_basicas <- list(
   mean   = ~mean(.x, na.rm = TRUE),
@@ -289,9 +309,11 @@ fun_basicas <- list(
   mim    = ~min(.x, na.rm = TRUE),
   max    = ~max(.x, na.rm = TRUE))
 
+# Resúmenes --------------------------------------------------------------------
+
 
 # Operación con PRB y THP
-ci <- prueba |>
+capacity_flags <- prueba |>
   mutate(
     capacity_efficienty = (prb / thp),
     capacity_alert = if_else(condition = capacity_efficienty > 32, 1, 0)) |>
@@ -300,50 +322,54 @@ ci <- prueba |>
       sum_prb_ratio  = sum(capacity_alert),
       capacity_issue = ifelse(sum_prb_ratio >= 2, 1, 0)) |>
   group_by(user) |>
-  summarise(capacity_flag = ifelse(sum(capacity_issue) >= 5, 1, 0))
-
-dos_dias <- c(as.Date("2023-04-21"), as.Date("2023-04-22"))
-
-eb <- ctl_01 |>
- filter(user == 33483697, met %in% dos_dias, bts == "KAVP536A")
- select(user, bts, date, met, hor, rrc, erb) |>
- arrange(user, met, hor) |>
- mutate(rrc = c(rep(75, 12), rep(90, 6)), erb = c(rep(75, 11), rep(90, 7)))
-
-eb1 <- data_edit(eb)
+  summarise(cap_issues = ifelse(sum(capacity_issue) >= 5, 1, 0))
 
 
-eb |>
+# Operación con RRC y ERAB
+success_rate <- eb |>
   mutate(
     rrc_alert = as.integer(rrc < 90),
     erb_alert = as.integer(erb < 90)
   ) |>
   group_by(user, met) |>
   summarise(
-
     sum_rrc_alert  = sum(rrc_alert),
-    sum_erb_alert  = sum(erb_alert),
-    rrc_issue = ifelse(sum_rrc_alert >= 12, 1, 0),
-    erb_issue = ifelse(sum_erb_alert >= 12, 1, 0))
+    sum_erb_alert  = sum(erb_alert)) |>
+  group_by(user) |>
+  summarise(
+    rrc_issues = if_else(sum_rrc_alert >= 12, 1, 0),
+    erb_issues = if_else(sum_erb_alert >= 12, 1, 0)
+  )
 
+# Dataset Final ----------------------------------------------------------------
 
+  usuario <- ctl_01 |>
+  filter(user == 30001118) |>
+  slice(1:10)
 
-  prueba |>
+ usuario |>
     group_by(user) |>
 
     summarise(
 
-      across(prb, fun_basicas),
-      prb_out_of_range_time = mean(prb > 80),
-      prb_out_of_range_count = sum(prb > 80),
+      across(prb:erb, fun_basicas),
+      prb_timeout = mean(prb > 80),
+      prb_counter = sum(prb > 80),
 
-      across(thp, fun_basicas),
-      thp_out_of_range_time = mean(thp < 2.5),
-      thp_out_of_range_count = sum(thp < 2.5)
+      # across(thp, fun_basicas),
+      thp_timeout = mean(thp < 2.5),
+      thp_counter = sum(thp < 2.5)
+
+
   ) |>
-  left_join(ci, join_by(user))
+  left_join(capacity_flags, join_by(user)) |>
+  left_join(success_rate, join_by(user)) %>% glimpse()
 
 
+# Aquí me quedé
+
+ # Continuar con el resto de métricas y la lógica de los días
+ # Escribir a André para que validen bien los muchachos por correo
 
 
 
