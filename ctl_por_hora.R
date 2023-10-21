@@ -243,63 +243,16 @@ ctl_01 |>
 
 # craft -------------------------------------------------------------------
 
+crear_secuencia_fechas <- function(dias, horas) {
+  # Fecha de inicio
+  fecha_inicio <- as.Date("2023-04-01")
 
+  # Crear secuencia de fechas
+  secuencia_fechas <- seq(from = fecha_inicio, by = "days", length.out = dias)
 
-# Datasets de prueba ------------------------------------------------------
+  sort(rep(secuencia_fechas, horas))
 
-
-# thp y prb
-muestra <- c(30001118, 30003353)
-
-anomalias <- tribble(
-  ~user,    ~date,                 ~prb, ~thp,
-  30001118, "2023-07-03 23:00:00", 90,   1.900,
-  30001118, "2023-07-03 15:00:00", 91,   1.300,
-  30001118, "2023-07-05 23:00:00", 92,   0.500,
-  30001118, "2023-07-05 22:00:00", 70,   0.800,
-  30001118, "2023-07-06 10:00:00", 94,   1.241,
-  30001118, "2023-07-06 11:00:00", 95,   2.41,
-  30001118, "2023-07-07 12:00:00", 95,   3.41,
-  30001118, "2023-07-08 12:00:00", 95,   1.41,
-  30001118, "2023-07-08 13:00:00", 95,   1.41,
-  30001118, "2023-07-09 14:00:00", 95,   1.41,
-  30001118, "2023-07-09 15:00:00", 95,   1.41,
-  30001118, "2023-07-10 16:00:00", 95,   0.41,
-  30001118, "2023-07-11 17:00:00", 95,   1.41
-  # 30003353, "2023-07-16 23:00:00", 20,   52.400,
-  # 30003353, "2023-07-16 11:00:00", 30,   83.00,
-  # 30003353, "2023-07-05 23:00:00", 40,   2.200,
-  # 30003353, "2023-07-06 22:00:00", 50,   2.100,
-  # 30003353, "2023-07-07 22:00:00", 60,   2.000
-) |> mutate(
-  date = ymd_hms(date))
-
-prueba <- ctl_01 |>
-  # filter(user %in% muestra) |>
-  filter(user == 30001118) |>
-  group_by(user) |>
-  slice(1:10) |>
-  ungroup() |>
-  select(user, date, prb, thp) |>
-  bind_rows(anomalias) |>
-  mutate(fecha = as.Date(date), .after = date) |>
-  select(-date) |>
-  arrange(user, fecha)
-
-prueba
-
-# erab y rrc
-eb <- ctl_01 |>
-  filter(user == 30001118) |>
-  slice(1:18) |>
-  select(user, met, hor, rrc, erb) |>
-  arrange(user, met) |>
-  mutate(
-    met = as.Date("2023-04-22"),
-    rrc = c(rep(75, 12), rep(90, 6)), erb = c(rep(75, 11), rep(90, 7)))
-
-
-# Funciones básicas ------------------------------------------------------------
+}
 
 # Definir listado de funciones básicas
 fun_basicas <- list(
@@ -309,41 +262,137 @@ fun_basicas <- list(
   mim    = ~min(.x, na.rm = TRUE),
   max    = ~max(.x, na.rm = TRUE))
 
-# Resúmenes --------------------------------------------------------------------
+# Datasets de prueba ------------------------------------------------------
 
+# baseline
+test <- ctl_01 |>
+  filter(user == 30001118) |>
+  slice(1:126) |>
+  mutate(met = crear_secuencia_fechas(dias = 7, horas = 18))
+
+
+# PRB  y THP -------------------------------------------------------------------
+
+# issue when: pbr > 80 & thp < 2.5
+# horas por día: 2 | días por mes: 5
+prbthp <- test |>
+ select(user, met, prb, thp) |>
+ group_by(user, met) |>
+ mutate(
+  prb = replace(prb, list = 1:15, values = 85),
+  thp = replace(thp, list = 1:15, values = 2.3)) |>
+ ungroup()
 
 # Operación con PRB y THP
-capacity_flags <- prueba |>
+# horas: 2 | días: 5
+capacity_flags <- prbthp |>
   mutate(
     capacity_efficienty = (prb / thp),
     capacity_alert = if_else(condition = capacity_efficienty > 32, 1, 0)) |>
-  group_by(user, fecha) |>
-    summarise(
-      sum_prb_ratio  = sum(capacity_alert),
-      capacity_issue = ifelse(sum_prb_ratio >= 2, 1, 0)) |>
+  group_by(user, met) |>
+  summarise(
+    sum_hours_prb_out  = sum(capacity_alert),
+    capacity_flag      = if_else(sum_hours_prb_out >= 2, 1, 0)) |>
   group_by(user) |>
-  summarise(cap_issues = ifelse(sum(capacity_issue) >= 5, 1, 0))
+  summarise(capacity_rule = if_else(sum(capacity_flag) >= 5, 1, 0))
 
+
+
+# ERAB y RRC -------------------------------------------------------------------
+
+
+# issue when: rrc < 90 and or erab < 90
+# horas: 12 | días: 3
+rrc_erab <- test |>
+  select(user, met, rrc, erb) |>
+  group_by(user, met) |>
+  mutate(
+    rrc = replace(rrc, list = 1:15, values = 85),
+    erb = replace(rrc, list = 1:15, values = 35)
+  ) |>
+  ungroup()
+
+rrc_erab |> summarise(rrc_out = sum(rrc < 90), erb_out = sum(erb < 90), .by = met)
 
 # Operación con RRC y ERAB
-success_rate <- eb |>
+# horas 12 | días: 3
+success_rate <- rrc_erab |>
   mutate(
+    # Fuera del umbral
     rrc_alert = as.integer(rrc < 90),
     erb_alert = as.integer(erb < 90)
   ) |>
   group_by(user, met) |>
   summarise(
     sum_rrc_alert  = sum(rrc_alert),
-    sum_erb_alert  = sum(erb_alert)) |>
+    sum_erb_alert  = sum(erb_alert),
+
+    # Indicador de horas
+    rrc_flag = if_else(sum(sum_rrc_alert) >= 12, 1, 0),
+    erb_flag = if_else(sum(sum_erb_alert) >= 12, 1, 0)) |>
   group_by(user) |>
   summarise(
-    rrc_issues = if_else(sum_rrc_alert >= 12, 1, 0),
-    erb_issues = if_else(sum_erb_alert >= 12, 1, 0)
+    # Indicador de días
+    rrc_rule = if_else(sum(rrc_flag) >= 3, 1, 0),
+    erb_rule = if_else(sum(erb_flag) >= 3, 1, 0)
   )
+
+
+# CQI --------------------------------------------------------------------------
+
+
+# issue when: cqi < 7
+# horas: 6 | días: 4
+cqi_df <- test |>
+ select(user, met, cqi) |>
+ arrange(met) |>
+ group_by(user, met) |>
+ mutate(
+  cqi = replace(
+   cqi,
+   list = sample.int(n = 18, size = 7, replace = F),
+   values = 5)
+  ) |>
+  ungroup()
+
+# validar cantidad de horas por día
+cqi_df |> summarise(cqi_out = sum(cqi < 7), .by = met)
+
+
+# Operación con cqi
+# horas: 6 | días: 4
+cqi_df |>
+  mutate(
+    cqi_alert = as.integer(cqi < 7)
+  ) |>
+  group_by(user, met) |>
+  summarise(
+    sum_cqi_alert  = sum(cqi_alert), # por hora
+    cqi_flag  = if_else(sum_cqi_alert >= 6, 1, 0)
+  ) |>
+  # ungroup() |>
+  group_by(user) |>
+  summarise(
+   cqi_rule = if_else(sum(cqi_flag) >= 4, 1, 0))
+
+
+
+# TA ---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 # Dataset Final ----------------------------------------------------------------
 
-  usuario <- ctl_01 |>
+ usuario <- ctl_01 |>
   filter(user == 30001118) |>
   slice(1:10)
 
@@ -356,13 +405,19 @@ success_rate <- eb |>
       prb_timeout = mean(prb > 80),
       prb_counter = sum(prb > 80),
 
-      # across(thp, fun_basicas),
       thp_timeout = mean(thp < 2.5),
-      thp_counter = sum(thp < 2.5)
+      thp_counter = sum(thp < 2.5),
 
+      erb_timeout = mean(erb < 90),
+      erb_counter = sum(erb < 90),
+
+      rrc_timeout = mean(rrc < 90),
+      rrc_counter = sum(rrc < 90)
 
   ) |>
+  # Regresa capacity_issues (cap_issues)
   left_join(capacity_flags, join_by(user)) |>
+  # Regresa rrc y erb issues
   left_join(success_rate, join_by(user)) %>% glimpse()
 
 
