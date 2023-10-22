@@ -137,7 +137,6 @@ ctl_00 <- diagnosticos |>
   inner_join(hourly_metrics_raw, join_by(fct_srvy_dt, msisdn_dd, srvy_id))
 # 32,164,414 × 31
 
-
 # Dataset exploratorio ---------------------------------------------------------
 
 # 253 seg (4.23 min)
@@ -254,13 +253,45 @@ crear_secuencia_fechas <- function(dias, horas) {
 
 }
 
+
+
 # Definir listado de funciones básicas
 fun_basicas <- list(
   mean   = ~mean(.x, na.rm = TRUE),
   median = ~median(.x, na.rm = TRUE),
   sd     = ~sd(.x, na.rm = TRUE),
   mim    = ~min(.x, na.rm = TRUE),
-  max    = ~max(.x, na.rm = TRUE))
+  max    = ~max(.x, na.rm = TRUE),
+  iqr    = ~IQR(.x, na.rm = TRUE),
+  p1     = ~quantile(.x, probs = 0.01, na.rm = TRUE),
+  p5     = ~quantile(.x, probs = 0.05, na.rm = TRUE),
+  p10    = ~quantile(.x, probs = 0.10, na.rm = TRUE),
+  p25    = ~quantile(.x, probs = 0.25, na.rm = TRUE),
+  p75    = ~quantile(.x, probs = 0.75, na.rm = TRUE),
+  p90    = ~quantile(.x, probs = 0.90, na.rm = TRUE),
+  p95    = ~quantile(.x, probs = 0.95, na.rm = TRUE),
+  p99    = ~quantile(.x, probs = 0.99, na.rm = TRUE),
+  sk     = ~skewness(.x, na.rm = TRUE),
+  kt     = ~kurtosis(.x, na.rm = TRUE)
+  )
+
+
+# m <- hourly_metrics_raw |>
+#  filter(msisdn_dd %in% c(33483697, 30001118))
+#
+#
+#
+# m1 <- m |>
+#  select(msisdn_dd, bts_sh_nm, starts_with("ra_"), -ra_ta_ue_total) |>
+#  rowwise() |>
+#  mutate(
+#    tad = sum(c_across(ra_ta_ue_index6:ra_ta_ue_index7)),
+#    tad_t = sum(c_across(ra_ta_ue_index1:ra_ta_ue_index7))) |>
+#  ungroup()
+#
+#
+# m1 |>
+#   arrange(bts_sh_nm)
 
 # Datasets de prueba ------------------------------------------------------
 
@@ -287,16 +318,21 @@ prbthp <- test |>
 # horas: 2 | días: 5
 capacity_flags <- prbthp |>
   mutate(
-    capacity_efficienty = (prb / thp),
-    capacity_alert = if_else(condition = capacity_efficienty > 32, 1, 0)) |>
+    prb_alert = as.integer(prb > 80),
+    thp_alert = as.integer(thp < 2.5),
+    cap_effic = (prb / thp),
+    cap_alert = if_else(condition = cap_effic > 32, 1, 0)) |>
   group_by(user, met) |>
   summarise(
-    sum_hours_prb_out  = sum(capacity_alert),
-    capacity_flag      = if_else(sum_hours_prb_out >= 2, 1, 0)) |>
+    prb_flag      = if_else(sum(prb_alert) >= 2, 1, 0),
+    thp_flag      = if_else(sum(thp_alert) >= 2, 1, 0),
+    cap_flag      = if_else(sum(cap_alert) >= 2, 1, 0)) |>
   group_by(user) |>
-  summarise(capacity_rule = if_else(sum(capacity_flag) >= 5, 1, 0))
-
-
+  summarise(
+    thp_rule = if_else(sum(thp_flag) >= 5, 1, 0),
+    prb_rule = if_else(sum(prb_flag) >= 5, 1, 0),
+    cap_rule = if_else(sum(cap_flag) >= 5, 1, 0)
+  )
 
 # ERAB y RRC -------------------------------------------------------------------
 
@@ -312,24 +348,25 @@ rrc_erab <- test |>
   ) |>
   ungroup()
 
-rrc_erab |> summarise(rrc_out = sum(rrc < 90), erb_out = sum(erb < 90), .by = met)
+rrc_erab |> summarise(rrc_out = sum(rrc < 90), erb_out = sum(erb < 90), .
+                      by = met)
 
 # Operación con RRC y ERAB
 # horas 12 | días: 3
 success_rate <- rrc_erab |>
   mutate(
     # Fuera del umbral
-    rrc_alert = as.integer(rrc < 90),
-    erb_alert = as.integer(erb < 90)
+    rrc_alert = as.integer(rrc < 90),  #
+    erb_alert = as.integer(erb < 90)   #
   ) |>
   group_by(user, met) |>
   summarise(
-    sum_rrc_alert  = sum(rrc_alert),
-    sum_erb_alert  = sum(erb_alert),
+    # sum_rrc_alert  = sum(rrc_alert),
+    # sum_erb_alert  = sum(erb_alert),
 
     # Indicador de horas
-    rrc_flag = if_else(sum(sum_rrc_alert) >= 12, 1, 0),
-    erb_flag = if_else(sum(sum_erb_alert) >= 12, 1, 0)) |>
+    rrc_flag = if_else(sum(rrc_alert) >= 12, 1, 0),
+    erb_flag = if_else(sum(erb_alert) >= 12, 1, 0)) |>
   group_by(user) |>
   summarise(
     # Indicador de días
@@ -337,21 +374,125 @@ success_rate <- rrc_erab |>
     erb_rule = if_else(sum(erb_flag) >= 3, 1, 0)
   )
 
+# Drop Rate --------------------------------------------------------------------
+
+# issue when: drp > 1.5
+# horas: 3 | días: 3
+drop_df <- test |>
+  select(user, met, drp) |>
+  group_by(user, met) |>
+  mutate(
+    drp = replace(
+      drp,
+      list = sample.int(n = 18, size = 7, replace = F),
+      values = 1.8)
+  ) |>
+  ungroup()
+
+drop_df |> summarise(drp_out = sum(drp > 1.5), .by = met)
+
+
+# Operación con drop_rate
+# horas: 3 | días: 3
+drp_rule <- drop_df |>
+  mutate(
+    drp_alert = as.integer(drp > 1.5)
+  ) |>
+  group_by(user, met) |>
+  summarise(
+    sum_drp_alert  = sum(drp_alert), # por hora
+    drp_flag  = if_else(sum_drp_alert >= 3, 1, 0)
+  ) |>
+  # ungroup() |>
+  group_by(user) |>
+  summarise(
+    drp_rule = if_else(sum(drp_flag) >= 3, 1, 0))
+
+# TAD---------------------------------------------------------------------------
+
+# issue when: ta > 15
+# horas: 4 | días: 7
+tad_df <- test |>
+  select(user, met, tad) |>
+  group_by(user, met) |>
+  mutate(
+    tad = replace(
+      tad,
+      list = sample.int(n = 18, size = 7, replace = F),
+      values = 20)
+  ) |>
+  ungroup()
+
+tad_df |> summarise(tad_out = sum(tad > 15), .by = met)
+
+
+# Operación con tad
+# horas: 4 | días: 7
+tad_rule <- tad_df |>
+  mutate(
+    tad_alert = as.integer(tad > 15)
+  ) |>
+  group_by(user, met) |>
+  summarise(
+    sum_tad_alert  = sum(tad_alert), # por hora
+    tad_flag  = if_else(sum_tad_alert >= 4, 1, 0)
+  ) |>
+  # ungroup() |>
+  group_by(user) |>
+  summarise(
+    tad_rule = if_else(sum(tad_flag) >= 7, 1, 0))
+
+
+
+
+# Interferencia ----------------------------------------------------------------
+
+# issue when: erf > -95
+# horas: 3 | días: 3
+erf_df <- test |>
+  select(user, met, erf) |>
+  group_by(user, met) |>
+  mutate(
+    erf = replace(
+      erf,
+      list = sample.int(n = 18, size = 7, replace = F),
+      values = -83)
+  ) |>
+  ungroup()
+
+erf_df |> summarise(erf_out = sum(erf > -95), .by = met)
+
+
+# Operación con Interferencia
+# horas: 5 | días: 3
+erf_rule <- erf_df |>
+  mutate(
+    erf_alert = as.integer(erf > -95)
+  ) |>
+  group_by(user, met) |>
+  summarise(
+    sum_erf_alert  = sum(erf_alert), # por hora
+    erf_flag  = if_else(sum_erf_alert >= 5, 1, 0)
+  ) |>
+  # ungroup() |>
+  group_by(user) |>
+  summarise(
+    erf_rule = if_else(sum(erf_flag) >= 3, 1, 0))
+
 
 # CQI --------------------------------------------------------------------------
-
 
 # issue when: cqi < 7
 # horas: 6 | días: 4
 cqi_df <- test |>
- select(user, met, cqi) |>
- arrange(met) |>
- group_by(user, met) |>
- mutate(
-  cqi = replace(
-   cqi,
-   list = sample.int(n = 18, size = 7, replace = F),
-   values = 5)
+  select(user, met, cqi) |>
+  arrange(met) |>
+  group_by(user, met) |>
+  mutate(
+    cqi = replace(
+      cqi,
+      list = sample.int(n = 18, size = 7, replace = F),
+      values = 5)
   ) |>
   ungroup()
 
@@ -361,7 +502,7 @@ cqi_df |> summarise(cqi_out = sum(cqi < 7), .by = met)
 
 # Operación con cqi
 # horas: 6 | días: 4
-cqi_df |>
+cqi_rule <- cqi_df |>
   mutate(
     cqi_alert = as.integer(cqi < 7)
   ) |>
@@ -373,84 +514,177 @@ cqi_df |>
   # ungroup() |>
   group_by(user) |>
   summarise(
-   cqi_rule = if_else(sum(cqi_flag) >= 4, 1, 0))
+    cqi_rule = if_else(sum(cqi_flag) >= 4, 1, 0))
 
 
+# Disponibilidad ---------------------------------------------------------------
 
-# TA ---------------------------------------------------------------------------
+# issue when: dis > 200
+# horas: 1 | días: 1
+dis_df <- test |>
+  select(user, met, dis, dif) |>
+  group_by(user, met) |>
+  mutate(
+    dis = replace(
+      dis,
+      list = sample.int(n = 18, size = 7, replace = F),
+      values = 201),
+    dif = replace(
+      dif,
+      list = sample.int(n = 18, size = 7, replace = F),
+      values = 201)
+  ) |>
+  ungroup()
+
+dis_df |> summarise(dis_out = sum(dis > 200), dif_out = sum(dif > 200), .by = met)
 
 
-
-
-
-
-
-
+# Operación con Interferencia
+# horas: 5 | días: 3
+dis_rule <- dis_df |>
+  mutate(
+    dis_alert = as.integer(dis > 200),
+    dif_alert = as.integer(dif > 200)
+  ) |>
+  group_by(user, met) |>
+  summarise(
+    sum_dis_alert  = sum(dis_alert), # por hora
+    sum_dif_alert  = sum(dif_alert), # por hora
+    dis_flag  = if_else(sum_dis_alert >= 1, 1, 0),
+    dif_flag  = if_else(sum_dif_alert >= 1, 1, 0)
+  ) |>
+  # ungroup() |>
+  group_by(user) |>
+  summarise(
+    dis_rule = if_else(sum(dis_flag) >= 1, 1, 0),
+    dif_rule = if_else(sum(dif_flag) >= 1, 1, 0)
+  )
 
 
 
 
 # Dataset Final ----------------------------------------------------------------
 
- usuario <- ctl_01 |>
-  filter(user == 30001118) |>
-  slice(1:10)
 
- usuario |>
+data_prueba <- test |>
+  select(user, met, prb:dif)
+
+crear_business_rules <- function(df) {
+ df |>
+  mutate(
+    eff = (prb / thp), # relación entre prb y thp
+    prb_alert = as.integer(prb > 80),
+    thp_alert = as.integer(thp < 2.5),
+    cap_alert = as.integer(eff > 32),
+    rrc_alert = as.integer(rrc < 90),
+    erb_alert = as.integer(erb < 90),
+    drp_alert = as.integer(drp > 1.5),
+    tad_alert = as.integer(tad > 15),
+    erf_alert = as.integer(erf > -95),
+    cqi_alert = as.integer(cqi < 7),
+    dis_alert = as.integer(dis > 200),
+    dif_alert = as.integer(dif > 200)
+  ) |>
+  group_by(user, met) |>
+  summarise(
+    # Indicador de umbrales de horas al día como mínimo
+    prb_flag = if_else(sum(prb_alert) >= 2, 1, 0),
+    thp_flag = if_else(sum(thp_alert) >= 2, 1, 0),
+    cap_flag = if_else(sum(cap_alert) >= 2,  1, 0),
+    rrc_flag = if_else(sum(rrc_alert) >= 12, 1, 0),
+    erb_flag = if_else(sum(erb_alert) >= 12, 1, 0),
+    drp_flag = if_else(sum(drp_alert) >= 3,  1, 0),
+    tad_flag = if_else(sum(tad_alert) >= 4, 1, 0),
+    erf_flag = if_else(sum(erf_alert) >= 5, 1, 0),
+    cqi_flag = if_else(sum(cqi_alert) >= 6, 1, 0),
+    dis_flag = if_else(sum(dis_alert) >= 1, 1, 0),
+    dif_flag = if_else(sum(dif_alert) >= 1, 1, 0)
+  ) |>
+  group_by(user) |>
+  summarise(
+    # Indicador de días al mes con el problema
+    prb_rule = if_else(sum(prb_flag) >= 5, 1, 0),
+    thp_rule = if_else(sum(thp_flag) >= 5, 1, 0),
+    cap_rule = if_else(sum(cap_flag) >= 5, 1, 0),
+    rrc_rule = if_else(sum(rrc_flag) >= 3, 1, 0),
+    erb_rule = if_else(sum(erb_flag) >= 3, 1, 0),
+    drp_rule = if_else(sum(drp_flag) >= 3, 1, 0),
+    tad_rule = if_else(sum(tad_flag) >= 7, 1, 0),
+    erf_rule = if_else(sum(erf_flag) >= 3, 1, 0),
+    cqi_rule = if_else(sum(cqi_flag) >= 4, 1, 0),
+    dis_rule = if_else(sum(dis_flag) >= 1, 1, 0),
+    dif_rule = if_else(sum(dif_flag) >= 1, 1, 0)
+  )
+}
+
+
+reglas_de_negocio_df <- data_prueba |>
+  crear_business_rules()
+
+data_prueba |>
+  group_by(user) |>
+  summarise(across(where(is.numeric), fun_basicas)) %>% glimpse()
+
+
+ data_prueba |>
     group_by(user) |>
-
     summarise(
 
-      across(prb:erb, fun_basicas),
+      across(where(is.numeric), fun_basicas),
+
       prb_timeout = mean(prb > 80),
-      prb_counter = sum(prb > 80),
+      prb_counter = sum(prb  > 80),
 
       thp_timeout = mean(thp < 2.5),
-      thp_counter = sum(thp < 2.5),
-
-      erb_timeout = mean(erb < 90),
-      erb_counter = sum(erb < 90),
+      thp_counter = sum(thp  < 2.5),
 
       rrc_timeout = mean(rrc < 90),
-      rrc_counter = sum(rrc < 90)
+      rrc_counter = sum(rrc  < 90),
 
-  ) |>
-  # Regresa capacity_issues (cap_issues)
-  left_join(capacity_flags, join_by(user)) |>
-  # Regresa rrc y erb issues
-  left_join(success_rate, join_by(user)) %>% glimpse()
+      erb_timeout = mean(erb < 90),
+      erb_counter = sum(erb  < 90),
+
+      drp_timeout = mean(drp > 1.5),
+      drp_counter = sum(drp  > 1.5),
+
+      tad_timeout = mean(tad > 15),
+      tad_counter = sum(tad  > 15),
+
+      lod_timeout = mean(lod > 77),
+      lod_counter = sum(lod  > 77),
+
+      erf_timeout = mean(erf > -95),
+      erf_counter = sum(erf  > -95),
+
+      cqi_timeout = mean(cqi < 7),
+      cqi_counter = sum(cqi  < 7),
+
+      dis_timeout = mean(dis > 200),
+      dif_counter = sum(dis  > 200)
+
+  ) %>% glimpse()
+  left_join(reglas_de_negocio_df, by = join_by(user)) %>% glimpse()
 
 
-# Aquí me quedé
-
- # Continuar con el resto de métricas y la lógica de los días
- # Escribir a André para que validen bien los muchachos por correo
-
-
-
+# 246 columnas
+test |>
+  group_by(user) |>
+  summarize_metrics() |>
+  left_join(reglas_de_negocio_df, by = join_by(user)) %>% glimpse()
 
 
 ##  Resumir                                                                 ####
 
-# Crear dos datasets
-
 tic()
-# 24 seg
-ctl_per_cell <- ctl |>
-  group_by(user, bts) |>
-  summarize_metrics() |>
-  ungroup()
-toc()
-# 16,252 × 80
-
-tic()
-# 7.51 seg
-ctl_per_user <- ctl |>
+# 241 seg (4 min)
+ctl_per_user <- ctl_01 |>
   group_by(user) |>
   summarize_metrics() |>
-  ungroup()
+  ungroup() |>
+  left_join(reglas_de_negocio_df, by = join_by(user))
 toc()
-# 4,225 × 79
+# 4,244 × 216
+
 
 ##  ............................................................................
 ##  Split                                                                   ####
@@ -461,14 +695,6 @@ toc()
 ##  ............................................................................
 ##  EDA                                                                     ####
 
-mi_per_cell <- information_gain(
-  formula      = diag ~ .,
-  data         = ctl_per_cell[-1],
-  type         = "infogain",
-  discIntegers = FALSE) |>
-  as_tibble() |>
-  arrange(-importance) |>
-  rename(per_cell = importance)
 
 mi_per_user <- information_gain(
   formula      = diag ~ .,
@@ -491,8 +717,8 @@ mi_per_cell |>
 
 
 mi_per_user |>
-  mutate(feature = fct_reorder(attributes, importance, .desc = FALSE)) |>
-  ggplot(aes(x = importance, y = feature)) +
+  mutate(feature = fct_reorder(attributes, per_user, .desc = FALSE)) |>
+  ggplot(aes(x = per_user, y = feature)) +
   geom_point() +
   labs(title = "MI por usuario") +
   drako +
