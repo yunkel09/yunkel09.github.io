@@ -5,8 +5,10 @@ import::from(fs,            dir_ls, path)
 import::from(parallel,      detectCores, makePSOCKcluster, stopCluster)
 import::from(doParallel,    registerDoParallel)
 import::from(conectigo,     cargar_fuentes)
-# import::from(DBI,           dbDisconnect)
-import::from(moments,        skewness, kurtosis)
+import::from(DBI,           dbDisconnect)
+import::from(dbplyr,        in_schema)
+# import::from(moments,        skewness, kurtosis)
+import::from(bestNormalize, bestNormalize, step_best_normalize)
 import::from(FSelectorRcpp, information_gain)
 import::from(cowplot,       .except = "stamp")
 
@@ -63,7 +65,6 @@ drako <- theme_bw(base_family = "yano", base_size = 14) +
 theme_set(yunkel)
 
 
-
 # preparar y desplegar receta
 ver <- . %>% prep() %>% juice()
 
@@ -107,6 +108,89 @@ ajustar <- function() {
 
 }
 
+
+# Para crear dataset de prueba
+crear_secuencia_fechas <- function(dias, horas) {
+  # Fecha de inicio
+  fecha_inicio <- as.Date("2023-04-01")
+
+  # Crear secuencia de fechas
+  secuencia_fechas <- seq(from = fecha_inicio, by = "days", length.out = dias)
+
+  sort(rep(secuencia_fechas, horas))
+
+}
+
+
+
+# Definir listado de funciones básicas
+fun_basicas <- list(
+  mean   = ~mean(.x, na.rm = TRUE),
+  median = ~median(.x, na.rm = TRUE),
+  sd     = ~sd(.x, na.rm = TRUE),
+  mim    = ~min(.x, na.rm = TRUE),
+  max    = ~max(.x, na.rm = TRUE),
+  iqr    = ~IQR(.x, na.rm = TRUE),
+  p1     = ~quantile(.x, probs = 0.01, na.rm = TRUE),
+  p5     = ~quantile(.x, probs = 0.05, na.rm = TRUE),
+  p10    = ~quantile(.x, probs = 0.10, na.rm = TRUE),
+  p25    = ~quantile(.x, probs = 0.25, na.rm = TRUE),
+  p75    = ~quantile(.x, probs = 0.75, na.rm = TRUE),
+  p90    = ~quantile(.x, probs = 0.90, na.rm = TRUE),
+  p95    = ~quantile(.x, probs = 0.95, na.rm = TRUE),
+  p99    = ~quantile(.x, probs = 0.99, na.rm = TRUE)
+  # sk     = ~skewness(.x, na.rm = TRUE),
+  # kt     = ~kurtosis(.x, na.rm = TRUE)
+)
+
+crear_business_rules <- function(df) {
+  df |>
+    mutate(
+      # relación entre prb y thp
+      eff = if_else(is.infinite(prb / thp), 0, (prb / thp)),
+      prb_alert = as.integer(prb > 80),
+      thp_alert = as.integer(thp < 2.5),
+      cap_alert = as.integer(eff > 32),
+      rrc_alert = as.integer(rrc < 90),
+      erb_alert = as.integer(erb < 90),
+      drp_alert = as.integer(drp > 1.5),
+      tad_alert = as.integer(tad > 15),
+      erf_alert = as.integer(erf > -95),
+      cqi_alert = as.integer(cqi < 7),
+      dis_alert = as.integer(dis > 200),
+      dif_alert = as.integer(dif > 200)
+    ) |>
+    group_by(user, met) |>
+    summarise(
+      # Indicador de umbrales de horas al día como mínimo
+      prb_flag = if_else(sum(prb_alert) >= 2, 1, 0),
+      thp_flag = if_else(sum(thp_alert) >= 2, 1, 0),
+      cap_flag = if_else(sum(cap_alert) >= 2,  1, 0),
+      rrc_flag = if_else(sum(rrc_alert) >= 12, 1, 0),
+      erb_flag = if_else(sum(erb_alert) >= 12, 1, 0),
+      drp_flag = if_else(sum(drp_alert) >= 3,  1, 0),
+      tad_flag = if_else(sum(tad_alert) >= 4, 1, 0),
+      erf_flag = if_else(sum(erf_alert) >= 5, 1, 0),
+      cqi_flag = if_else(sum(cqi_alert) >= 6, 1, 0),
+      dis_flag = if_else(sum(dis_alert) >= 1, 1, 0),
+      dif_flag = if_else(sum(dif_alert) >= 1, 1, 0)
+    ) |>
+    group_by(user) |>
+    summarise(
+      # Indicador de días al mes con el problema
+      prb_rule = if_else(sum(prb_flag) >= 5, 1, 0),
+      thp_rule = if_else(sum(thp_flag) >= 5, 1, 0),
+      cap_rule = if_else(sum(cap_flag) >= 5, 1, 0),
+      rrc_rule = if_else(sum(rrc_flag) >= 3, 1, 0),
+      erb_rule = if_else(sum(erb_flag) >= 3, 1, 0),
+      drp_rule = if_else(sum(drp_flag) >= 3, 1, 0),
+      tad_rule = if_else(sum(tad_flag) >= 7, 1, 0),
+      erf_rule = if_else(sum(erf_flag) >= 3, 1, 0),
+      cqi_rule = if_else(sum(cqi_flag) >= 4, 1, 0),
+      dis_rule = if_else(sum(dis_flag) >= 1, 1, 0),
+      dif_rule = if_else(sum(dif_flag) >= 1, 1, 0)
+    )
+}
 
 # Función para sumarizar métricas
 summarize_metrics <- function(df) {
