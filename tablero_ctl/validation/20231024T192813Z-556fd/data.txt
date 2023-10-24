@@ -1,0 +1,9 @@
+file: validation.rds
+file_size: 876042290
+pin_hash: 556fd2e2f635497a
+type: rds
+title: Resultados validacion
+description: Conjunto de validacion
+tags: ~
+created: 20231024T192813Z
+api_version: 1

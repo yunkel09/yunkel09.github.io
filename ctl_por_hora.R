@@ -17,8 +17,8 @@ etiquetas <- c(
  "CAPACIDAD",
  "OPTIMIZACION",
  "COBERTURA",
- "DISPONIBILIDAD")
- # "NO_DIAG")
+ "DISPONIBILIDAD",
+ "NO_DIAG")
 
 # Tabla par renombrar columnas
 lookup <- c(
@@ -57,8 +57,8 @@ metrics_to_remove <- c(
   "ra_ta_ue_index7",
   "ra_ta_ue_total",
   "thpughput_ul",
+  # "volte_erlang",
   "cell_unavail_s1fail"
-  # "volte_erlang"
   )
 
 enteros <- c(
@@ -99,6 +99,7 @@ cols_diag <- cols_only(
  msisdn_dd   = "c",
  srvy_id     = "i",
  time_lte    = "d",
+ class_desc  = "c",
  diag        = "c")
 
 # Leer el archivo
@@ -132,15 +133,28 @@ sitiosfs <- sitiosfs_raw |>
 diagnosticos <- diag_00 |>
  mutate(
   across(diag, toupper)) |>
- filter(diag %in% etiquetas)
+ filter(diag %in% etiquetas) |>
+ split(~ diag) |>
+ map_at("NO_DIAG", \(df) df |>
+ filter(class_desc == "PROMOTOR") |>
+ drop_na() |>
+ distinct(msisdn_dd, .keep_all = TRUE)) |>
+ # Combinar listas en un solo data frame
+ list_rbind() |>
+ # Transformaciones finales
+ mutate(
+  across(diag,
+   \(x) case_match(x, "NO_DIAG" ~ "PROMOTOR", .default = diag))) |>
+ select(-class_desc) |>
+ distinct(msisdn_dd, .keep_all = TRUE)
+
 
 # Unir y transformar -----------------------------------------------------------
 
 # 18.2 seg
 ctl_00 <- diagnosticos |>
  inner_join(
-  hourly_metrics_raw, join_by(fct_srvy_dt, msisdn_dd, srvy_id),
-  relationship = "many-to-many")
+  hourly_metrics_raw, join_by(fct_srvy_dt, msisdn_dd, srvy_id))
 
 # Dataset exploratorio ---------------------------------------------------------
 
@@ -168,7 +182,8 @@ tic()
 ctl_02 <- ctl_01 |>
  filter(
   !twr %in% sitios_ruedas,
-  !if_all(prb:dis, ~ .x == 0)) |>
+  !if_all(prb:dis, ~ .x == 0),
+  !(dis == 0 & diag == "DISPONIBILIDAD")) |>
  arrange(user, fecha, hora, desc(time)) |>
  group_by(user, fecha, hora) |>
  slice_head(n = 5) |>
@@ -176,70 +191,123 @@ ctl_02 <- ctl_01 |>
 toc()
 # 11,044,464 × 24
 
-# Guardar dataset preprocesado
+
+# Este considera el top10 para tener más muestras y no perder varianza
+tic()
+ctl_03 <- ctl_01 |>
+  filter(
+    !twr %in% sitios_ruedas,
+    !if_all(prb:dis, ~ .x == 0),
+    !(dis == 0 & diag == "DISPONIBILIDAD")) |>
+  arrange(user, fecha, hora, desc(time)) |>
+  group_by(user, fecha, hora) |>
+  slice_head(n = 10) |>
+  ungroup()
+toc()
+
+
+# Guardar y cargar datasets preprocesados
 cted_f <- path("data", "ctlexp", ext = "fst")
+top10f <- path("data", "top10", ext = "fst")
 write_fst(ctl_02, path = cted_f, compress = 0)
-
+write_fst(ctl_03, path = top10f, compress = 0)
 ctl_02 <- read_fst(cted_f) |> as_tibble()
+ctl_03 <- read_fst(top10f) |> as_tibble()
 
 
-ctl_02 |> filter(prb < 80 & thp > 2.7 & tad < 15 & lte > 80 & erf < -95 & cqi > 7 & dis == 0)
+# Definir reglas mutuamente excluyentes
+capacidad <- expr(prb >= 85 & thp <= 2.7 & tad <= 15)
+cobertura <- expr((prb >= 85 & thp <= 2.7) | tad >= 15)
+disponibi <- expr(if_all(prb:vol, ~ .x == 0) | dis > 0)
+optimizac <- expr(
+ erb < 90 |
+ rrc < 90 |
+ cqi < 7   |
+ erf > -95 |
+ drp > 1.5 |
+ (prb == 0 & thp > 0 & lod == 0)  |
+ (thp == 0 & prb > 0 & vol == 0)  |
+ (prb == 0 & thp == 0 & vol == 0) |
+ psk > m64
+)
+promotor  <- expr(
+ prb <  85  &
+ thp >  2.7 &
+ tad <  15  &
+ lte >  95  &
+ erf <= -95 &
+ cqi >  7   &
+ dis == 0)
 
-# AQUI ME QUEDE
-# 1. Corregir las etiquetas con base a las nuevas reglas
-# 2. Validar que ya no haya OPTIMIZACION
+# 11.56 seg
+tic()
+ctl_04 <- ctl_03 |>
+ drop_na() |>
+ filter(!(dis == 0 & diag == "DISPONIBILIDAD")) |>
+ mutate(
+  diag2 = case_when(
+   eval(optimizac) ~ "OPTIMIZACION",
+   eval(capacidad) ~ "CAPACIDAD",
+   eval(promotor)  ~ "PROMOTOR",
+   eval(cobertura) ~ "COBERTURA",
+   eval(disponibi) ~ "DISPONIBILIDAD",
+  .default = diag
+  ),
+  across(diag:diag2, as.factor)
+ )
+toc()
 
-ctl_03 <- ctl_02 |>
-  drop_na() |>
-  filter(!(dis == 0 & diag == "DISPONIBILIDAD")) |>
-  mutate(
-    diag2 = case_when(
-      (prb > 80 & thp < 2.7 & tad < 15) | lte < 95     ~ "CAPACIDAD",
-      prb > 80 & thp < 2.7 & tad > 15  ~ "COBERTURA",
-      if_all(prb:vol, ~ .x == 0) & dis > 0 ~ "DISPONIBILIDAD",
-      prb < 80 & thp > 2.7 & tad < 15 & lte > 95 & erf < -95 & cqi > 7 & dis == 0 ~ "PROMOTOR",
-      cqi < 7 & psk > 33 ~ "OPTIMIZACION",
-      .default = diag
-    )
-  )
+# Comparar reglas con etiquetas de SMEs
+ctl_04 |> summarise(n = n_distinct(user), .by = diag2) |>
+  mutate(prop = n / sum(n) * 100)
+multi_metric <- metric_set(f_meas, recall, precision)
+multi_metric(ctl_04, truth = diag, estimate = diag2)
 
-ctl_03 |> count(diag2)
+tic()
+ctl_05 <- ctl_04 |>
+ group_by(user) |>
+ filter(diag == diag2) |>
+ ungroup()
+ # select(-diag2)
+toc()
 
-ctl_03 |> summarise(n = n_distinct(user), .by = diag2) |> mutate(prop = n / sum(n) * 100)
-ctl_03 |> filter(diag2 == "OPTIMIZACION") |> sample_n(size = 55) |> print(n = 55)
+
+ctl_05 |>  summarise(n = n_distinct(diag2), .by = user) |> filter(n > 1)
+
+tic()
+multi_metric(ctl_05, truth = diag, estimate = diag2)
+toc()
+
+
+ctl_05 |> summarise(n = n_distinct(bts), .by = user) |> with(sum(n))
+ctl_05 |> summarise(n = n_distinct(bts), .by = user) |> with(mean(n))
+ctl_05 |> summarise(n = n_distinct(bts), .by = user) |> with(sum(n))
+ctl_05 |> summarise(n = n_distinct(bts), .by = user) |> with(mean(n))
 
 
 ##  Resumir                                                                 ####
 
-
 tic()
 # 169.35 (2.82 min)
-reglas_de_negocio_df <- ctl_02 |>
-  crear_business_rules()
+# reglas_de_negocio_df <- ctl_02 |>
+#   crear_business_rules()
 toc()
 
 tic()
-# 231 seg (4 min)
-ctl <- ctl_02 |>
+# 408 seg (6.8 min)
+ctl <- ctl_05 |>
   group_by(user) |>
   summarize_metrics() |>
-  ungroup() |>
-  left_join(reglas_de_negocio_df, by = join_by(user))
+  drop_na() |>
+  mutate(across(where(is.character), as.factor))
 toc()
-# 4,244 × 216
 
-# algunos filtros y transformaciones adicionales (post-resumen)
-ctl_m <- ctl |>
- mutate(
-   across(where(is.character), as_factor),
-   across(where(ends_with("rule")), as.integer)
 
- )
 
 
 # Guardar dataset resumido
 ctre_f <- path("data", "ctlre", ext = "fst")
-# write_fst(ctl_m, path = ctre_f, compress = 0)
+write_fst(ctl, path = ctre_f, compress = 0)
 
 # Empezar aquí
 ctl <- read_fst(ctre_f) |> as_tibble()
@@ -250,11 +318,14 @@ ctl <- read_fst(ctre_f) |> as_tibble()
 ctl_split <- initial_validation_split(data = ctl, strata = diag)
 
 ctl_train <- training(ctl_split)
+ctl_validacion <- validation(ctl_split)
+ctl_validation_set <- validation_set(ctl_split)
 
 ##  ............................................................................
 ##  Cross-validation                                                        ####
 
-ctl_folds <- vfold_cv(ctl_train, strata = diag, v = 3)
+set.seed(2023)
+ctl_folds <- vfold_cv(ctl_train, strata = diag, v = 10)
 
 ##  ............................................................................
 ##  EDA                                                                     ####
@@ -269,21 +340,73 @@ mi <- information_gain(
   arrange(-importance)
 
 mi |>
- filter(importance != 0) |>
+ filter(importance > 0.5) |>
  mutate(feature = fct_reorder(attributes, importance, .desc = FALSE)) |>
  ggplot(aes(x = importance, y = feature)) +
  geom_point() +
  labs(title = "MI por usuario") +
  drako +
  theme(
-  axis.text.y = element_text(size = 10),
+  axis.text.y = element_text(size = 20),
   axis.text.x = element_text(size = 10))
 
 
-ctl |> count(diag)
-  ggplot()
+library(corrplot)
+tmwr_cols <- colorRampPalette(c("#91CBD765", "#CA225E"))
+ctl_train %>%
+  select(-c(user, twr, dpto, city, diag)) %>%
+  cor()
+  corrplot(col = tmwr_cols(200), tl.col = "black", method = "ellipse")
 
 
+
+# PCA --------------------------------------------------------------------------
+
+ctl_num <- ctl_train |> select(diag, where(is.numeric), -user)
+ctl_rec <- recipe(diag ~ ., data = ctl_num) |>
+  step_zv(all_numeric_predictors()) |>
+  step_orderNorm(all_numeric_predictors()) |>
+  step_normalize(all_numeric_predictors())
+
+ctl_trained <- prep(ctl_rec)
+
+
+
+library(ggforce)
+plot_validation_results <- function(recipe, dat = ctl_validacion) {
+    recipe %>%
+      # Estimate any additional steps
+      prep() %>%
+      # Process the data (the validation set by default)
+      bake(new_data = dat) %>%
+      # Create the scatterplot matrix
+      ggplot(aes(x = .panel_x, y = .panel_y, color = diag, fill = diag)) +
+      geom_point(alpha = 0.1, size = 1) +
+      geom_autodensity(alpha = .2) +
+      facet_matrix(vars(-diag), layer.diag = 2) +
+      scale_color_brewer(palette = "Dark2") +
+      scale_fill_brewer(palette = "Dark2") +
+      drako
+  }
+
+ctl_trained %>%
+  step_pca(all_numeric_predictors(), num_comp = 4) %>%
+  plot_validation_results() +
+  ggtitle("Principal Component Analysis")
+
+library(learntidymodels)
+ctl_trained %>%
+  step_pca(all_numeric_predictors(), num_comp = 4) %>%
+  prep() %>%
+  plot_top_loadings(component_number <= 4, n = 5) +
+  scale_fill_brewer(palette = "Paired") +
+  ggtitle("Principal Component Analysis")
+
+
+ctl_trained %>%
+  step_pls(all_numeric_predictors(), outcome = "diag", num_comp = 4) %>%
+  plot_validation_results() +
+  ggtitle("Partial Least Squares")
 
 ##  ............................................................................
 ##  Métricas y racing control                                               ####
@@ -295,81 +418,276 @@ race_ctrl <- control_race(
   parallel_over = "everything",
   verbose       = TRUE,
   verbose_elim  = TRUE,
-  save_workflow = TRUE)
+  save_workflow = FALSE)
 
 ##  ............................................................................
 ##  Model Spec                                                              ####
 
-rf_ranger <- rand_forest(
-  mtry = tune(),
-  trees = tune(),
-  min_n = tune()) %>%
-  set_engine("ranger", importance = "impurity") %>%
-  set_mode("classification")
+multi_nnet <- multinom_reg(penalty = tune()) %>%
+  set_engine('nnet') |>
+  set_mode('classification')
+
+bt_xgboost <- boost_tree(
+  mtry        = tune(),
+  tree_depth  = tune(),
+  trees       = tune(),
+  learn_rate  = 0.1) %>%
+  set_engine('xgboost') %>%
+  set_mode('classification')
+
+multi_glmnet <- multinom_reg(
+  penalty = tune(),
+  mixture = tune()
+  ) %>%
+  set_engine('glmnet') |>
+  set_mode('classification')
+
+nnet_brulee <- mlp(
+ epochs = 1000,
+ hidden_units = 10,
+ penalty = 0.01,
+ learn_rate = 0.1) %>%
+set_engine("brulee", validation = 0) %>%
+set_mode("classification")
+
+knn_kknn <- nearest_neighbor(
+  neighbors   = tune(),
+  weight_func = tune()) %>%
+ set_mode("classification") %>%
+ set_engine("kknn")
+
+svm_poly_kernlab <- svm_poly(
+  cost = tune(),
+  degree = tune(),
+  scale_factor = tune(),
+  margin = tune()) %>%
+  set_engine('kernlab') %>%
+  set_mode('classification')
+
+bag_mars_earth <- bag_mars() %>%
+  set_engine('earth') %>%
+  set_mode('classification')
+
+mars_earth <- mars(prod_degree = tune()) %>%
+  set_engine('earth') %>%
+  set_mode('classification')
+
 
 # lista de modelos
-modelos <- list(rf_ranger = rf_ranger)
+modelos <- list(
+ multi_nnet       = multi_nnet,
+ bt_xgboost       = bt_xgboost,
+ multi_glmnet     = multi_glmnet
+ nnet_brulee      = nnet_brulee,
+ knn_kknn         = knn_kknn,
+ svm_poly_kernlab = svm_poly_kernlab,
+ bag_mars_earth   = bag_mars_earth,
+ mars_earth       = mars_earth
+)
 
 ##  ............................................................................
 ##  Preprocesamiento                                                        ####
 
-rec_basica <- recipe(diag ~ ., data = ctl_train) |>
+
+infgain_regular <- recipe(diag ~ ., data = ctl_train) |>
+ step_rm(matches("timeout$|counter$")) |>
+ step_rm(all_nominal_predictors()) |>
  update_role(user, new_role = "id") |>
- step_novel(twr) |>
- step_other(city, threshold = 2) |>
- step_impute_median(all_numeric_predictors()) |>
- step_zv(all_numeric_predictors()) |>
- step_upsample(diag, skip = TRUE)
- # ver()
+  step_select_infgain(
+    all_predictors(),
+    outcome = "diag",
+    threshold = 0.8) |>
+ step_smote(diag, skip = TRUE)
 
-
-
-
-
-ajustar <- function() {
-
-  cl <- makePSOCKcluster(10)
-  registerDoParallel(cl)
-
-  tune_res <- ctl_set |>
-    workflow_map(
-      fn        = "tune_race_anova",
-      verbose   = TRUE,
-      resamples = ctl_folds,
-      control   = race_ctrl,
-      seed      = 2023,
-      metrics   = mset,
-      grid      = 20)
-
-  stopCluster(cl)
-  unregister()
-
-  tune_res |>
-    rank_results(select_best = TRUE, rank_metric = "f_meas") |>
-    select(modelo = wflow_id, .metric, mean, rank) |>
-    pivot_wider(names_from = .metric, values_from = mean)
-
-}
-
-
-recetas <- list(variable = rec_basica)
-ctl_set <- workflow_set(preproc = recetas, models  = modelos)
-ajustar()
-
-
+infgain_norm <- recipe(diag ~ ., data = ctl_train) |>
+  step_rm(matches("timeout$|counter$")) |>
   step_rm(all_nominal_predictors()) |>
-  step_rm(fecha) |>
-  step_impute_median(all_numeric_predictors()) |>
+  update_role(user, new_role = "id") |>
+  step_orderNorm(all_numeric_predictors()) |>
   step_normalize(all_numeric_predictors()) |>
-  step_upsample(diag, skip = TRUE)
+  step_select_infgain(
+    all_predictors(),
+    outcome = "diag",
+    threshold = 0.8) |>
+  step_smote(diag, skip = TRUE)
+
+infgain_norm_zv_corr <- recipe(diag ~ ., data = ctl_train) |>
+  update_role(user, new_role = "id") |>
+  step_rm(matches("timeout$|counter$")) |>
+  step_rm(all_nominal_predictors()) |>
+  step_zv(all_numeric_predictors()) |>
+  step_corr(all_numeric_predictors(), threshold = 0.7) |>
+  step_orderNorm(all_numeric_predictors()) |>
+  step_normalize(all_numeric_predictors()) |>
+  step_select_infgain(
+    all_predictors(),
+    outcome = "diag",
+    threshold = 0.8) |>
+  step_smote(diag, skip = TRUE)
+
+all_plus_pca <- recipe(diag ~ ., data = ctl_train) |>
+  update_role(user, new_role = "id") |>
+  step_rm(matches("timeout$|counter$")) |>
+  step_rm(all_nominal_predictors()) |>
+  step_zv(all_numeric_predictors()) |>
+  step_corr(all_numeric_predictors(), threshold = 0.7) |>
+  step_orderNorm(all_numeric_predictors()) |>
+  step_normalize(all_numeric_predictors()) |>
+  step_pca(all_numeric_predictors(), num_comp = 4) |>
+  step_smote(diag, skip = TRUE)
+
+
+recetas <- list(
+ infgain_regular      = infgain_regular,
+ infgain_norm         = infgain_norm,
+ infgain_norm_zv_corr = infgain_norm_zv_corr,
+ all_plus_pca         = all_plus_pca
+ )
+
+
+ctl_set <- workflow_set(preproc = recetas, models  = modelos)
+ctl_set
+
+
+cl <- makePSOCKcluster(10)
+registerDoParallel(cl)
+
+tune_res <- ctl_set |>
+ workflow_map(
+ fn = "tune_race_anova",
+ verbose   = TRUE,
+ resamples = ctl_folds,
+ control   = race_ctrl,
+ seed      = 2023,
+ metrics   = mset,
+ grid      = 20)
+
+stopCluster(cl)
+unregister()
+
+tablero_ctl <- board_folder(path = "tablero_ctl")
+
+pin_write(
+  board       = tablero_ctl,
+  x           = tune_res,
+  name        = "tune_res",
+  type        = "rds",
+  versioned   = TRUE,
+  title       = "Resultados entrenamiento",
+  description = "Usando validacion cruzada")
+
+metricas_training <- tune_res |>
+ rank_results(select_best = TRUE, rank_metric = "f_meas") |>
+ select(modelo = wflow_id, .metric, mean, rank) |>
+ pivot_wider(names_from = .metric, values_from = mean) |>
+ select(modelo, f1_score_tr = f_meas, precision_tr = precision,
+        recall_tr = recall)
+
+metricas_training
+
+autoplot(tune_res, select_best = TRUE, rank_metric = "f_meas") + drako
+
+
+# plot race: https://bit.ly/46KlDui
+tune_res |>
+  extract_workflow_set_result(id = "infgain_norm_multi_glmnet") |>
+  plot_race()
+
+# Revisar los resultados en diferentes folds: https://bit.ly/3Frog8x
+tune_res |>
+  extract_workflow_set_result(id = "infgain_norm_multi_glmnet") |>
+  collect_predictions() |>
+  group_by(id) |>
+  f_meas(diag, .pred_class)
 
 
 
 
 
+# Selección manual de modelos
+best <- metricas_training %>%
+  # slice(1:12) |>
+  pull(modelo) %>%
+  set_names(.)
+
+lista_mejores <- best %>%
+  map(~ tune_res %>% extract_workflow_set_result(id = .x) %>%
+        select_best(metric = "f_meas"))
+
+
+tic()
+# 93 seg
+validation_result_list <- map2(
+ .x = best,
+ .y = lista_mejores, ~ tune_res %>%
+ extract_workflow(id = .x) %>%
+ finalize_workflow(.y) %>%
+ last_fit(split = ctl_validation_set$splits[[1]], metrics = mset))
+toc()
+
+pin_write(
+  board       = tablero_ctl,
+  x           = validation_result_list,
+  name        = "validation",
+  type        = "rds",
+  versioned   = TRUE,
+  title       = "Resultados validacion",
+  description = "Conjunto de validacion")
+
+
+validation_result_list
+
+metricas_validation <- validation_result_list %>%
+  map_dfr(~ collect_metrics(.x), .id = "modelo") %>%
+  pivot_wider(names_from = .metric, values_from = .estimate) %>%
+  select(modelo, f1_score_val = f_meas, precision_val = precision,
+         recall_val = recall)
+
+metricas_validation
+
+
+validation_result_list |>
+  keep_at(sof) |>
+  pluck(1) |> collect_predictions() |>
+  conf_mat(diag, .pred_class) |>
+  autoplot() +
+  theme_light()
+
+metricas_validation
+
+# comprobar que si estamos utilizando "Macro-averaging"
+validation_result_list |>
+  keep_at(sof) |>
+  pluck(1) |>
+  collect_predictions() |>
+  f_meas(truth = diag, estimate = .pred_class, estimator = "macro")
 
 
 
+comparacion <- metricas_training |>
+  left_join(metricas_validation, join_by(modelo)) |>
+  mutate(
+  overfit_f1     = f1_score_tr > f1_score_val,
+  overfit_recall = recall_tr > recall_val,
+  overfit_precision = precision_tr > precision_val) |>
+  relocate(modelo,
+           f1_score_tr,
+           f1_score_val,
+           overfit_f1,
+           recall_tr,
+           recall_val,
+           overfit_recall,
+           precision_tr,
+           precision_val,
+           overfit_precision)
+
+# agarrar los primeros 5 y mejorar los hiperparámetros y las recetas que si funcionan
+comparacion
+
+sin_overfit <- comparacion |>
+  filter(if_all(starts_with("overfit"), ~ .x == FALSE))
+
+sof <- sin_overfit |> pull(modelo)
 
 
 

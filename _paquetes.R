@@ -7,8 +7,9 @@ import::from(doParallel,    registerDoParallel)
 import::from(conectigo,     cargar_fuentes)
 import::from(DBI,           dbDisconnect)
 import::from(dbplyr,        in_schema)
+import::from(rlang,         expr)
 # import::from(moments,        skewness, kurtosis)
-import::from(bestNormalize, bestNormalize, step_best_normalize)
+import::from(bestNormalize,  bestNormalize, step_best_normalize, step_orderNorm)
 import::from(FSelectorRcpp, information_gain)
 import::from(cowplot,       .except = "stamp")
 
@@ -25,6 +26,8 @@ pacman::p_load(
  colino,
  textrecipes,
  spatialsample,
+ embed,
+ butcher,
  tidymodels,
  tidyverse)
 
@@ -121,8 +124,6 @@ crear_secuencia_fechas <- function(dias, horas) {
 
 }
 
-
-
 # Definir listado de funciones básicas
 fun_basicas <- list(
   mean   = ~mean(.x, na.rm = TRUE),
@@ -142,6 +143,7 @@ fun_basicas <- list(
   # sk     = ~skewness(.x, na.rm = TRUE),
   # kt     = ~kurtosis(.x, na.rm = TRUE)
 )
+
 
 crear_business_rules <- function(df) {
   df |>
@@ -201,7 +203,7 @@ summarize_metrics <- function(df) {
   dpto = first(dpto),
   city = first(city),
 
-  across(prb:dif, fun_basicas),
+  across(prb:lte, fun_basicas),
 
   prb_timeout = mean(prb > 80),
   prb_counter = sum(prb  > 80),
@@ -230,8 +232,14 @@ summarize_metrics <- function(df) {
   cqi_timeout = mean(cqi < 7),
   cqi_counter = sum(cqi  < 7),
 
-  dis_timeout = mean(dis > 200),
-  dif_counter = sum(dis  > 200),
+  psk_timeout = mean(psk > m64),
+  psk_counter = sum(psk > m64),
+
+  dis_timeout = mean(dis > 0),
+  dif_counter = sum(dis  > 0),
+
+  lte_timeout = mean(lte <= 95),
+  lte_counter = sum(lte  <= 95),
 
   lat = first(lat),
   lon = first(lon),
@@ -240,7 +248,7 @@ summarize_metrics <- function(df) {
   r = sqrt(lat^2 + lon^2),  # radio
   theta = atan2(lon, lat),  # ángulo
 
-  diag = first(diag)
+  diag = first(diag2)
 
   )
 }
