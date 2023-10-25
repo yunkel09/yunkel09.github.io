@@ -5,10 +5,11 @@ import::from(fs,            dir_ls, path)
 import::from(parallel,      detectCores, makePSOCKcluster, stopCluster)
 import::from(doParallel,    registerDoParallel)
 import::from(conectigo,     cargar_fuentes)
+import::from(corrplot,      corrplot)
 import::from(DBI,           dbDisconnect)
 import::from(dbplyr,        in_schema)
 import::from(rlang,         expr)
-import::from(bestNormalize,  bestNormalize, step_best_normalize, step_orderNorm)
+import::from(bestNormalize, bestNormalize, step_best_normalize, step_orderNorm)
 import::from(FSelectorRcpp, information_gain)
 import::from(cowplot,       .except = "stamp")
 
@@ -28,6 +29,7 @@ pacman::p_load(
  embed,
  butcher,
  vip,
+ agua,
  tidymodels,
  tidyverse)
 
@@ -65,7 +67,7 @@ drako <- theme_bw(base_family = "yano", base_size = 14) +
     plot.subtitle = element_text(size = 18),
     legend.title  = element_blank())
 
-theme_set(yunkel)
+theme_set(drako)
 
 
 tablero_ctl <- board_folder(path = "tablero_ctl")

@@ -1,9 +1,0 @@
-file: validation.qs
-file_size: 615632855
-pin_hash: 52aa5c3033e38f8e
-type: qs
-title: 'validation: a pinned list'
-description: ~
-tags: ~
-created: 20231025T022551Z
-api_version: 1

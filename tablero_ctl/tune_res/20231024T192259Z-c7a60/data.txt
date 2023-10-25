@@ -1,9 +1,0 @@
-file: tune_res.rds
-file_size: 946767768
-pin_hash: c7a6098f0d770a1d
-type: rds
-title: Resultados entrenamiento
-description: Usando validacion cruzada
-tags: ~
-created: 20231024T192259Z
-api_version: 1
