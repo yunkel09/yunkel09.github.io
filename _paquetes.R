@@ -8,7 +8,6 @@ import::from(conectigo,     cargar_fuentes)
 import::from(DBI,           dbDisconnect)
 import::from(dbplyr,        in_schema)
 import::from(rlang,         expr)
-# import::from(moments,        skewness, kurtosis)
 import::from(bestNormalize,  bestNormalize, step_best_normalize, step_orderNorm)
 import::from(FSelectorRcpp, information_gain)
 import::from(cowplot,       .except = "stamp")
@@ -28,6 +27,7 @@ pacman::p_load(
  spatialsample,
  embed,
  butcher,
+ vip,
  tidymodels,
  tidyverse)
 
@@ -67,6 +67,8 @@ drako <- theme_bw(base_family = "yano", base_size = 14) +
 
 theme_set(yunkel)
 
+
+tablero_ctl <- board_folder(path = "tablero_ctl")
 
 # preparar y desplegar receta
 ver <- . %>% prep() %>% juice()

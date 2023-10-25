@@ -1,0 +1,9 @@
+file: tune_res.qs
+file_size: 416722535
+pin_hash: 497eff10ea95de6b
+type: qs
+title: Resultados entrenamiento
+description: Usando validacion cruzada
+tags: ~
+created: 20231025T041742Z
+api_version: 1

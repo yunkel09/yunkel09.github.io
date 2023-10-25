@@ -225,8 +225,8 @@ optimizac <- expr(
  cqi < 7   |
  erf > -95 |
  drp > 1.5 |
- (prb == 0 & thp > 0 & lod == 0)  |
- (thp == 0 & prb > 0 & vol == 0)  |
+ (prb == 0 & thp >  0 & lod == 0) |
+ (thp == 0 & prb >  0 & vol == 0) |
  (prb == 0 & thp == 0 & vol == 0) |
  psk > m64
 )
@@ -257,41 +257,17 @@ ctl_04 <- ctl_03 |>
  )
 toc()
 
-# Comparar reglas con etiquetas de SMEs
-ctl_04 |> summarise(n = n_distinct(user), .by = diag2) |>
-  mutate(prop = n / sum(n) * 100)
-multi_metric <- metric_set(f_meas, recall, precision)
-multi_metric(ctl_04, truth = diag, estimate = diag2)
 
 tic()
 ctl_05 <- ctl_04 |>
  group_by(user) |>
  filter(diag == diag2) |>
  ungroup()
- # select(-diag2)
 toc()
-
-
-ctl_05 |>  summarise(n = n_distinct(diag2), .by = user) |> filter(n > 1)
-
-tic()
-multi_metric(ctl_05, truth = diag, estimate = diag2)
-toc()
-
-
-ctl_05 |> summarise(n = n_distinct(bts), .by = user) |> with(sum(n))
-ctl_05 |> summarise(n = n_distinct(bts), .by = user) |> with(mean(n))
-ctl_05 |> summarise(n = n_distinct(bts), .by = user) |> with(sum(n))
-ctl_05 |> summarise(n = n_distinct(bts), .by = user) |> with(mean(n))
 
 
 ##  Resumir                                                                 ####
 
-tic()
-# 169.35 (2.82 min)
-# reglas_de_negocio_df <- ctl_02 |>
-#   crear_business_rules()
-toc()
 
 tic()
 # 408 seg (6.8 min)
@@ -301,8 +277,6 @@ ctl <- ctl_05 |>
   drop_na() |>
   mutate(across(where(is.character), as.factor))
 toc()
-
-
 
 
 # Guardar dataset resumido
@@ -317,8 +291,8 @@ ctl <- read_fst(ctre_f) |> as_tibble()
 
 ctl_split <- initial_validation_split(data = ctl, strata = diag)
 
-ctl_train <- training(ctl_split)
-ctl_validacion <- validation(ctl_split)
+ctl_train          <- training(ctl_split)
+ctl_validacion     <- validation(ctl_split)
 ctl_validation_set <- validation_set(ctl_split)
 
 ##  ............................................................................
@@ -410,7 +384,7 @@ ctl_trained %>%
 
 ##  ............................................................................
 ##  Métricas y racing control                                               ####
-mset <- metric_set(precision, recall, f_meas)
+mset <- metric_set(precision, recall, f_meas, roc_auc)
 
 # definir race control para búsqueda de hiperparámetros
 race_ctrl <- control_race(
@@ -423,81 +397,50 @@ race_ctrl <- control_race(
 ##  ............................................................................
 ##  Model Spec                                                              ####
 
-multi_nnet <- multinom_reg(penalty = tune()) %>%
-  set_engine('nnet') |>
-  set_mode('classification')
-
-bt_xgboost <- boost_tree(
-  mtry        = tune(),
-  tree_depth  = tune(),
-  trees       = tune(),
-  learn_rate  = 0.1) %>%
-  set_engine('xgboost') %>%
-  set_mode('classification')
-
-multi_glmnet <- multinom_reg(
+glmnet_spec <- multinom_reg(
   penalty = tune(),
-  mixture = tune()
-  ) %>%
-  set_engine('glmnet') |>
-  set_mode('classification')
+  mixture = tune()) |>
+ set_engine('glmnet') |>
+ set_mode('classification')
 
-nnet_brulee <- mlp(
- epochs = 1000,
- hidden_units = 10,
- penalty = 0.01,
- learn_rate = 0.1) %>%
-set_engine("brulee", validation = 0) %>%
-set_mode("classification")
 
-knn_kknn <- nearest_neighbor(
-  neighbors   = tune(),
-  weight_func = tune()) %>%
- set_mode("classification") %>%
- set_engine("kknn")
+xgboost_spec <- boost_tree(
+ tree_depth     = 4,        # ajustar para evitar overfitting
+ trees          = tune(),
+ learn_rate     = tune(),
+ min_n          = tune(),
+ loss_reduction = tune(),
+ sample_size    = tune(),
+ stop_iter      = tune()) |>
+set_engine('xgboost') %>%
+set_mode('classification')
 
-svm_poly_kernlab <- svm_poly(
-  cost = tune(),
-  degree = tune(),
-  scale_factor = tune(),
-  margin = tune()) %>%
-  set_engine('kernlab') %>%
-  set_mode('classification')
 
-bag_mars_earth <- bag_mars() %>%
-  set_engine('earth') %>%
-  set_mode('classification')
-
-mars_earth <- mars(prod_degree = tune()) %>%
-  set_engine('earth') %>%
-  set_mode('classification')
+brulee_spec <- multinom_reg(
+ penalty    = tune(),
+ mixture    = tune()) |>
+set_engine('brulee') |>
+set_mode('classification')
 
 
 # lista de modelos
 modelos <- list(
- multi_nnet       = multi_nnet,
- bt_xgboost       = bt_xgboost,
- multi_glmnet     = multi_glmnet
- nnet_brulee      = nnet_brulee,
- knn_kknn         = knn_kknn,
- svm_poly_kernlab = svm_poly_kernlab,
- bag_mars_earth   = bag_mars_earth,
- mars_earth       = mars_earth
-)
+ glmnet      = glmnet_spec,
+ xgboost     = xgboost_spec,
+ brulee      = brulee_spec)
 
 ##  ............................................................................
 ##  Preprocesamiento                                                        ####
 
-
 infgain_regular <- recipe(diag ~ ., data = ctl_train) |>
- step_rm(matches("timeout$|counter$")) |>
- step_rm(all_nominal_predictors()) |>
- update_role(user, new_role = "id") |>
+  step_rm(matches("timeout$|counter$")) |>
+  step_rm(all_nominal_predictors()) |>
+  update_role(user, new_role = "id") |>
   step_select_infgain(
     all_predictors(),
     outcome = "diag",
     threshold = 0.8) |>
- step_smote(diag, skip = TRUE)
+  step_smote(diag, skip = TRUE)
 
 infgain_norm <- recipe(diag ~ ., data = ctl_train) |>
   step_rm(matches("timeout$|counter$")) |>
@@ -511,43 +454,22 @@ infgain_norm <- recipe(diag ~ ., data = ctl_train) |>
     threshold = 0.8) |>
   step_smote(diag, skip = TRUE)
 
-infgain_norm_zv_corr <- recipe(diag ~ ., data = ctl_train) |>
-  update_role(user, new_role = "id") |>
-  step_rm(matches("timeout$|counter$")) |>
-  step_rm(all_nominal_predictors()) |>
-  step_zv(all_numeric_predictors()) |>
-  step_corr(all_numeric_predictors(), threshold = 0.7) |>
-  step_orderNorm(all_numeric_predictors()) |>
-  step_normalize(all_numeric_predictors()) |>
-  step_select_infgain(
-    all_predictors(),
-    outcome = "diag",
-    threshold = 0.8) |>
-  step_smote(diag, skip = TRUE)
-
-all_plus_pca <- recipe(diag ~ ., data = ctl_train) |>
-  update_role(user, new_role = "id") |>
-  step_rm(matches("timeout$|counter$")) |>
-  step_rm(all_nominal_predictors()) |>
-  step_zv(all_numeric_predictors()) |>
-  step_corr(all_numeric_predictors(), threshold = 0.7) |>
-  step_orderNorm(all_numeric_predictors()) |>
-  step_normalize(all_numeric_predictors()) |>
-  step_pca(all_numeric_predictors(), num_comp = 4) |>
-  step_smote(diag, skip = TRUE)
-
 
 recetas <- list(
  infgain_regular      = infgain_regular,
- infgain_norm         = infgain_norm,
- infgain_norm_zv_corr = infgain_norm_zv_corr,
- all_plus_pca         = all_plus_pca
- )
+ infgain_norm         = infgain_norm
+)
 
 
 ctl_set <- workflow_set(preproc = recetas, models  = modelos)
 ctl_set
 
+# Cambiar a última versión
+ver_tr   <- pin_versions(board = tablero_ctl, name = "tune_res")$version[[2]]
+tune_res <- pin_read(board = tablero_ctl, name = "tune_res", version = ver)
+
+
+# Ajustar hiperparámetros ---------------------------------------------------- #
 
 cl <- makePSOCKcluster(10)
 registerDoParallel(cl)
@@ -565,16 +487,22 @@ tune_res <- ctl_set |>
 stopCluster(cl)
 unregister()
 
-tablero_ctl <- board_folder(path = "tablero_ctl")
+# ---------------------------------------------------------------------------- #
 
 pin_write(
   board       = tablero_ctl,
   x           = tune_res,
   name        = "tune_res",
-  type        = "rds",
+  type        = "qs",
   versioned   = TRUE,
   title       = "Resultados entrenamiento",
   description = "Usando validacion cruzada")
+
+
+tune_res <- tune_res |> filter(wflow_id %in% c("infgain_regular_glmnet",
+                                               "infgain_regular_xgboost",
+                                               "infgain_norm_glmnet",
+                                               "infgain_norm_xgboost"))
 
 metricas_training <- tune_res |>
  rank_results(select_best = TRUE, rank_metric = "f_meas") |>
@@ -585,8 +513,15 @@ metricas_training <- tune_res |>
 
 metricas_training
 
-autoplot(tune_res, select_best = TRUE, rank_metric = "f_meas") + drako
 
+
+
+tune_res |>
+autoplot(rank_metric = "f_meas", metric = "f_meas", select_best = TRUE) +
+  geom_text(aes(y = mean - 1/2, label = wflow_id), angle = 90, hjust = 0.5) +
+  lims(y = c(0, 1.2)) +
+  theme(legend.position = "none") +
+  drako
 
 # plot race: https://bit.ly/46KlDui
 tune_res |>
@@ -615,6 +550,19 @@ lista_mejores <- best %>%
         select_best(metric = "f_meas"))
 
 
+
+# Probar con validación --------------------------------------------------------
+
+# Cambiar a la versión correspondiente
+ver_val  <- pin_versions(board = tablero_ctl, name = "validation")$version[[2]]
+tic()
+validation_result_list <- pin_read(
+ board = tablero_ctl,
+ name = "validation",
+ version = ver_val)
+toc()
+
+
 tic()
 # 93 seg
 validation_result_list <- map2(
@@ -628,11 +576,9 @@ toc()
 pin_write(
   board       = tablero_ctl,
   x           = validation_result_list,
+  type        = "qs",
   name        = "validation",
-  type        = "rds",
-  versioned   = TRUE,
-  title       = "Resultados validacion",
-  description = "Conjunto de validacion")
+  versioned   = TRUE)
 
 
 validation_result_list
@@ -641,9 +587,18 @@ metricas_validation <- validation_result_list %>%
   map_dfr(~ collect_metrics(.x), .id = "modelo") %>%
   pivot_wider(names_from = .metric, values_from = .estimate) %>%
   select(modelo, f1_score_val = f_meas, precision_val = precision,
-         recall_val = recall)
+         recall_val = recall) |>
+  drop_na()
 
 metricas_validation
+
+# Importancia Relativa usando Vip
+validation_result_list |>
+  pluck("infgain_regular_bt_xgboost") |>
+  extract_workflow(id = "infgain_regular_bt_xgboost") |>
+  extract_fit_parsnip() |>
+  vip(geom = "point", num_features = 20) +
+  drako
 
 
 validation_result_list |>
@@ -681,7 +636,8 @@ comparacion <- metricas_training |>
            precision_val,
            overfit_precision)
 
-# agarrar los primeros 5 y mejorar los hiperparámetros y las recetas que si funcionan
+# agarrar los primeros 5 y mejorar los hiperparámetros y las recetas que si
+# funcionan
 comparacion
 
 sin_overfit <- comparacion |>
