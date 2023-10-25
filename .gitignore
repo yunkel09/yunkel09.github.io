@@ -44,5 +44,6 @@ vignettes/*.pdf
 *.rdx
 *.xlsx
 *.parquet
+*.qs
 
 
