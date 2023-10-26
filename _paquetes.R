@@ -19,7 +19,7 @@ pacman::p_load(
  arrow,
  fst,
 
-
+ paletteer,
  tictoc,
  themis,
  janitor,
@@ -27,6 +27,9 @@ pacman::p_load(
  bonsai,
  baguette,
  finetune,
+
+ gt,
+ gtExtras,
 
  colino,
  textrecipes,
@@ -249,14 +252,55 @@ summarize_metrics <- function(df) {
 }
 
 
+paleta <-c(
+  "#D56702FF",
+  "#AD8875FF",
+  "#DB1C6AFF",
+  "#4092E1FF",
+  "#02AF44FF",
+  "#D7B5A6",
+  "#FCCD1BFF",
+  "#BAB0AC",
+  "#1B8EC4FF",
+  "#E64B35FF")
+
+tableau <- c("#4E79A7", "#A0CBE8", "#F28E2B", "#FFBE7D", "#59A14F",
+             "#8CD17D", "#B6992D", "#F1CE63", "#499894", "#86BCB6", "#E15759",
+             "#FF9D9A", "#79706E", "#BAB0AC", "#D37295", "#FABFD2", "#B07AA1",
+             "#D4A6C8", "#9D7660", "#D7B5A6")
+
+allcolors <- c(paleta, tableau)
 
 
 
+mean_ci <- function(df, metrica, conf.level = 0.95) {
+  x  <- df[[metrica]][!is.na(df[[metrica]])]
+  m  <- mean(x)
+  ci <- t.test(x)$conf.int
+  data.frame(media = m, lower = ci[1], upper = ci[2])
+}
 
 
-
-
-
+# resumen estadístico versátil
+resumir <- function(.df) {
+ my_skim <- skim_with(
+  base = NULL,
+  numeric = sfl(media   = ~ mean(., na.rm = TRUE),
+                mediana = ~ median(., na.rm = TRUE),
+                maximo  = ~ max(., na.rm = TRUE),
+                minimo  = ~ min(., na.rm = TRUE),
+                sd = ~ sd(., na.rm = TRUE)
+                # varianza = ~ var(., na.rm = TRUE),
+                # iqr = ~ IQR(., na.rm = TRUE),
+                # skewness = ~ skewness(., na.rm = TRUE),
+                # kurtosis = ~ kurtosis(., na.rm = TRUE)
+  ), append = F)
+ my_skim(.df) |>
+  rename_with(~ str_replace_all(.x, "numeric\\.", "")) |>
+  as_tibble() |>
+  select(-skim_type) |>
+  rename(variable = skim_variable)
+}
 
 
 

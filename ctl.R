@@ -304,6 +304,38 @@ ctl_folds <- vfold_cv(ctl_train, strata = diag, v = 10)
 ##  ............................................................................
 ##  EDA                                                                     ####
 
+
+# respuesta
+ctl_train |>
+  barra(diag) +
+  theme(legend.position = "none") +
+  labs(title = "Clasificación variable politómica")
+
+
+# muestra de datos de entrada
+ctl_train |>
+ # select(where(is.numeric)) |>
+ slice_sample(n = 5) |>
+ select(sample(x = 1:ncol(ctl_train), size = 10), diag) |>
+ gt() |>
+ gt_theme_538() |>
+ cols_align(align = "center", columns = where(~ is.numeric(.x))) |>
+ fmt_number(columns = where(is.numeric), decimals = 2)
+
+
+# estadísticas descriptivas
+ctl |>
+  select(where(is.numeric)) |>
+  slice_sample(n = 5) |>
+  select(sample(x = 1:ncol(ctl_train), size = 10)) |>
+  resumir() |>
+  gt() |>
+  gt_theme_538() |>
+  cols_align(align = "center", columns = where(~ is.numeric(.x))) |>
+  fmt_number(columns = where(is.numeric), decimals = 2)
+
+
+
 # Revisar information gain
 mi <- information_gain(
   formula      = diag ~ .,
@@ -313,16 +345,55 @@ mi <- information_gain(
   as_tibble() |>
   arrange(-importance)
 
-mi |>
- filter(importance > 0.5) |>
+imp <- mi |>
+  filter(importance > 0.5, attributes != "twr",
+         str_detect(attributes, "counter$|timeout$", negate = TRUE))
+
+imp_v <- imp |> pull(attributes)
+
+imp |>
  mutate(feature = fct_reorder(attributes, importance, .desc = FALSE)) |>
  ggplot(aes(x = importance, y = feature)) +
- geom_point() +
- labs(title = "MI por usuario") +
+ geom_point(size = 5) +
+ labs(title = "Information Gain") +
  drako +
  theme(
-  axis.text.y = element_text(size = 20),
+  axis.text.y = element_text(size = 40, face = "bold"),
   axis.text.x = element_text(size = 10))
+
+
+dob <- ctl_train |>
+  select(all_of(imp_v))
+
+pal <- allcolors[1:7]
+ndv <- names(dob)
+nar <- str_to_title(ndv)
+
+# crear distribuciones
+dist_predictores <- list(ndv, pal, nar) |>
+  pmap(~ estimar_densidad(df = dob, d = ..1, color = ..2, titulo = ..1))
+
+
+dist_predictores[4:5] |>
+  reduce(.f = `+`) +
+  plot_layout(ncol = 2)
+
+ctl_c <- ctl_train |>
+  select(where(is.factor), -diag)
+
+ctl_c |>
+  inspect_cat() |>
+  show_plot(high_cardinality = 4, col_palette = 1)
+
+
+ctl_normalizados <- ctl_train |>
+  select(diag, where(is.numeric), -user) |>
+  relocate(diag) |>
+  recipe(diag ~ ., data = _) |>
+  step_best_normalize(all_predictors(), -all_nominal()) |>
+  ver()
+
+
 
 
 tmwr_cols <- colorRampPalette(c("#91CBD765", "#CA225E"))
@@ -342,8 +413,8 @@ corrplot(col = tmwr_cols(200), tl.col = "black", method = "ellipse")
 
 
 
-# PCA --------------------------------------------------------------------------
 
+# pca
 ctl_num <- ctl_train |> select(diag, where(is.numeric), -user)
 ctl_rec <- recipe(diag ~ ., data = ctl_num) |>
   step_zv(all_numeric_predictors()) |>
@@ -390,7 +461,7 @@ ctl_trained %>%
   ggtitle("Partial Least Squares")
 
 ##  ............................................................................
-##  Métricas y racing control                                               ####
+##  Modelado                                                                ####
 mset <- metric_set(precision, recall, f_meas, roc_auc)
 
 # definir race control para búsqueda de hiperparámetros
@@ -401,8 +472,22 @@ race_ctrl <- control_race(
   verbose_elim  = TRUE,
   save_workflow = FALSE)
 
-##  ............................................................................
-##  Model Spec                                                              ####
+
+# Python
+pacman::p_load(reticulate)
+
+ruta_python <- path("C:",
+                    "Users",
+                    "wchavarria",
+                    "anaconda3",
+                    "envs",
+                    "nn",
+                    "python",
+                    ext = "exe")
+
+Sys.setenv(RETICULATE_PYTHON = ruta_python)
+use_python(ruta_python, required = T)
+
 
 glmnet_spec <- multinom_reg(
   penalty = tune(),
@@ -412,7 +497,7 @@ glmnet_spec <- multinom_reg(
 
 
 xgboost_spec <- boost_tree(
- tree_depth     = 4,
+ tree_depth     = 3,           # 4
  trees          = tune(),
  learn_rate     = tune(),
  min_n          = tune(),
@@ -423,32 +508,51 @@ set_engine('xgboost') %>%
 set_mode('classification')
 
 
-keras_spec <- multinom_reg(
-  penalty = tune()) |>
-  set_engine("keras") |>
+decision_tree_C5.0_spec <-
+  decision_tree(min_n = tune()) %>%
+  set_engine('C5.0')
+
+decision_tree_rpart_spec <-
+  decision_tree(tree_depth = tune(), min_n = tune(), cost_complexity = tune()) %>%
+  set_engine('rpart') %>%
+  set_mode('classification')
+
+discrim_regularized_klaR_spec <-
+  discrim_regularized(frac_common_cov = tune(), frac_identity = tune()) %>%
+  set_engine('klaR')
+
+gen_additive_mod_mgcv_spec <-
+  gen_additive_mod(select_features = tune(), adjust_deg_free = tune()) %>%
+  set_engine('mgcv') %>%
+  set_mode('classification')
+
+naive_Bayes_klaR_spec <-
+  naive_Bayes(smoothness = tune(), Laplace = tune()) %>%
+  set_engine('klaR')
+
+pls_mixOmics_spec <-
+  pls(predictor_prop = tune(), num_comp = tune()) %>%
+  set_engine('mixOmics') %>%
+  set_mode('classification')
+
+svm_rbf_kernlab_spec <-
+  svm_rbf(cost = tune(), rbf_sigma = tune(), margin = tune()) %>%
+  set_engine('kernlab') %>%
   set_mode('classification')
 
 
-h2o_spec <- multinom_reg(
- penalty = tune(),
- mixture = tune()) |>
-set_engine("h2o") |>
-set_mode('classification')
 
-
-spark_spec <- multinom_reg(
- penalty = tune(),
- mixture = tune()) |>
-set_engine("spark") |>
-set_mode('classification')
 
 # lista de modelos
 modelos <- list(
+
  glmnet  = glmnet_spec,
  xgboost = xgboost_spec,
  keras   = keras_spec,
- h2o     = h2o_spec,
- spark   = spark_spec)
+ # h2o     = h2o_spec,
+ # spark   = spark_spec
+
+ )
 
 ##  ............................................................................
 ##  Preprocesamiento                                                        ####
@@ -524,6 +628,8 @@ tune_res <- tune_res |> filter(wflow_id %in% c("infgain_regular_glmnet",
                                                "infgain_regular_xgboost",
                                                "infgain_norm_glmnet",
                                                "infgain_norm_xgboost"))
+
+tune_res <- tune_res |> slice(1:3, 6:8)
 
 metricas_training <- tune_res |>
  rank_results(select_best = TRUE, rank_metric = "f_meas") |>
