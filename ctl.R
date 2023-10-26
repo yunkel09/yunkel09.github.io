@@ -280,11 +280,11 @@ toc()
 
 
 # Guardar dataset resumido
-ctre_f <- path("data", "ctlre", ext = "fst")
 write_fst(ctl, path = ctre_f, compress = 0)
 
 # Empezar aquí
-ctl <- read_fst(ctre_f) |> as_tibble()
+ctre_f <- path("data", "ctlre", ext = "fst")
+ctl <- read_fst(ctre_f) |> as_tibble() |> suppressMessages()
 
 ##  ............................................................................
 ##  Split                                                                   ####
@@ -354,7 +354,6 @@ ctl_trained <- prep(ctl_rec)
 
 
 
-library(ggforce)
 plot_validation_results <- function(recipe, dat = ctl_validacion) {
     recipe %>%
       # Estimate any additional steps
@@ -363,8 +362,8 @@ plot_validation_results <- function(recipe, dat = ctl_validacion) {
       bake(new_data = dat) %>%
       # Create the scatterplot matrix
       ggplot(aes(x = .panel_x, y = .panel_y, color = diag, fill = diag)) +
-      geom_point(alpha = 0.1, size = 1) +
-      geom_autodensity(alpha = .2) +
+      geom_point(size = 1) +
+      geom_autodensity() +
       facet_matrix(vars(-diag), layer.diag = 2) +
       scale_color_brewer(palette = "Dark2") +
       scale_fill_brewer(palette = "Dark2") +
@@ -556,9 +555,6 @@ tune_res |>
   collect_predictions() |>
   group_by(id) |>
   f_meas(diag, .pred_class)
-
-
-
 
 
 # Selección manual de modelos

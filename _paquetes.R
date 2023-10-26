@@ -9,12 +9,17 @@ import::from(corrplot,      corrplot)
 import::from(DBI,           dbDisconnect)
 import::from(dbplyr,        in_schema)
 import::from(rlang,         expr)
+import::from(ggforce,       geom_autodensity, facet_matrix)
 import::from(bestNormalize, bestNormalize, step_best_normalize, step_orderNorm)
 import::from(FSelectorRcpp, information_gain)
 import::from(cowplot,       .except = "stamp")
 
 pacman::p_load(
+ # file readers
+ arrow,
  fst,
+
+
  tictoc,
  themis,
  janitor,
@@ -22,10 +27,10 @@ pacman::p_load(
  bonsai,
  baguette,
  finetune,
- arrow,
+
  colino,
  textrecipes,
- spatialsample,
+ # spatialsample,
  embed,
  butcher,
  vip,
@@ -116,18 +121,6 @@ ajustar <- function() {
 }
 
 
-# Para crear dataset de prueba
-crear_secuencia_fechas <- function(dias, horas) {
-  # Fecha de inicio
-  fecha_inicio <- as.Date("2023-04-01")
-
-  # Crear secuencia de fechas
-  secuencia_fechas <- seq(from = fecha_inicio, by = "days", length.out = dias)
-
-  sort(rep(secuencia_fechas, horas))
-
-}
-
 # Definir listado de funciones básicas
 fun_basicas <- list(
   mean   = ~mean(.x, na.rm = TRUE),
@@ -144,8 +137,6 @@ fun_basicas <- list(
   p90    = ~quantile(.x, probs = 0.90, na.rm = TRUE),
   p95    = ~quantile(.x, probs = 0.95, na.rm = TRUE),
   p99    = ~quantile(.x, probs = 0.99, na.rm = TRUE)
-  # sk     = ~skewness(.x, na.rm = TRUE),
-  # kt     = ~kurtosis(.x, na.rm = TRUE)
 )
 
 

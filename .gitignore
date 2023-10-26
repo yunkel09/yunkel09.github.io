@@ -28,8 +28,10 @@
 vignettes/*.html
 vignettes/*.pdf
 
+
 *.csv
 *.docx
+*.txt
 *.drawio
 *.fst
 *.gz
@@ -45,5 +47,8 @@ vignettes/*.pdf
 *.xlsx
 *.parquet
 *.qs
+*.bkp
+*.dtmp
+*.svg
 
 
