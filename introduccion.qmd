@@ -1,0 +1,62 @@
+# Introducción {#sec-introduccion}
+
+## Justificación
+
+En un entorno donde los consumidores tienen más opciones que nunca, las
+empresas como Tigo Guatemala enfrentan el reto de ofrecer no solo un servicio
+de alta calidad sino también una experiencia de usuario excepcional. Este
+estudio se centra en aplicar modelos de aprendizaje automático para identificar
+a los usuarios detractores de la red móvil de Tigo Guatemala en la unidad de
+negocio B2C y diagnosticar las causas de su insatisfacción.
+
+La experiencia del usuario se ha convertido en un pilar crucial para las
+empresas en la actualidad. Mariano Alonso, director de *Customer Experience* en
+Millicom, subraya la importancia de cada interacción con el cliente en cada
+punto de contacto. La tecnología nos permite capturar y analizar estas
+interacciones, lo cual no solo mejora la experiencia del cliente, sino que
+también tiene el potencial de aumentar los ingresos para la empresa.
+
+Además, este proyecto tiene objetivos estratégicos claros. Primero, busca
+determinar en qué sitios se debe invertir en capex para infraestructura y
+mejoras de red con el fin de elevar el CX. Esto es crucial para construir y
+solidificar la marca. Segundo, en un mercado competitivo donde nuestro
+principal competidor está cerca de alcanzar nuestro *market share*, reducir el
+abandono de clientes (churn) es más importante que nunca. Tercero, la
+automatización de esta clasificación, que actualmente se realiza de forma
+manual, se traducirá en un apalancamiento operativo significativo, adaptándose
+a las nuevas realidades del negocio. [@kuhn_feature_2020]
+
+
+## Objetivos
+
+### General
+
+1. Desarrollar un modelo de machine learning de clasificación
+multinomial para automatizar la clasificación de detractores de red móvil en
+Tigo Guatemala.
+
+### Específicos
+
+1. Alcanzar un F1-Score macro de al menos el 90% en la clasificación de
+detractores de red. Este umbral se establece para asegurar que el modelo
+tenga una alta precisión y recall.
+
+2. Diagnosticar y predecir las causas de insatisfacción de red en las
+siguientes categorías: capacidad, cobertura, optimización y disponibilidad,
+así como los usuarios que serán promotores.
+
+3. Implementar un sistema de priorización predictiva basado en la
+experiencia actual de los usuarios para guiar las acciones de los equipos
+técnicos.
+
+## Hipótesis
+
+1. La implementación de modelos de machine learning puede automatizar de
+manera efectiva la clasificación de detractores de red móvil en Tigo Guatemala.
+
+2. La información derivada de la clasificación automatizada de detractores
+de red móvil puede ser utilizada para priorizar acciones de mejora en la red
+de Tigo Guatemala, resultando en una mejora cuantificable en indicadores
+clave de rendimiento (KPIs).
+
+

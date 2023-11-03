@@ -1,0 +1,36 @@
+# Modelado {#sec-modelado}
+
+
+```{r}
+source("_paquetesx.R")
+source("_configura.R")
+source("_variables.R")
+source("_funciones.R")
+```
+
+```{r}
+ctl_split <- pin_read(board = tablero_ctl, name = "ctl_split")
+```
+
+```{r}
+ctl_split
+```
+
+
+## Métricas
+
+
+
+
+## Control de Hiperparámetros
+
+## Algoritmos
+
+
+## Preprocesamiento
+
+
+## Workflow Set
+
+## Ajustar
+

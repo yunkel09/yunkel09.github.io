@@ -1,0 +1,369 @@
+# Marco Teórico {#sec-marco-teorico}
+
+## Clasificación Multiclase Desbalanceada
+
+Un conjunto de datos se considera desbalanceado cuando existe una distribución
+desigual significativa, o en algunos casos extrema, entre el número de ejemplos
+de cada clase. En este escenario desbalanceado, el desafío más notable es la
+presencia de múltiples clases minoritarias y mayoritarias. Esta situación hace
+que ya no sea posible centrarse en reforzar el aprendizaje hacia una sola
+clase. Sin embargo, esta no es la única dificultad al abordar conjuntos de
+datos multiclase desbalanceados. Cualquier característica intrínseca del
+conjunto de datos que degrade el rendimiento en el caso binario se acentúa aún
+más en el contexto multiclase.
+
+Entre las estrategias de descomposición más populares para tratar el desbalance
+en la clasificación multiclase, destacan los enfoques One-vs-One (OVO) y
+One-vs-All (OVA). El enfoque OVO divide el problema original en tantos pares de
+clases como sea posible, ignorando los ejemplos que no pertenecen a las clases
+relacionadas. Estos se aprenden de manera independiente mediante los llamados
+aprendices o clasificadores base del conjunto. Por otro lado, el enfoque OVA
+toma una clase como "positiva" y el conjunto de las restantes como "negativas",
+resultando en tantos clasificadores como clases, cada uno dedicado a reconocer
+una única clase [@fernandez_learning_2018].
+
+### SMOTE
+
+SMOTE (Synthetic Minority Over-sampling TEchnique), es un enfoque que aborda el
+problema de desbalance en conjuntos de datos al generar ejemplos sintéticos de
+la clase minoritaria en lugar de simplemente replicar los existentes. Este
+método opera en el "espacio de características" y crea nuevas muestras
+sintéticas al tomar en cuenta los vecinos más cercanos de cada muestra de la
+clase minoritaria. Concretamente, para cada muestra de la clase minoritaria, se
+generan ejemplos sintéticos a lo largo de los segmentos de línea que unen a
+cualquiera o todos los $k$ vecinos más cercanos de la misma clase. Estos
+vecinos se seleccionan al azar según la cantidad de sobremuestreo necesario. La
+generación de ejemplos sintéticos se realiza mediante una combinación lineal
+del vector de características de la muestra en cuestión y su vecino más cercano,
+utilizando un número aleatorio entre 0 y 1 como coeficiente.
+
+Este enfoque tiene varias ventajas. Primero, ayuda a generalizar la región de
+decisión de la clase minoritaria, permitiendo que los clasificadores tengan un
+rendimiento más robusto. Segundo, la combinación de SMOTE con técnicas de
+submuestreo suele tener un rendimiento superior al submuestreo simple. Además,
+los resultados experimentales en diversos conjuntos de datos han demostrado que
+SMOTE generalmente supera a otros métodos como Ripper o el Clasificador
+Bayesiano Ingenuo, que también tratan de manejar la distribución sesgada de
+clases [@chawla_smote_2002].
+
+## Métricas para clasificación multiclase desbalanceada
+
+Al igual que en la evaluación de clasificadores binarios, es posible utilizar
+métricas como la Precisión, Recall, y F1-Score para evaluar el rendimiento de
+un clasificador multiclase. Sin embargo, tener más de dos clases requiere
+prestar más atención a las métricas utilizadas.
+
+Las macro-métricas o métricas de "macro-average" calculan cada métrica para
+cada clase y luego toman la media aritmética para obtener un valor global. Las
+fórmulas para todas estas métricas son similares a sus contrapartes en la
+clasificación binaria, simplemente se dividen por el número de clases,
+asignando el mismo peso a cada clase [@oliva_navarro_metaheuristics_2021].
+
+En el caso de conjuntos de datos desbalanceados o donde algunas clases son más
+raras que otras, las métricas de "macro-average" son especialmente útiles.
+Estas métricas aseguran que todas las clases tengan igual peso en el cálculo de
+la métrica global, independientemente de su frecuencia en el conjunto de datos.
+Por lo tanto, si todas las clases son igualmente importantes para tu problema,
+el uso de "macro-average" proporciona una medida de rendimiento más
+equitativa.
+
+### Precisión y Recall
+
+La precisión y el Recall en "macro-average" se calcula como:
+
+$$
+Precision_{M} = \frac{1}{n} \sum_{i = 1}^{n} \frac{TP_{i}}{TP_{i} + FP_{i}}
+$$ {#eq-precision}
+
+$$
+Recall_{M} = \frac{1}{n} \sum_{i = 1}^{n} \frac{TP_{i}}{TP_{i} + FN_{i}}
+$$ {#eq-recall}
+
+
+Aquí $n$ es el número de clases y $TP_{i}$, $FP_{i}$, $FN_{i}$ son los
+Verdaderos Positivos, Falsos Positivos y Falsos Negativos para la i-ésima
+clase, respectivamente.
+
+### F1-Score Macro
+
+El F1-Score Macro, o simplemente "Macro F1," es una métrica de evaluación de
+clasificadores que es especialmente útil cuando se trabaja con conjuntos de
+datos desbalanceados. Según un estudio realizado por [@opitz_macro_2021], Macro
+F1 es recomendable para asignar un peso igual a clases frecuentes e
+infrecuentes. La métrica se calcula tomando el promedio aritmético de los
+F1-Scores individuales para cada clase. En términos matemáticos, el F1-Score
+Macro se define como:
+
+$$
+ \mathcal{F}_{1} = \frac{1}{n} \sum_{x} F1_{x} = \frac{1}{n} \sum_{x}
+ \frac{2P_{x}R_{x}}{P_{x} + R_{x}}
+$$ {#eq-f1-score}
+
+Aquí, $n$ es el número de clases, $P_{x}$ es la precisión y $R_{x}$ es el
+recall para la clase $x$. Este enfoque es más robusto en términos de
+distribución de tipos de error y no solo puede llevar a puntuaciones absolutas
+diferentes sino también a diferentes clasificaciones de clasificadores. Los
+autores del estudio recomiendan utilizar Macro F1 para evaluar clasificadores
+en situaciones de desbalance de clases.
+
+## Algoritmos
+
+### LightGBM
+
+LightGBM es una implementación más eficiente de *Gradient Boosting Decision Tree*
+(GBDT) creada por investigadores de Microsoft en cooperación con la universidad
+de Pekín, el cual implementa dos nuevas técnicas: *Gradient-based One-Side
+Sampling (GOSS)* y *Exclusive Feature Bundling (EFB)*, las cuales pueden ayudar
+a reducir hasta 20 veces el tiempo de entrenamiento versus un GBDT puro,
+alcanzando casi la misma precisión. [@ke_lightgbm_2017]. La idea fundamental
+para hacer que LightGBM sea más eficiente es reducir el número de instancias y
+atributos.
+
+Aunque GBDT alcanza una gran eficiencia, en especial en tareas de clasificación
+multiclase, tiende a ser muy lento cuando los datos son altamente dimensionales
+debido a que por cada atributo realiza un scan de todas las instancias con el
+fin de estimar el *information gain* de cada punto posible de división, por lo
+que la complejidad computacional estará determinada tanto por el número de
+atributos como por el número de instancias.
+
+Para resolver esto se usan dos nuevos métodos:
+
+**Gradient-based One-Side Sampling (GOSS):** Se basa en la idea de que las
+instancias con un gradiente más grande contribuirán más al *information gain*
+por lo que al realizar un muestreo de las instancias lo que se hace es retener
+estas que tienen un gradiente grande (ej. basado en algún umbral predefinido) y
+con el resto de instancias que tienen un gradiente pequeño, realizar un
+muestreo. Este sistema ayudará a reducir el tiempo de forma considerable a la
+vez que conlleva aun estimación más precisa de la ganancia que utilizando un
+muestreo uniforme.
+
+**Exclusive Feature Bundling (EFB):** Es una técnica que aprovecha los atributos
+dispersos en los datos para reducir su dimensionalidad sin sacrificar mucha
+información. Funciona particularmente bien en escenarios donde hay muchas
+características categóricas codificadas como one-hot, lo que a menudo da lugar
+a una matriz dispersa. La clave está en identificar features que son
+"exclusivos", lo que significa que raramente toman valores distintos de cero al
+mismo tiempo. Estos features exclusivos se pueden agrupar en un solo feature.
+
+LightGBM es más rápido que XGBoost.
+
+### Glmnet
+
+Glmnet (Generalized Linear Model with NETwork penalties) es un algoritmo
+altamente eficiente y rápido que ajusta modelos lineales generalizados mediante
+la maximización penalizada de la verosimilitud. Glmnet implementa una forma
+regularizada (penalizada) de regresión logística. La ruta de regularización se
+calcula para las penalizaciones del lasso o elastic net en una cuadrícula de
+valores (en la escala logarítmica) para el parámetro de regularización 
+$\lambda$ Este algoritmo es particularmente veloz y puede aprovechar la
+dispersión en la matriz de entrada $x$. Las penalizaciones, que pueden ser $L1$
+(Lasso) y $L2$ (Ridge), actúan como un mecanismo para prevenir el uso excesivo
+de variables en el modelo. De esta manera, Glmnet es útil para evitar el
+sobreajuste, dando como resultado modelos más simples y robustos
+(parsimoniosos). [@hastie_introduction_2023]
+
+El modelo multinomial extiende el binomial cuando el número de clases es mayor
+a dos. Suponga que la variable de respuesta tiene $K$ niveles ${\cal G} =
+{1,2,\ldots,K}$. Aquí se modela:
+
+$$
+Pr\left (G = k | X = x \right ) = \frac{e^{\beta_{0k}+\beta_{k^{x}}^{T}}}{\sum_{\ell = 1}^{K} e^{\beta_{0\ell}+\beta^{T}_{\ell^{x}}}}
+$$ {#eq-glmnet}
+
+### Random Forest
+
+El Random Forest es un algoritmo basado en un conjunto de árboles de decisión.
+Cada árbol se desarrolla utilizando una muestra aleatoria del conjunto de datos
+original, lo que elimina la correlación entre los aprendices básicos. Además,
+cada división dentro del árbol se crea utilizando solo un subconjunto aleatorio
+de atributos. La cantidad de estos atributos influye en el equilibrio entre el
+sesgo y la varianza para el conjunto de entrenamiento.
+
+## Técnicas de selección de características
+
+Las técnicas de selección de características se dividen en tres clases
+generales: métodos intrínsecos (o implícitos), métodos de filtro y métodos de
+envoltura.
+
+### Métodos Implícitos
+
+Los métodos intrínsecos integran la selección de características en el propio
+proceso de modelado, lo que ofrece varias ventajas. Algunos ejemplos de métodos
+intrínsecos incluyen:
+
+**Modelos basados en árboles y reglas:** Estos modelos buscan el mejor predictor
+y punto de división para que los resultados sean más homogéneos dentro de cada
+nueva partición. Si un predictor no se usa en ninguna división, es
+funcionalmente independiente y se excluye del modelo. Ejemplos populares de
+este tipo de modelos incluyen LightGBM, Random Forest y XGBoost, los cuales son
+altamente efectivos en la selección intrínseca de características.
+
+**Modelos de regularización:** Estos modelos utilizan penalizaciones para
+reducir o eliminar coeficientes de predictores, como en el caso del método
+Lasso, que reduce algunos coeficientes a cero absoluto, excluyendo así esas
+características del modelo final. Un ejemplo notable en este ámbito es Glmnet,
+que implementa regularización eficiente y rápida.
+
+La principal ventaja de los métodos intrínsecos es su eficiencia, ya que el
+proceso de selección está incrustado en la fase de ajuste del modelo,
+eliminando la necesidad de herramientas de selección de características
+externas. Sin embargo, una desventaja importante es que la selección de
+características es dependiente del modelo. Si el conjunto de datos se ajusta
+mejor a un tipo de modelo que no tiene selección de características
+intrínsecas, el rendimiento predictivo podría no ser óptimo
+[@kuhn_feature_2020].
+
+### Métodos basados en filtros
+
+Los métodos de selección de características basados en filtros realizan un
+análisis preliminar supervisado de los predictores para identificar cuáles son
+importantes para el modelado posterior. Este análisis se lleva a cabo
+generalmente una sola vez antes de pasar al proceso de modelado. Los métodos de
+filtro pueden considerar cada predictor de forma independiente o en conjunto,
+aunque el enfoque individual es más común. Estos métodos emplean diversas
+técnicas de puntuación para cuantificar la importancia de cada predictor en
+relación con la variable objetivo. Aunque son rápidos y efectivos para captar
+grandes tendencias en los datos, son propensos a la sobreselección de
+predictores. Además, la medida de "importancia" en muchos casos podría no estar
+alineada con el rendimiento predictivo del modelo. Para mitigar las falsas
+selecciones positivas, a menudo se utiliza un conjunto de datos independiente
+para evaluar las características seleccionadas.
+
+#### Information Gain
+
+Dado que la entropía es una medida de la impureza en una colección de ejemplos
+de entrenamiento, ahora podemos definir una medida de la efectividad de un
+atributo en la clasificación de los datos de entrenamiento. La medida que
+usaremos, llamada information gain, es simplemente la reducción esperada en la
+entropía causada por la partición de los ejemplos según este atributo. Más
+precisamente, la ganancia de información, Gain(S,A), de un atributo A, en
+relación con una colección de ejemplos S, se define como:
+
+$$
+ \text{Entropy}(S) \equiv \sum_{i = 1}^{c} - p_{i}\;\log_{2}\;p_{i}
+$$ {#eq-entropy}
+
+donde $p_{i}$ es la proporción de $S$ que pertenece a la clase $i$. Hay que
+tener en cuenta que el logaritmo sigue siendo en base 2 porque la entropía es
+una medida de la longitud de codificación esperada medida en *bits*.
+
+$$
+ \text{Information Gain}, (S, A) = Entropy, (S)\; - \sum_{v \in Values(A)}^{} \; \frac{|S_{v}|}{|S|} Entropy(S_{v})
+$$ {#eq-ig}
+
+donde $Values(A)$ es el conjunto de todos los posibles valores para el atributo
+$A$, y $S_{v}$ es el subconjunto de $S$ para el cual el atributo $A$ tiene el
+valor $v$ (es decir, $S_{v} = {S \in S|A(S) = v}$) [@mitchell_machine_2013].
+
+Un ejemplo específico de un método de filtro es la función
+`step_select_infgain()` del paquete colino, que utiliza
+*information gain* como métrica para evaluar la importancia de un
+predictor. Este paquete se centra principalmente en métodos de selección de
+características basados en filtros y está diseñado para integrarse con el
+paquete tidymodels para recetas de modelado [@pawley_github_2022].
+
+### Métodos Wrappers
+
+Los métodos de envoltura (wrappers) evalúan múltiples modelos utilizando
+procedimientos que agregan y/o eliminan predictores para encontrar la
+combinación óptima que maximiza el rendimiento del modelo. En esencia, los
+métodos de envoltura son algoritmos de búsqueda que tratan a los predictores
+como las entradas y utilizan el rendimiento del modelo como la salida a
+optimizar.
+
+Estos métodos pueden adoptar enfoques de búsqueda "voraces" o "no voraces". Los
+voraces eligen rápidamente subconjuntos de predictores basados en el
+rendimiento inmediato del modelo, aunque corren el riesgo de quedar atrapados
+en óptimos locales. Un ejemplo es la eliminación de características recursiva
+(RFE), que elimina iterativamente los predictores menos importantes.
+
+La principal ventaja de los métodos de envoltura es su capacidad para explorar
+una amplia gama de subconjuntos de predictores. Sin embargo, son
+computacionalmente intensivos y tienen un mayor riesgo de sobreajuste, lo cual
+requiere validación externa.
+
+#### Boruta
+
+Boruta es una herramienta que explora datos y genera múltiples árboles de
+decisión basados en muestras, combinándolos mediante votación mayoritaria.
+Utiliza modelos de Random Forest para estimar la relevancia de las
+características. En el paquete Boruta, se crean variables aleatorias utilizando
+múltiples combinaciones de otras variables en el conjunto de datos. Estas
+nuevas variables se combinan con las originales para entrenar un Random Forest
+diferente. La importancia de las distintas características se obtiene
+comparando la importancia de las variables aleatorias con la de las variables
+originales. Solo las variables con una importancia mayor que la de las
+variables aleatorias se consideran importantes. El paquete Boruta puede ser muy
+exigente en tiempo si el número de variables es alto, especialmente porque el
+algoritmo crea aún más variables para clasificar sus características
+[@stanczyk_advances_2017].
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

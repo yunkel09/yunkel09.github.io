@@ -1,0 +1,54 @@
+# Antecedentes {#sec-antecedentes}
+
+El estudio de la satisfacción del cliente en la compañía es un indicador
+crítico de gran relevancia [@muhammad_how_2016]. Entender el estado actual de
+la satisfacción permite a la empresa dirigir sus esfuerzos para fortalecer la
+relación con el cliente, fomentar la recompra y la lealtad hacia la marca
+[@zhou_measuring_2019]. Asimismo, proporciona la capacidad de identificar y
+abordar los problemas que los clientes puedan estar experimentando.
+
+Existen distintos enfoques para el estudio de los clientes en el ámbito de las
+telecomunicaciones. Uno de ellos se enfoca en la generación de conocimiento
+para una mejor comprensión de los usuarios. El análisis de
+[@mustafa_customer_2021] sobre el NPS y su relación con el porcentaje de
+usuarios que abandonan la compañía (churn) en Malasia, utilizando un modelo de
+Clasificación y Árboles de Regresión (CART), revela que los bajos puntajes en
+NPS incrementan la probabilidad de que los clientes terminen su relación con la
+empresa. Una limitación de este indicador en Tigo Guatemala es que no todos los
+clientes reportan sus malas experiencias, lo que reduce la visibilidad de
+problemas potenciales.
+
+La predicción de churn es otra área con extensa investigación. Determinar la
+probabilidad de que un cliente deje la empresa es una información valiosa
+[@ullah_churn_2019]. Este estudio clasifica la probabilidad de churn en
+categorías de bajo, medio y alto riesgo, lo que ayuda a diseñar estrategias de
+retención de clientes diferenciadas. La calidad de un modelo de churn se basa
+en una ingeniería de datos adecuada [@jain_telecom_2021]. Para la evaluación de
+estos modelos, se sugiere el uso de métricas que refuercen la precisión, como
+el área bajo la curva ROC y el f1-score. Además, se ha comprobado que las Redes
+Neuronales Convolucionales (CNN) son algoritmos efectivos para procesar grandes
+volúmenes de datos de clientes [@seymen_customer_2023].
+
+Incrementar la lealtad del cliente es un objetivo deseado por las compañías, ya
+que esto se traduce en mayores ingresos. La fiabilidad del servicio es un
+predictor directo de la lealtad del cliente, a diferencia de la garantía de
+nivel de servicio, que no lo es [@izogo_customer_2017]. La fiabilidad se define
+como el correcto funcionamiento de un sistema durante un tiempo establecido
+[@ahmed_reliability_2017]. Un funcionamiento constante de la red de
+telecomunicaciones en Tigo Guatemala podría contribuir a mantener y aumentar su
+cuota de mercado.
+
+En la investigación de variables para predecir el churn, [@ahmad_customer_2019]
+concluye que factores como los días desde la última transacción saliente, el
+acceso a tecnologías 2G, 3G y 4G, y el saldo en la billetera móvil, son
+significativos para mejorar la predicción del churn. El estudio también señala
+la relevancia de variables vinculadas al análisis de la red social del usuario,
+como la medida de similitud del coseno entre los nodos de la red.
+
+Con el conocimiento de las razones por las cuales los clientes se convierten en
+detractores, se implementan modelos de clasificación de aprendizaje
+supervisado. Algoritmos útiles en este contexto incluyen árboles de decisión,
+bosques aleatorios, GBM y XGBOOST [@ahmad_customer_2019]. XGBOOST ha demostrado
+ser un algoritmo de predicción eficaz en la clasificación de usuarios de una
+red. Estos algoritmos tienen la ventaja de ser resistentes a conjuntos de datos
+desbalanceados, una situación común en estudios de detracción de clientes.

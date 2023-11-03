@@ -1,0 +1,51 @@
+# División {#sec-division}
+
+```{r}
+source("_paquetesx.R")
+source("_configura.R")
+source("_variables.R")
+source("_funciones.R")
+```
+
+```{r, echo=FALSE}
+ctre_f    <- path("data", "ctlre", ext = "fst")
+ctl       <- read_fst(ctre_f) |> as_tibble() |> suppressMessages()
+ctl_clean <- ctl |> select(!matches("counter$|timeout$"), -c(twr:city))
+```
+
+```{r}
+# Semilla
+set.seed(2023)
+```
+
+```{r}
+ctl_split <- initial_validation_split(data = ctl_clean, strata = diag)
+ctl_train <- training(ctl_split)
+ctl_valid <- validation(ctl_split)
+ctl_valse <- validation_set(ctl_split)
+```
+
+
+```{r}
+ctl_split
+```
+
+```{r}
+ctl_train |>
+ select(1:8) |> 
+ slice(1:5)
+```
+
+```{r, echo=FALSE}
+# Guardar split
+pin_write(
+  board       = tablero_ctl,
+  x           = ctl_split,
+  name        = "ctl_split",
+  type        = "qs")
+```
+
+
+
+
+

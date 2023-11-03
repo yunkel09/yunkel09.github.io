@@ -1,6 +1,11 @@
+#   ____________________________________________________________________________
+#   Funciones                                                               ####
 
+# Fecha: 2023-11-01
+# Autor: William Chavarría
 
-centinelas <- c("TBD", "TO_BE_DETERMINED")
+##  ............................................................................
+##  Prep                                                                    ####
 
 # Revisar presencia de valores centinelas
 revisar_centinelas <- function(df, sentinel) {
@@ -17,6 +22,16 @@ revisar_centinelas <- function(df, sentinel) {
   ) |>
   arrange(desc(tbds))
 }
+
+estandarizar_columnas <- function(columna) {
+  columna |>
+    toupper() |>
+    str_replace_all("[\\s-]", "_")
+}
+
+
+##  ............................................................................
+##  Graficar                                                                ####
 
 # barras de conteo para variables binarias o politómicas
 barra <- function(df, x) {
@@ -50,11 +65,6 @@ barra <- function(df, x) {
   legend.title = element_blank())
 }
 
-estandarizar_columnas <- function(columna) {
- columna |>
-  toupper() |>
-  str_replace_all("[\\s-]", "_")
-}
 
 # resumen estadístico versátil
 resumir <- function(.df) {
@@ -193,6 +203,9 @@ graficar_mosaicos <- function(df, f1, f2, leyenda = F, ra = 0.4) {
   }
 }
 
+##  ............................................................................
+##  Tidymodels                                                              ####
+
 # preparar y desplegar receta
 ver <- . %>% prep() %>% juice()
 
@@ -203,6 +216,17 @@ unregister <- function() {
 }
 
 
+##  ............................................................................
+##  Estadísticas                                                            ####
+
+mean_ci <- function(df, metrica, conf.level = 0.95) {
+  x  <- df[[metrica]][!is.na(df[[metrica]])]
+  m  <- mean(x)
+  ci <- t.test(x)$conf.int
+  data.frame(media = m, lower = ci[1], upper = ci[2])
+}
+
+# ---------------------------------------------------------------------------- #
 
 
 

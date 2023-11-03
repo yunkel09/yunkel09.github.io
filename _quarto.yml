@@ -10,7 +10,7 @@ book:
   author:
   - name: "William Chavarría"
     orcid: 0009-0001-4084-9290
-  date: "9/28/2023"
+  date: "11/1/2023"
 
   page-footer:
     left: |
@@ -21,34 +21,37 @@ book:
   favicon: fav.jpg
   repo-url: https://github.com/yunkel09/yunkel09.github.io
   repo-branch: master
+
   chapters:
+
     - index.qmd
+    - introduccion.qmd
+    - antecedentes.qmd
+    - marco-teorico.qmd
+    - metodologia.qmd
 
-
-    - intro.qmd
-
-    - part: data-adquisition.qmd
+    - part: preparacion.qmd
       chapters:
-        - data-collection.qmd
-        - data-import.qmd
-        - data-dictionary.qmd
+        - importacion.qmd
+        - preparacion.qmd               # clean and transform
+        - division.qmd
+        - analisis-exploratorio.qmd
 
-    - part: visualize.qmd
+    - part: workflow.qmd
       chapters:
-        - data-prep.qmd
-        - split.qmd
-        - eda.qmd
+        - validacion-cruzada.qmd
+        - modelado.qmd
+        - evaluacion.qmd
 
-    - part: modeling.qmd
-      chapters:
-        - cross-validation.qmd
-        - preprocessing.qmd
-        - model-specification.qmd
-        - model-training.qmd
-        - model-evaluation.qmd
-
-    - summary.qmd
+    - resultados.qmd
+    - discusion.qmd
+    - conclusiones.qmd
+    - recomendaciones.qmd
     - references.qmd
+
+  appendices:
+      - glosario.qmd
+
 
 bibliography: [references.bib, paquetes.bib]
 
@@ -63,5 +66,5 @@ format:
       - cosmo
       - ctl.scss
 
-    author-meta: "William Chavarría, André Rodas, Francisco Manjon y Pablo Armas"
+    author-meta: "William Chavarría"
     callout-appearance: default

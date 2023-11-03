@@ -1,9 +1,16 @@
-# Preface {.unnumbered}
+# Resumen {.unnumbered}
 
-El proyecto busca desarrollar un modelo de machine learning para analizar y
-clasificar automáticamente las respuestas de las encuestas de NPS (Net Promoter
-Score) en Tigo Guatemala. El objetivo es utilizar estos insights para guiar
-decisiones estratégicas en áreas como inversión en infraestructura,
-optimización de red y mejora de la calidad del servicio. Al hacerlo, la empresa
-espera mejorar la percepción del cliente, medida a través del NPS, y en última
-instancia, aumentar la lealtad del cliente y el retorno de inversión (ROI).
+En el ámbito de las telecomunicaciones, la mejora de la experiencia del cliente
+(CX) es esencial para mantener una ventaja competitiva. Este estudio se centra
+en la aplicación de modelos de aprendizaje automático para optimizar diversas
+métricas relacionadas con CX. Utilizamos el método de envoltura Boruta y una
+implementación específica de Lightgbm, un algoritmo de árbol de decisión de
+impulso de gradiente (GBDT), para predecir y diagnosticar correctamente los
+distintos tipos de detractores de red. Nuestros experimentos demuestran que el
+método de envoltura (*wrapper*) Boruta con Lightgbm supera a otros
+algoritmos en términos de f1-score macro, precisión y recuperación, tanto en
+conjuntos de entrenamiento como de prueba, sin signos de sobreajuste.
+Específicamente, el f1-score en el conjunto de prueba fue de 97.34%, con una
+precisión de 97.67% y un Recall de 97.12%. Estos resultados demuestran
+la eficacia de nuestro enfoque, que tiene aplicaciones significativas en la
+mejora de CX en Tigo Guatemala.

@@ -1,0 +1,28 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+# Validación Cruzada {#sec-validacion-cruzada}
+
+```{r}
+source("_paquetesx.R")
+source("_configura.R")
+source("_variables.R")
+source("_funciones.R")
+```
+
+```{r, echo=FALSE}
+ctl_split <- pin_read(board = tablero_ctl, name = "ctl_split")
+```
+
+```{r}
+ctl_train <- training(ctl_split)
+```
+
+
+```{r}
+set.seed(2023)
+ctl_folds <- vfold_cv(ctl_train, strata = diag, v = 10)
+```
+

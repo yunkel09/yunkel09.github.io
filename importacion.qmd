@@ -1,0 +1,9 @@
+# Importación {#sec-importacion}
+
+```{r}
+source("_paquetesx.R")
+source("_configura.R")
+source("_variables.R")
+source("_funciones.R")
+```
+
