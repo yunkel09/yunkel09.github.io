@@ -1,0 +1,342 @@
+# Prep {#sec-prep}
+
+## Diagnóstico
+
+El primer paso consiste en la transformación de los datos de diagnóstico. 
+
+```{r}
+#| eval: false
+# Preprocesamiento y filtrado inicial
+diagnosticos <- diag_00 |>
+ mutate(
+  across(diag, toupper)) |>                # <1>
+ filter(diag %in% etiquetas) |>            # <2>
+ split(~ diag) |>                          # <3>
+ map_at("NO_DIAG", \(df) df |>             # <4>
+ filter(class_desc == "PROMOTOR") |>       # <5>
+ drop_na() |>                              # <6>
+ distinct(msisdn_dd, .keep_all = TRUE)) |> # <7>
+ # Combinar listas en un solo data frame
+ list_rbind() |>                           # <8>
+ # Transformaciones finales
+ mutate(
+  across(diag,
+   \(x) case_match(x, "NO_DIAG" ~ "PROMOTOR", .default = diag))) |> # <9>
+ select(-class_desc) |>                   # <10>
+ distinct(msisdn_dd, .keep_all = TRUE)    # <11>
+```
+
+1. Convertir a mayúscula todas las etiquetas *ground truth labels*.
+2. Dejar únicamente las etiquetas de interés para el proyecto.
+3. Separar en un df distinto cada etiqueta para recibir transformaciones.
+4. Aplicar una transformación específicamente al df que contienen los NO_DIAG.
+5. En ese df dejar únicamente los promotores.
+6. Debido a que hay muchos promotores, podemos eliminar los valores NAs.
+7. Eliminar registros duplicados (ej. clientes que tienen más de una encuesta)
+8. Unir los data-frames que están en una lista en un solo data-frame
+9. Renombrar los NO_DIAG como PROMOTOR
+10. Eliminar la columna `class_desc`
+11. Retirar los duplicados de todo el data-frame
+
+## Integración
+
+```{r}
+#| eval: false
+ctl_00 <- diagnosticos |>
+ inner_join(hourly_metrics_raw, join_by(fct_srvy_dt, msisdn_dd, srvy_id))
+```
+
+Una vez que los diagnósticos han sido procesados, los uniremos con las métricas
+RBS utilizando un *inner_join* para no tener columnas en blanco. 
+
+## Preparación
+
+A continuación realizaremos las primeras transformaciones, así como limpieza
+de los datos ya unidos. Manejaremos una secuencia de objetos enumerados con
+un sufijo.  El objetivo es mantener los fragmentos de código realacionados a
+la preparación del tamaño adecuado.
+
+```{r}
+#| eval: false
+ctl_01 <- ctl_00 |>
+ mutate(
+  tad   = ra_ta_ue_index6 + ra_ta_ue_index7,         # <1>
+  fecha = str_sub(prttn_hr, 1, 8) |> ymd(),          # <2> 
+  hora  = str_sub(prttn_hr, 9, 10),                  # <3>
+  date  = str_c(fecha, hora, sep = " ") |> ymd_h(),  # <4>
+  twr   = str_sub(bts_sh_nm, start = 2, end = 7),    # <5>
+  across(all_of(enteros), as.integer),               # <6>
+  across(thoughput_dl, \(x) x / 1e3),                # <7>
+  across(all_of(porcentajes), \(col) col * 100)) |>  # <8>
+ left_join(sitiosfs, join_by(twr)) |>                # <9>
+ select(-all_of(metrics_to_remove)) |>               # <10>
+ rename(any_of(lookup)) |>                           # <11>
+ relocate(                                           # <12>         
+  user, date, poll, fecha, hora, dpto, city,twr, bts, time, lat, lon, prb,
+  thp, rrc,erb, drp, tad, lod, erf, cqi, m64, m16, psk, vol, dis, lte, diag)
+```
+
+1. *Feature Engineering:* Crear un nuevo atributo derivado de la suma de los
+*timing advanced* con index 6 y 7.  Esto se validó con los SMEs como una forma
+válida de determinar problemas de capacidad y cobertura.
+2. Extraer la fecha de la columna `prttn_hr` debido a que venía concatenada con
+la hora.
+3. Extraer la hora
+4. Convertir a fecha el atributo extraído.
+5. Extraer el sitio del id de la celda
+6. Convertir a enteros los predictores que lo ameriten.
+7. El `throuput_dl` está en kilobytes, así que debemos pasarlo a megabytes
+8. Las columnas que están en proporción (ej. 0 a 1) las pasaremos a porcentaje
+para mayor facilidad.
+9. Unir los datos con la tabla que contiene información geográfica (ej.
+latitud, longitud, etc).
+10. Remover variables validadas con SMEs que no serían relevantes para el
+modelo.
+11. Renombrar a un formato más corto para facilidad en el modelado.
+12. Reubicar las columnas para facilitar la aplicación de transformación y EDA.
+
+```{r}
+#| eval: false
+ctl_02 <- ctl_01 |>
+ filter(
+  !twr %in% sitios_ruedas,                     # <1>
+  !if_all(prb:dis, ~ .x == 0),                 # <2>
+  !(dis == 0 & diag == "DISPONIBILIDAD")) |>   # <3>
+ arrange(user, fecha, hora, desc(time)) |>     # <4>
+ group_by(user, fecha, hora) |>                # <5>
+ slice_head(n = 10) |>                         # <6>
+ ungroup()                                     # <7>
+```
+
+1. Remover sitios que se mueven de un lugar a otro en plataformas portátiles.
+2. Los contadores para 3G no están habilitados, por lo que no hay valores en
+sus métricas. Estos dan cero, por lo que deben removerse.
+3. Los casos donde la disponibilidad es igual a cero y el diagnóstico es igual
+a disponibilidad son errores de digitación.
+4. Reordenar.
+5. Agrupar por usuario, fecha y hora.
+6. Seleccionar únicamente el top 10 de celdas de cada usuario.
+7. Desagrupar.
+
+## Reglas de negocio
+
+Las reglas de negocio sirven para poder identificar que celdas son las que
+utilizó el SME para determinar el diagnóstico.
+
+```{r}
+#| eval: false
+# Definir reglas mutuamente excluyentes
+capacidad <- expr(prb >= 85 & thp <= 2.7 & tad <= 15)
+cobertura <- expr((prb >= 85 & thp <= 2.7) | tad >= 15)
+disponibi <- expr(if_all(prb:vol, ~ .x == 0) | dis > 0)
+optimizac <- expr(erb < 90 | rrc < 90 | cqi < 7 | erf > -95 | drp > 1.5 |
+ (prb == 0 & thp >  0 & lod == 0) | (thp == 0 & prb > 0 & vol == 0) |
+ (prb == 0 & thp == 0 & vol == 0) |  psk > m64)
+promotor  <- expr(prb < 85 & thp > 2.7 & tad < 15 & lte > 95 & erf <= -95 &
+ cqi > 7 & dis == 0)
+```
+
+::: {.callout-important}
+#### Importante
+La implementación de reglas de negocio explícitas para identificar las celdas
+de diagnóstico seleccionadas por el experto en la materia (SME) ha suscitado
+debate. Podría parecer, a primera vista, que si se aplican estas reglas, el uso
+de un modelo de aprendizaje automático (ML) se vuelve redundante. Sin embargo,
+esta perspectiva no considera un factor crítico: la ausencia de etiquetas
+específicas para las celdas y los periodos en que se manifestaron los síntomas
+de las distintas categorías. Al consolidar los datos de 30 días y 10 celdas sin
+distinción, las estadísticas descriptivas se calculan tanto para celdas con
+comportamiento normal como anormal, lo que resulta en una pérdida de
+variabilidad y un incremento de ruido en los datos.
+
+Esta hipótesis se vio confirmada cuando los primeros modelos arrojaron un
+rendimiento inferior al 35%. Al no diferenciar entre datos 'buenos' y 'malos',
+se diluye la varianza, impidiendo que el modelo distinga señales claras
+asociadas a cada categoría.
+
+Por tanto, lejos de 'ayudar' al modelo, la creación de estas reglas es un
+intento de replicar el proceso de diagnóstico del SME. Esto no solo es un punto
+crucial para mejorar el proceso, sino que también es esencial para garantizar
+que el modelo de ML esté estimando las categorías basándose en las mismas
+premisas utilizadas por el experto durante su evaluación.
+
+En la literatura de aprendizaje automático y ciencia de datos, la aplicación de
+heurísticas para mejorar el rendimiento de los modelos es un enfoque bien
+establecido y documentado. Estas heurísticas a menudo toman la forma de
+ingeniería de características, selección de instancias, o la creación de reglas
+de negocio que reflejan el conocimiento del dominio.
+
+:::
+
+## Aprendizaje Semi-supervisado
+
+En este caso crearemos una nueva columna y **no se modificaran las etiquetas
+originales**.
+
+```{r}
+#| eval: false
+ctl_03 <- ctl_02 |>
+ drop_na() |>                                         # <1>
+ mutate(
+  diag2 = case_when(                                  # <2>
+   eval(optimizac) ~ "OPTIMIZACION",                  
+   eval(capacidad) ~ "CAPACIDAD",                     
+   eval(promotor)  ~ "PROMOTOR",                      
+   eval(cobertura) ~ "COBERTURA",                     
+   eval(disponibi) ~ "DISPONIBILIDAD",                
+  .default = diag                                     # <3>
+  ),
+  across(diag:diag2, as.factor)                       # <4>
+ )
+```
+
+1. Debido a que las métricas de RBS se extraen de los gestores, hay muy pocos
+valores perdidos (NAs), por lo que es mejor descartarlos.
+2. Crear una columna nueva llamada `diag2` y evaluar cada una de las reglas
+generadas anteriormente. El cumplimiento de cada regla genera una etiqueta
+paralela a la etiqueta *ground truth*.
+3. En caso de que no encuentre ninguna de las reglas, colocar la etiqueta
+*ground truth*.
+4. Convertir a variable de tipo *factor* las dos columnas.
+
+```{r}
+#| eval: false
+ctl_04 <- ctl_03 |>
+ group_by(user) |>        # <1>
+ filter(diag == diag2) |> # <2>
+ ungroup()                # <3>
+```
+
+1. Agrupar por usuario.
+2. Filtrar para dejar las filas en las que las etiquetas originales
+(*ground truth*) generadas por los SMEs coinciden con las etiquetas generadas
+por la heurística.
+3. Desagrupar.
+
+Este paso es el más crucial y es al que se le puede atribuir el incremento en
+el desempeño del modelado.  La detección de las instancias que él SME
+posiblemente utilizó como base para realizar el diagnóstico son las que quedan.
+
+::: {.callout-important}
+#### Importante
+Durante las entrevistas con los expertos en la materia (SMEs), se confirmó que
+la inclusión de etiquetas específicas que identifican la celda de origen del
+diagnóstico, así como las horas en que se detectaron anomalías en las métricas,
+deberían ser incorporadas como un estándar en el proceso de etiquetado.
+Anteriormente, esta práctica no se llevaba a cabo de manera sistemática.
+
+La importancia de este ajuste en el proceso de etiquetado es significativa. Al
+etiquetar de manera precisa y detallada desde el inicio, las instancias de
+datos se preparan de forma más adecuada, lo que facilita la identificación de
+patrones y anomalías por parte de los modelos de aprendizaje automático. Esta
+mejora en la calidad de los datos iniciales puede conducir a un incremento en
+la precisión y la eficacia de los diagnósticos automatizados.
+
+Además, este cambio en la metodología de etiquetado refleja una alineación más
+estrecha con las prácticas óptimas de gestión de datos. Al asegurar que cada
+instancia de datos esté correctamente etiquetada con la información relevante,
+se establece una base sólida para el análisis predictivo y se potencia la
+capacidad del modelo para aprender de los datos más fidedignos. 
+:::
+
+## Agregación
+
+Una vez realizada la discriminación de instancias que provocan ruido, al no
+ser las que se utilizaron para derivar el diagnóstico, se procede con la fase
+de agregación.  Aquí el objetivo es colapsar el dataset de +44 millones de
+registros utilizando estadísticas descriptivas con la finalidad de capturar
+la mayor cantidad de variabilidad [ver @kuhn_feature_2020 Capítulo 9]
+
+
+```{r}
+#| eval: false
+# Definir listado de funciones básicas
+fun_basicas <- list(
+  mean   = ~mean(.x, na.rm = TRUE),
+  median = ~median(.x, na.rm = TRUE),
+  sd     = ~sd(.x, na.rm = TRUE),
+  mim    = ~min(.x, na.rm = TRUE),
+  max    = ~max(.x, na.rm = TRUE),
+  iqr    = ~IQR(.x, na.rm = TRUE),
+  p1     = ~quantile(.x, probs = 0.01, na.rm = TRUE),
+  p5     = ~quantile(.x, probs = 0.05, na.rm = TRUE),
+  p10    = ~quantile(.x, probs = 0.10, na.rm = TRUE),
+  p25    = ~quantile(.x, probs = 0.25, na.rm = TRUE),
+  p75    = ~quantile(.x, probs = 0.75, na.rm = TRUE),
+  p90    = ~quantile(.x, probs = 0.90, na.rm = TRUE),
+  p95    = ~quantile(.x, probs = 0.95, na.rm = TRUE),
+  p99    = ~quantile(.x, probs = 0.99, na.rm = TRUE)
+)
+```
+
+Estas estadística se definieron con base a lo observado en los gestores que
+usan los SMEs para determinar una anomalía.  Se observó que los valores
+extremos son particularmente útiles en muchos escenarios, por lo que el uso de
+IQR podría ser relevante.
+
+Posterior a definir la lista de estadístico, se creo una función que los
+aplicará de forma automática a todos los atributos.  Para poder colapsar las
+variables de tipo categórica se optó por el primer valor utilizando la función
+`first` [^1]
+
+```{r}
+#| eval: false
+# Función para sumarizar métricas
+summarize_metrics <- function(df) {
+ df |>
+  summarise(
+
+  across(prb:lte, fun_basicas),  # <1>
+
+  lat = first(lat),              # <2>
+  lon = first(lon),              # <3>
+
+  # coordenadas polares
+  r = sqrt(lat^2 + lon^2),       # <4>
+  theta = atan2(lon, lat)        # <4>
+  )
+}
+```
+
+1. Aplicar lista de funciones estadísticas
+2. Primera latitud.
+3. Primera longitud.
+4. Convertir coordenadas cartesianas a coordenadas polares[^2]
+
+
+```{r}
+#| eval: false
+ctl <- ctl_04 |>
+ group_by(user) |>       # <1>
+ summarize_metrics() |>  # <2>
+ drop_na() |>            # <3>
+ mutate(across(where(is.character), as.factor))  # <4>
+```
+
+1. Agrupar por usuario.
+2. Aplicar función de métricas sumarizadas.
+3. Eliminar valores faltantes debido a que son muy pocos.
+4. Convertir las variables de tipo caracter en de tipo *factor*.
+
+
+[^1]: Se podía utilizar la frecuencia de la variable categórica.
+[^2]: La literatura de ML y Feature engineering indican mejor representatividad
+si se utilizan las coordenadas en formato polar.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

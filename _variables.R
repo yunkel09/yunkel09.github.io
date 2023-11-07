@@ -15,7 +15,7 @@ etiquetas <- c(
         "DISPONIBILIDAD",
         "NO_DIAG")
 
-# Tabla par renombrar columnas
+# Tabla para renombrar columnas con nombres más cortos
 lookup <- c(
         poll  = "fct_srvy_dt",
         erf   = "l_ul_interference_avg",
@@ -41,8 +41,6 @@ metrics_to_remove <- c(
         "srvy_id",
         "r1",
         "prttn_hr",
-        # "status",
-        # "cll_prctg",
         "ra_ta_ue_index1",
         "ra_ta_ue_index2",
         "ra_ta_ue_index3",
@@ -52,16 +50,16 @@ metrics_to_remove <- c(
         "ra_ta_ue_index7",
         "ra_ta_ue_total",
         "thpughput_ul",
-        # "volte_erlang",
-        "cell_unavail_s1fail"
-)
+        "cell_unavail_s1fail")
 
+# Atributos de tipo entero
 enteros <- c(
         "msisdn_dd",
         "corrected_cqi",
         "cell_unavail",
         "cell_unavail_s1fail")
 
+# Atributos de tipo ratio que deben ser pasado a porcentaje
 porcentajes <-c(
         "rate_prb_dl",
         "cell_load",
@@ -74,6 +72,23 @@ porcentajes <-c(
         "time_lte",
         "cll_prctg",
         "tad")
+
+# Tipos de columnas en tabla maestra 'diagnósticos'
+cols_diag <- cols_only(
+ fct_srvy_dt = "c",
+ msisdn_dd   = "c",
+ srvy_id     = "i",
+ time_lte    = "d",
+ class_desc  = "c",
+ diag        = "c")
+
+# Rutas
+diag_f <- path("data", "diags", ext = "csv")
+# metr_f <- path("data", "metri", ext = "fst")
+metr_f <- path("data", "metricas_tiny", ext = "fst")
+sifs_f <- path("data", "sitfs", ext = "fst")
+
+
 
 paleta <-c(
  "#D56702FF", "#AD8875FF", "#DB1C6AFF", "#4092E1FF", "#02AF44FF", "#D7B5A6",

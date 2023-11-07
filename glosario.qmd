@@ -1,1 +1,36 @@
 # Glosario {#sec-glosario}
+
+```{r}
+#| echo: false
+source("_paquetesx.R")  # Paquetes
+source("_configura.R")  # Configuración
+source("_variables.R")  # Variables globales
+source("_funciones.R")  # Funciones
+```
+
+```{r}
+dic_f <- dir_ls("diccionarios", glob = "*.csv")
+```
+
+
+
+```{r}
+dic <- dic_f |> map(~ read_csv(file = .x)) |> 
+ list_rbind()
+ 
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Mostrar Código"
+#| label: tbl-diccionario
+#| tbl-cap: "dic"
+dic |> 
+ gt() |> 
+ gt_theme_538() |> 
+ tab_header(
+  title = html("<p style='color:#25a7f0;'><strong>Diccionario</strong></p>"),
+    subtitle = md("Tablas principales")
+  )
+```
+

@@ -1670,6 +1670,7 @@ ctl_interact <- ctl_train |>
   select(all_of(optim_vars), diag) |> 
   filter(diag %in% c("OPTIMIZACION", "CAPACIDAD", "COBERTURA")) |> 
   mutate(across(diag, as_factor))
+ 
 ```
 
 ```{r}

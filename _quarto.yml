@@ -33,7 +33,7 @@ book:
     - part: preparacion.qmd
       chapters:
         - importacion.qmd
-        - preparacion.qmd               # clean and transform
+        - prep.qmd               # clean and transform
         - division.qmd
         - analisis-exploratorio.qmd
 

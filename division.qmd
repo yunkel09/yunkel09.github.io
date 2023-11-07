@@ -1,6 +1,7 @@
 # División {#sec-division}
 
 ```{r}
+#| echo: false
 source("_paquetesx.R")
 source("_configura.R")
 source("_variables.R")
@@ -10,7 +11,7 @@ source("_funciones.R")
 ```{r, echo=FALSE}
 ctre_f    <- path("data", "ctlre", ext = "fst")
 ctl       <- read_fst(ctre_f) |> as_tibble() |> suppressMessages()
-ctl_clean <- ctl |> select(!matches("counter$|timeout$"), -c(twr:city))
+ctl       <- ctl |> select(!matches("counter$|timeout$"), -c(twr:city))
 ```
 
 ```{r}
@@ -19,30 +20,41 @@ set.seed(2023)
 ```
 
 ```{r}
-ctl_split <- initial_validation_split(data = ctl_clean, strata = diag)
-ctl_train <- training(ctl_split)
-ctl_valid <- validation(ctl_split)
-ctl_valse <- validation_set(ctl_split)
+ctl_split <- initial_validation_split(data = ctl, strata = diag) # <1>
+ctl_train <- training(ctl_split)        # <2>
+ctl_valid <- validation(ctl_split)      # <3>
+ctl_valse <- validation_set(ctl_split)  # <4>
 ```
+
+1. Creación de un objeto que contendrá tres datasets: entrenamiento, validación
+y prueba. Todos estratificados a través de la variable respuesta `diag`.
+2. Extraer el conjunto de entrenamiento del objeto `ctl_split`.
+3. Extraer el conjunto de validación del objeto `ctl_split`.
+4. Crear un conjunto de validación para alimentar a la función `last_fit()`.
+
+Dentro del framework de Tidymodels, es muy sencillo ajustar los datos de
+validación una vez entrenado el modelo.  La función `validation_set()` es un
+objeto que ayuda a que se ajusten los modelos entrenados con validación cruzada
+al conjunto de validación para que se pueda iterar mientras se afinan los
+hiperparámetros.
 
 
 ```{r}
 ctl_split
 ```
 
-```{r}
-ctl_train |>
- select(1:8) |> 
- slice(1:5)
-```
+Vemos que el objeto `ctl_split` contiene la división 60% para el conjunto de
+entrenamiento, 20% para validación y el conjunto de prueba con el restante 20%.
+
 
 ```{r, echo=FALSE}
+#| message: false
 # Guardar split
 pin_write(
   board       = tablero_ctl,
   x           = ctl_split,
   name        = "ctl_split",
-  type        = "qs")
+  type        = "qs") |> suppressMessages()
 ```
 
 

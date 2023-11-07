@@ -1,9 +1,175 @@
 # Importación {#sec-importacion}
 
+Cargar las librerías y scripts auxiliares.
+
 ```{r}
-source("_paquetesx.R")
-source("_configura.R")
-source("_variables.R")
-source("_funciones.R")
+source("_paquetesx.R")  # Paquetes
+source("_configura.R")  # Configuración
+source("_variables.R")  # Variables globales
+source("_funciones.R")  # Funciones
 ```
+
+## Diagnósticos
+
+```{r}
+diag_00 <- read_csv(diag_f, col_types = cols_diag)
+```
+
+```{r}
+diag_00 |> glimpse(width = 75)
+```
+
+En el apéndice [-@sec-glosario] se pueden revisar el significado de cada
+variable
+
+## Métricas RBS
+
+```{r}
+hourly_metrics_raw <- read_fst(path = metr_f) |> as_tibble()
+```
+
+```{r}
+hourly_metrics_raw |> glimpse(width = 75)
+```
+
+Se aprecian los nombres originales de los atributos.
+
+::: {.callout-important}
+#### Importante
+En el caso de la tabla `hourly_metrics` estamos viendo una muestra de
+únicamente 10 registros debido a que el tamaño real del dataset es de más de
+44 millones de filas y cargarlo en este reporte web es muy tardado.
+:::
+
+## Datos Ubicación
+
+```{r}
+#| eval: false
+
+# Conexión a base de datos
+con <- conectigo::conectar_msql()
+
+# Query para extraer información geográfica y clima
+sitiosfs_raw <- tbl(con, in_schema("fieldservice", "site_collate")) |>
+ select(
+  twr = cilocation, lat = latitude, lon = longitude,
+  dpto = department, municipalidad = municipality) |> 
+ collect() |>
+ distinct(twr, .keep_all = TRUE)
+
+# Estandarización de columnas
+sitiosfs <- sitiosfs_raw |>
+  mutate(across(dpto:municipalidad, \(x) estandarizar_columnas(x))) |>
+  rename(city = "municipalidad")
+```
+
+
+```{r}
+#| echo: false
+sitiosfs <- read_fst(sifs_f) |> as_tibble()
+```
+
+```{r}
+sitiosfs %>% glimpse(width = 75)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

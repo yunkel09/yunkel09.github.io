@@ -1,2 +1,45 @@
 # Preparación {#sec-preparacion}
 
+El proceso de preparación de datos en un flujo de trabajo de aprendizaje
+automático es una etapa crítica que implica varias tareas destinadas a
+convertir los datos crudos en un formato adecuado para el modelado. Este
+proceso puede incluir las siguientes tareas:
+
+- **Limpieza de Datos:** Corregir o eliminar registros incorrectos, incompletos,
+corruptos, inexactos o irrelevantes. Esto puede incluir la corrección de
+errores tipográficos o de sintaxis, verificación de consistencia y completitud,
+y tratamiento de valores faltantes.
+
+- **Transformaciones Generales:** Convertir medidas a escalas uniformes (por
+ejemplo, kilobytes a megabytes) o realizar cálculos para cambiar proporciones a
+porcentajes. Estas son transformaciones básicas para homogeneizar las unidades
+de medida o la escala de los datos.
+
+- **Ingeniería de Atributos (Feature Engineering):** Crear nuevas variables que
+podrían ser útiles para el modelado, tales como la extracción de componentes de
+fechas y horas, o la creación de indicadores basados en lógica de negocio o
+conocimientos de expertos en la materia (SMEs). Esto puede incluir el uso de
+expresiones regulares para extraer información de campos de texto o calcular
+nuevas métricas a partir de los datos existentes.
+
+- **Pre-selección de Atributos:** Decidir qué variables incluir en el modelo
+basándose en el conocimiento del dominio y la relevancia para el problema en
+cuestión, antes de cualquier selección basada en técnicas de modelado o datos.
+Esto puede involucrar consultas con expertos en la materia para identificar qué
+características son importantes para predecir el resultado deseado.
+
+- **Agregaciones:** Sumarizar datos a un nivel superior, como convertir medidas
+diarias en medidas mensuales, o combinar categorías similares en una sola
+categoría para simplificar el análisis y el modelado posterior.
+
+- **Integración de Datos:** Combinar diferentes fuentes de datos en un solo
+conjunto de datos coherente que esté listo para el análisis. Esto podría
+incluir la fusión de tablas basadas en claves comunes, la unión de conjuntos de
+datos complementarios, o la consolidación de múltiples registros relacionados
+con la misma entidad.
+
+Estas tareas son cruciales para asegurar que los datos estén listos para las
+siguientes etapas del flujo de trabajo de machine learning, que incluirían el
+análisis exploratorio de datos (EDA), el preprocesamiento de datos (por
+ejemplo, normalización, codificación de variables categóricas, tratamiento de
+valores faltantes), y finalmente, el modelado.
