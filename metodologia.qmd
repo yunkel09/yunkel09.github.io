@@ -34,6 +34,8 @@ Se revisan indicadores provenientes de diversas fuentes, incluidas las
 estadísticas de red 2G, 3G y LTE almacenadas en el servidor Taishan de Huawei,
 así como datos de disponibilidad obtenidos de una herramienta llamada Tivoli.
 
+## Framework {#sec-framework}
+
 Un diagrama de trabajo fue realizado y se muestra en @fig-framework_dataflow.
 Este diagrama detalla el proceso de la metodología, desde las fuentes de
 información hasta los resultados obtenidos. A continuación, los procesos
@@ -43,7 +45,7 @@ mayor granularidad.
 ![Framework Data Flow](./imagenes/framework_dataflow.png){#fig-framework_dataflow}
 
 
-## Metodología de análisis
+## Metodología de análisis {#sec-met-analisis}
 
 Todo este trabajo fue realizado en la infraestructura de Aws Redshift para la
 obtención de los datos. Se utiliza Google Colab, R studio y SageMaker para la

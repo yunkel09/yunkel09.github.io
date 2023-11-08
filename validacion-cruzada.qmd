@@ -6,6 +6,7 @@ editor_options:
 # Validación Cruzada {#sec-validacion-cruzada}
 
 ```{r}
+#| echo: false
 source("_paquetesx.R")
 source("_configura.R")
 source("_variables.R")
@@ -17,12 +18,39 @@ ctl_split <- pin_read(board = tablero_ctl, name = "ctl_split")
 ```
 
 ```{r}
+#| echo: false
 ctl_train <- training(ctl_split)
 ```
+
+La validación cruzada es una técnica esencial en nuestro proyecto,
+especialmente debido a la presencia de clases desbalanceadas en nuestro
+conjunto de datos. Al utilizar la estratificación en un esquema de validación
+cruzada de 10 *folds*, garantizamos que cada pliegue mantenga la proporción
+original de las clases, lo cual es crucial para obtener una evaluación precisa
+del rendimiento del modelo.
+
+En contextos donde las clases están desbalanceadas, como en nuestro caso,
+modelos entrenados sin estratificación podrían sesgarse hacia las clases
+mayoritarias, ignorando efectivamente las minoritarias, que a menudo son de
+mayor interés. Esto podría llevar a un rendimiento aparentemente alto cuando se
+mide por métricas generales, pero pobre en lo que respecta a la detección de
+las clases menos representadas.
+
+Al aplicar la validación cruzada con estratificación, cada conjunto de
+entrenamiento y validación refleja la distribución de las clases del conjunto
+de datos completo. Esto no solo mejora la robustez y la generalización del
+modelo, sino que también asegura que nuestras métricas de rendimiento sean más
+representativas y confiables. Con 10 *folds*, aumentamos aún más la
+confiabilidad de nuestras estimaciones de rendimiento, ya que el modelo se
+evalúa en una variedad más amplia de subconjuntos de datos.
 
 
 ```{r}
 set.seed(2023)
 ctl_folds <- vfold_cv(ctl_train, strata = diag, v = 10)
+```
+
+```{r}
+ctl_folds
 ```
 

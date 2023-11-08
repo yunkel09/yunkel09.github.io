@@ -22,6 +22,7 @@ import::from(rlang,         expr)
 import::from(skimr,         skim, skim_with, sfl)
 import::from(lightgbm,      lgb.importance, lgb.plot.importance)
 import::from(cowplot,       .except = "stamp")
+import::from(ggforce,       geom_autodensity, facet_matrix)
 import::from(ggridges,      geom_density_ridges_gradient, theme_ridges)
 
 pacman::p_load(
@@ -32,12 +33,14 @@ pacman::p_load(
  inspectdf,
  corrr,
  paletteer,
- # themis,
+ themis,
  janitor,
  pins,
  gt,
  gtExtras,
- # colino,
+ finetune,
+ bonsai,
+ colino,
  # embed,
  # vip,
  tidymodels,

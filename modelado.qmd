@@ -2,6 +2,7 @@
 
 
 ```{r}
+#| echo: false
 source("_paquetesx.R")
 source("_configura.R")
 source("_variables.R")
@@ -9,28 +10,465 @@ source("_funciones.R")
 ```
 
 ```{r}
+#| echo: false
 ctl_split <- pin_read(board = tablero_ctl, name = "ctl_split")
+ctl_train <- training(ctl_split)
+ctl_validation_set <- validation_set(ctl_split)
 ```
+
+## Métricas
+
+Primeramente definiremos las métricas a utilizar. Estas se determinaron en la
+fase de EDA con base a la distribución de la variable respuesta y en especial
+del hecho de que no está balanceada.
+
+- **Precisión:** Esta métrica es importante cuando los costos de los falsos
+positivos son altos. En el contexto de nuestro proyecto, queremos asegurarnos
+de que las predicciones de las categorías de diagnóstico sean correctas y no
+queremos alarmar innecesariamente sobre posibles problemas que no existen.
+
+- **Recall (Sensibilidad):** El recall es crucial cuando es esencial detectar
+todos los casos positivos. Dado que nuestro proyecto podría estar relacionado
+con el mantenimiento predictivo, no queremos pasar por alto ninguna instancia
+que realmente pertenezca a una categoría de diagnóstico crítica.
+
+- **F1-Score Macro:** Esta métrica combina la precisión y el recall en un solo
+número, proporcionando un equilibrio entre ambos. Al usar el promedio macro,
+tratamos todas las clases por igual, dando el mismo peso a cada una, lo cual es
+importante en nuestro conjunto de datos desbalanceados. Esto asegura que no
+ignoramos el rendimiento en las clases minoritarias, que a menudo son las más
+importantes en aplicaciones de diagnóstico.
+
+- **ROC_AUC:** La curva ROC y el área bajo la curva (AUC) proporcionan una
+medida agregada del rendimiento en todos los umbrales de clasificación. Esto es
+particularmente útil cuando las clases son desbalanceadas y los costos de los
+falsos positivos y falsos negativos varían. El ROC_AUC es una medida de la
+capacidad del modelo para discriminar entre las clases positivas y negativas, y
+un valor alto indica que el modelo tiene una buena medida de separabilidad.
+
+```{r}
+mset <- metric_set(precision, recall, f_meas, roc_auc)
+```
+
+## Control de Hiperparámetros
+
+Debemos establecer la configuración de la búsqueda de hiperparámtros. Para este
+fin utilizaremos un método especial, el cual es más eficiente que el método
+tradicional. 
+
+```{r}
+race_ctrl <- control_race(
+ save_pred     = TRUE,
+ parallel_over = "everything",
+ verbose       = TRUE,
+ verbose_elim  = TRUE,
+ save_workflow = FALSE)
+```
+
+## Algoritmos
+
+Una de las fortalezas del framework Tidymodels es su capacidad para facilitar
+la evaluación simultánea de múltiples algoritmos y diversas estrategias de
+preprocesamiento. Esta flexibilidad es sumamente valiosa, ya que nos permite
+explorar una extensa gama de combinaciones en un único proceso de modelado.
+Idealmente, las recetas de preprocesamiento deberían ser personalizadas para
+cada algoritmo específico, optimizando así su rendimiento. No obstante, en la
+práctica, y siguiendo el principio del 'no free lunch theorem', es recomendable
+realizar pruebas exhaustivas y ajustes iterativos. Esto se debe a que no existe
+un único modelo o método que sea el mejor para todos los problemas y conjuntos
+de datos; la efectividad puede variar según la naturaleza específica de cada
+tarea de modelado.
+
+```{r}
+rand_forest_ranger <- rand_forest(
+ mtry  = tune(),
+ min_n = tune()) |>
+set_engine('ranger', importance = "permutation") |>
+set_mode('classification')
+
+bt_lightgbm <- boost_tree(
+ tree_depth = 2,
+ learn_rate = 0.001,
+ trees = tune(),
+ min_n = 20) |>
+set_engine(engine = "lightgbm") |>
+set_mode(mode = "classification")
+
+svm_linear_kernlab <- svm_linear(
+ cost = tune(),
+ margin = tune()) |>
+set_engine('kernlab') |>
+set_mode('classification')
+
+glmnet_spec <- multinom_reg(
+ penalty = tune(),
+ mixture = tune()) |>
+set_engine('glmnet') |>
+set_mode('classification')
+
+xgboost_spec <- boost_tree(
+ tree_depth     = 3,           
+ trees          = tune(),
+ learn_rate     = tune(),
+ min_n          = tune(),
+ loss_reduction = tune(),
+ sample_size    = tune(),
+ stop_iter      = tune()) |>
+set_engine('xgboost') |>
+set_mode('classification')
+
+decision_tree_partykit <- decision_tree() |>
+set_engine(engine = "partykit") |>
+set_mode(mode = "classification")
+
+nearest_neighbor_kknn_spec <- nearest_neighbor(
+ neighbors = tune(), 
+ weight_func = tune(), 
+ dist_power = tune()) |>
+set_engine('kknn') |>
+set_mode('classification')
+```
+
+Es importante notar que el *placeholder* `tune()` sirve para que ahí se
+evalué una cuadrícula de hiperparámetros.
+
+```{r}
+# lista de modelos
+modelos <- list(
+ rand_forest_ranger     = rand_forest_ranger,
+ bt_lightgbm            = bt_lightgbm,
+ svm_linear_kernlab     = svm_linear_kernlab,
+ glmnet                 = glmnet_spec,
+ xgboost                = xgboost_spec,
+ decision_tree_partykit = decision_tree_partykit,
+ knn                    = nearest_neighbor_kknn_spec)
+```
+
+## Preprocesamiento
+
+Crearemos 6 recetas de preprocesamiento, cada una con distintos pasos y filtros.
+En esta parte se aplican distintas técnicas de *feature selection* y de
+*feature scaling*.
+
+```{r}
+boruta_regular <-  recipe(diag ~ ., data = ctl_train) |>
+ update_role(user, new_role = "id") |> 
+ step_select_boruta(all_predictors(), outcome = "diag") |> 
+ step_smote(diag, skip = TRUE)
+ 
+infgain_regular_7 <- recipe(diag ~ ., data = ctl_train) |>
+ update_role(user, new_role = "id") |>
+ step_select_infgain(
+  all_predictors(),
+   outcome = "diag",
+   threshold = 0.7) |>
+ step_smote(diag, skip = TRUE)
+
+infgain_regular_9 <- recipe(diag ~ ., data = ctl_train) |>
+ update_role(user, new_role = "id") |>
+ step_select_infgain(
+  all_predictors(),
+   outcome = "diag",
+   threshold = 0.7) |>
+ step_smote(diag, skip = TRUE)
+
+infgain_regular_7_nzv <- recipe(diag ~ ., data = ctl_train) |>
+ update_role(user, new_role = "id") |>
+ step_zv(all_predictors()) |> 
+ step_nzv(all_predictors()) |> 
+ step_select_infgain(
+  all_predictors(),
+   outcome = "diag",
+   threshold = 0.7) |>
+ step_smote(diag, skip = TRUE)
+
+mrmr_regular_top20 <- recipe(diag ~ ., data = ctl_train) |>
+ update_role(user, new_role = "id") |>
+ step_select_mrmr(
+  all_predictors(),
+   outcome = "class",
+   top_p = 20) |> 
+ step_smote(diag, skip = TRUE)
+
+infgain_norm_7 <- recipe(diag ~ ., data = ctl_train) |>
+ update_role(user, new_role = "id") |>
+ step_orderNorm(all_numeric_predictors()) |>
+ step_normalize(all_numeric_predictors()) |>
+ step_select_infgain(
+  all_predictors(),
+   outcome = "diag",
+   threshold = 0.7) |>
+ step_smote(diag, skip = TRUE)
+```
+
+```{r}
+recetas <- list(
+ boruta_regular        = boruta_regular,
+ infgain_regular_7     = infgain_regular_7,
+ infgain_regular_9     = infgain_regular_9,
+ infgain_regular_7_nzv = infgain_regular_7_nzv,
+ mrmr_regular_top20    = mrmr_regular_top20,
+ infgain_norm_7        = infgain_norm_7)
+```
+
+## Workflow Set
+
+```{r}
+#| echo: false
+final_tune <- pin_read(board = tablero_ctl, name = "final_tune")
+final_val  <- pin_read(board = tablero_ctl, name = "final_val")
+final_test <- pin_read(board = tablero_ctl, name = "final_test")
+
+bm <- final_tune |> pull(wflow_id)
+```
+
+
+Una vez que hemos definido los motores (algoritmos) a probar junto con las
+distintas recetas de preprocesamiento, procederemos a juntar todo dentro de
+un `workflow_set`. 
+
+```{r}
+ctl_set <- workflow_set(preproc = recetas, models  = modelos)
+ctl_set |> print(n = Inf)
+```
+
+Podemos observar que todos los algoritmos se combinaron con todas las recetas
+de preprocesamiento. En total hay `r nrow(ctl_set)` combinaciones.
+
+## Ajustar
+
+```{r}
+#| eval: false
+cl <- makePSOCKcluster(10)    # <1>
+registerDoParallel(cl)        # <1>
+
+final_tune <- ctl_set |>
+ workflow_map(
+ fn        = "tune_race_anova",     # <2> 
+ verbose   = TRUE,           # <3>
+ resamples = ctl_folds,      # <4>
+ control   = race_ctrl,      # <5>
+ seed      = 2023,           # <6>
+ metrics   = mset,           # <7>
+ grid      = 20)             # <8>
+
+stopCluster(cl)              # <9>
+unregister()                 # <9>
+```
+
+1. Habilitar el backend para procesamiento paralelo haciendo uso de 10 nucleos
+físicos del CPU.
+2. Utilizar el método de tipo "race" el cual realiza un modelo ANOVA para
+probar la significancia estadística de las diferentes configuraciones del
+modelo (ver [Racing Methods](https://bit.ly/465ErTQ)).
+3. Establecer que se muestre el avance en el ajuste.
+4. Utilizar los pliegos definidos con validación cruzada.
+5. Utilizar la configuración de búsqueda de hiperparámetros del método "race".
+6. Definir semilla.
+7. Establecer métricas a calcular.
+8. Tamaño de la cuadricula de búsqueda de hiperparámetros.
+9. Detener el backend de parelelización.
+
+```{r}
+metricas_training <- final_tune |>
+ rank_results(select_best = TRUE, rank_metric = "f_meas") |>
+ select(modelo = wflow_id, .metric, mean, rank) |>
+ pivot_wider(names_from = .metric, values_from = mean) |>
+ select(modelo, f1_tr = f_meas, prec_tr = precision,
+ rec_tr = recall)
+```
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.65
+#| label: fig-rank-metric
+#| fig-cap: Rank Metrics
+#| warning: false
+final_tune |>
+ autoplot(rank_metric = "f_meas", metric = "f_meas", select_best = TRUE) +
+ ylab("f1-score") +
+ xlab("Modelos") +
+ labs(title = "Combinaciones de modelos y preprocesamiento") +
+ theme(
+ plot.title  = element_text(size = 30),
+ legend.position = "bottom",
+ legend.text = element_text(size = 30),
+ axis.title  = element_text(size = 25),
+ axis.text   = element_text(size = 20))
+```
+
+En la figura @fig-rank-metric se observan los resultados del entrenamiento y
+una comparación con intervalos de confianza de cada modelo ajustado.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Mostrar Código"
+#| label: tbl-metricas-training
+#| tbl-cap: "Resultados entrenamiento"
+metricas_training |> 
+ gt() |> 
+ tab_header(
+    title = md("**Resultados con Conjunto de Entrenamiento**"),
+    subtitle = md("Modelos sin sobreajuste")
+  ) |> 
+ gt_theme_538() |> 
+ cols_label(
+    f1_tr = md("**F1-Score**"),
+    prec_tr = md("**Precisión**"),
+    rec_tr = md("**Recall**"),
+  ) |> 
+ data_color(
+    columns = where(~ is.numeric(.x)),
+    method = "numeric",
+    palette = "RdYlGn", 
+    reverse = FALSE) |> 
+ fmt_number(columns = where(~ is.numeric(.x)), decimals = 4) |> 
+ cols_align_decimal() |> 
+ cols_align(align = "center", columns = where(~ is.numeric(.x)))
+```
+
+Posterior a la revisión de los resultados con los datos de entrenamiento con
+validación cruzada, procedemos a evaluar los modelos contra el conjunto de
+entrenamiento.
+
+Lo que haremos primero será extraer el nombre de todos los "workflows" y luego
+extraer los mejores modelos ajustados con validación cruzada. Por mejores se
+entiende que es la combinación de hipearparámetros que resultó en el f1-score
+más alto.
+
+```{r}
+#| eval: false
+best <- metricas_training |> pull(modelo) %>% set_names(.)
+
+# Seleccionar los modelos con los hiperparámetros que generaron el f1-score
+# más alto.
+lista_mejores <- best |>
+ map(~ tune_res |> extract_workflow_set_result(id = .x) |>
+ select_best(metric = "f_meas"))
+```
+
+En la sección @sec-division mencionamos la necesidad de crear un conjunto de
+validación para usarlo con la función `last_fit()`.  Es en este punto donde
+se utiliza el conjunto de validación, el cual se encuentra encapsulado en un
+objeto de tipo `validation_set` que es con lo que puede trabjar la función
+`last_fit()`.  
+
+Recordemos primero el contenido de `ctl_split`, el cual definimos en la
+sección @sec-division
 
 ```{r}
 ctl_split
 ```
 
+El conjunto de validación es el conjunto de entrenamiento y el conjunto de
+validación:
 
-## Métricas
+```{r}
+ctl_validation_set
+```
+
+Lo que haremos a continuación será usar los mejores modelos obtenidos en el
+entrenamiento con validación cruzada y comprobarlos contra el conjunto de
+validación.  Esta tarea en realidad se realizó durante muchas veces, siguiendo
+la metodología descrita en la sección @sec-met-analisis, iterando hasta
+obtener los hiperparámetros que no generaban sobreajuste.
+
+```{r}
+#| eval: false
+final_val <- map2(
+ .x = best,
+ .y = lista_mejores, ~ tune_res %>%
+ extract_workflow(id = .x) %>%
+ finalize_workflow(.y) %>%
+ last_fit(split = ctl_validation_set$splits[[1]], metrics = mset))
+```
+
+```{r}
+metricas_validation <- final_val %>%
+ map_dfr(~ collect_metrics(.x), .id = "modelo") %>%
+ select(-.estimator) |>
+ pivot_wider(names_from = .metric, values_from = .estimate) |>
+ select(modelo, f1_val = f_meas, prec_val = precision, 
+ rec_val = recall, roc_auc)
+```
+
+Debido a que es más eficiente realizar de una vez la comparación de las
+métricas obtenidas en entrenamiento contra validación, no presentaremos los
+resultados de entrenamiento por separado, sino que crearemos un dataframe que
+contenga la comparación.
+
+```{r}
+comparacion <- metricas_training |>
+  left_join(metricas_validation, join_by(modelo)) |>
+  select(-roc_auc) |>
+  relocate(modelo,
+           f1_tr,
+           f1_val,
+           rec_tr,
+           rec_val,
+           prec_tr,
+           prec_val) |>
+  arrange(-f1_val)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Mostrar Código"
+#| label: tbl-comparacion
+#| tbl-cap: "Evaluación"
+comparacion |> 
+ gt() |> 
+ tab_header(
+    title = md("**Evaluación de los modelos**"),
+    subtitle = md("Modelos sin sobreajuste")
+  ) |> 
+ gt_theme_538() |> 
+ # cols_label(
+ #    f1_tr = md("**F1-Score**"),
+ #    prec_tr = md("**Precisión**"),
+ #    rec_tr = md("**Recall**"),
+ #  ) |> 
+ data_color(
+    columns = where(~ is.numeric(.x)),
+    method = "numeric",
+    palette = "RdYlGn", 
+    reverse = FALSE) |> 
+    # domain = c(31, 35)
+  # )
+ fmt_number(columns = where(~ is.numeric(.x)), decimals = 4) |> 
+ cols_align_decimal() |> 
+ cols_align(align = "center", columns = where(~ is.numeric(.x)))
+```
 
 
 
 
-## Control de Hiperparámetros
-
-## Algoritmos
 
 
-## Preprocesamiento
 
 
-## Workflow Set
 
-## Ajustar
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

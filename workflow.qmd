@@ -1,6 +1,32 @@
 # Workflow {#sec-workflow}
 
+Siguiendo el framework establecido en la sección @sec-framework, el siguiente
+paso es construir el flujo de trabajo.  En este apartado es importante notar
+las diferencias con otros frameworks, como por ejemplo los pipelines en Python.
 
+Tomemos como ejemplo la aplicación de PCA. En la figura @fig-bad-workflow 
+vemos que PCA se considera un paso externo al workflow.
 
+![Modelo Incorrecto](./imagenes/bad-workflow.svg){#fig-bad-workflow}
 
+Sin embargo, en este framework, la aplicación de PCA si forma parte del
+workflow a como se ve en la figura @fig-proper-workflow.
 
+![Modelo Correcto](./imagenes/proper-workflow.svg){#fig-proper-workflow}
+
+En el apartado del modelado veremos como esta integración contrasta con la
+posición en que se colocó en el diagrama de la figura @fig-framework_dataflow.
+
+::: {.callout-warning}
+#### Advertencia
+En la Figura @fig-framework_dataflow, la etapa de preprocesamiento se ha
+integrado dentro del módulo de Data Preparation. Aunque esto podría parecer
+inusual, se tomó esta decisión siguiendo la recomendación de nuestro asesor,
+quien sugirió que se alinee con la comprensión común y las prácticas
+establecidas por la mayoría de los lectores potenciales. Esta convención es
+común en otros entornos y frameworks, como los pipelines de scikit-learn, donde
+el preprocesamiento a menudo se conceptualiza y se ejecuta como una operación
+separada y preliminar, tal como se ilustra en la Figura @fig-bad-workflow.
+Nuestro enfoque busca armonizar con estas normas establecidas para facilitar la
+comprensión y la adopción de nuestro flujo de trabajo propuesto
+:::

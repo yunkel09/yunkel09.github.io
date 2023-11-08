@@ -12,6 +12,7 @@ source("_funciones.R")
 #| echo: false
 ctl_split <- pin_read(board = tablero_ctl, name = "ctl_split")
 ctl_train <- training(ctl_split)
+ctl_validation_set <- validation_set(ctl_split)
 ```
 
 ## Estructura
@@ -178,7 +179,6 @@ mi <- information_gain(
 #| label: fig-mutual-information
 #| fig-cap: Information Gain
 #| warning: false
-#| column: page
 mi |> 
  slice_head(n = 20) |> 
  mutate(feature = fct_reorder(attributes, importance, .desc = FALSE)) |> 
@@ -764,7 +764,7 @@ plot(
                 strip = list(factor.names = FALSE)))
 ```
 
-### Análisis de correlación
+### Análisis de correlación {#sec-correlacion}
 
 Se debe realizar la inspección de las correlaciones que se encuentren arriba
 de 0.75 en valor absoluto.  Este umbral es sugerido por algunos autores
@@ -822,27 +822,69 @@ corm |>
 
 ### K-means
 
+El análisis de clústeres, y en particular el método k-means, es una técnica
+poderosa para evaluar la relevancia de las variables seleccionadas mediante el
+cálculo de la información mutua o ganancia de información. Este método nos
+ayuda a comprender si las variables seleccionadas tienen un fuerte efecto
+principal, es decir, si cada variable por sí sola tiene un impacto
+significativo en la formación de los grupos, sin necesariamente depender de
+interacciones complejas con otras variables.
+
+Si al aplicar k-means encontramos que los clústeres se forman de manera
+coherente y significativa alrededor de estas variables, podemos inferir que son
+predictores fuertes y que su inclusión en un modelo predictivo podría mejorar
+su rendimiento. Esto es especialmente útil cuando queremos incorporar variables
+de manera gradual en un enfoque de selección de características paso a paso
+(stepwise feature selection). En este proceso, añadimos o eliminamos
+predictores basándonos en criterios estadísticos, buscando optimizar algún
+criterio de selección como el AIC (Criterio de Información de Akaike) o el BIC
+(Criterio de Información Bayesiano).
+
+Por lo tanto, si las variables seleccionadas demuestran ser relevantes en el
+análisis de clústeres con k-means, esto nos proporciona una validación
+adicional de su importancia y nos da la confianza para incluirlas en el modelo.
+Esto nos permite realizar una selección de características más informada y
+metódica, asegurándonos de que cada variable que incluimos contribuye
+significativamente a la capacidad predictiva del modelo.
+
+En resumen, el uso de k-means en conjunto con la ganancia de información nos
+ofrece una estrategia robusta para identificar las variables más prometedoras
+para nuestros modelos predictivos, permitiéndonos construir modelos más
+precisos y eficientes.
+
+El primer paso es cargar algunas librerías de apoyo para realizar el análisis.
+
 ```{r}
 import::from(clustertend, hopkins)
-import::from(factoextra, fviz_dist, fviz_cluster)
+import::from(factoextra, fviz_nbclust, fviz_cluster)
 import::from(NbClust, NbClust)
 import::from(clValid, clValid, optimalScores)
 ```
 
+Elegiremos únicamente aquellas variables que tienen más información predictiva
+y que podrían ayudar a realizar de manera correcta la separación de clases.
 
 ```{r}
 ctl_scaled <- ctl_train |> 
- select(diag, all_of(predictores))
- select(diag, where(is.numeric), -user) |> 
- relocate(diag) |> 
+ select(diag, all_of(predictores)) |> 
  recipe(diag ~ ., data = _) |> 
  step_zv(all_predictors()) |> 
- step_nzv(all_predictors(), unique_cut = 2) |> 
+ # step_nzv(all_predictors(), unique_cut = 2) |> 
  step_center(all_numeric()) |> 
  step_scale(all_numeric()) |> 
- ver() |> 
+ step_smote(diag) |> 
+ ver()
+```
+
+Realizaremos una prueba con las las categorías que tienden a tener mayor
+separación en sus métricas.
+
+```{r}
+ctl_sd <- ctl_scaled |> 
+ filter(diag %in% c("COBERTURA", "CAPACIDAD", "DISPONIBILIDAD")) |> 
  select(-diag)
 ```
+
 
 ```{r}
 #| echo: false
@@ -872,10 +914,10 @@ ordenados.
 ```{r}
 kclusts <- tibble(k = 1:9) |> 
  mutate(
-  kclust    = map(k, ~kmeans(ctl_scaled, .x)),
+  kclust    = map(k, ~kmeans(ctl_sd, .x)),
   tidied    = map(kclust, tidy),
   glanced   = map(kclust, glance),
-  augmented = map(kclust, augment, ctl_scaled)
+  augmented = map(kclust, augment, ctl_sd)
  )
 ```
 
@@ -902,25 +944,176 @@ Ahora podemos graficar los puntos originales utilizando la data de `augment()`
 con cada punto coloreado de acuerdo al cluster predicho
 
 ```{r}
-p1 <- ggplot(assignments, aes(x = thp_median, y = lod_median)) +
-  geom_point(aes(color = .cluster), alpha = 0.8) + 
-  facet_wrap(~ k)
-p1
+#| fig-width: 10
+#| fig-asp: 0.6
+#| label: fig-cluster
+#| fig-cap: K-Means Clustering
+#| warning: false
+assignments |> 
+ ggplot(aes(x = tad_max, y = thp_max)) +
+ geom_point(aes(color = .cluster), alpha = 0.8) + 
+ geom_point(data = clusters, size = 10, shape = "x") +
+ facet_wrap(~ k)
 ```
 
+Visualmente observamos en la figura @fig-cluster que la mejor separación de
+clases se logra con tres clusters.
+
+A continuación podemos utilizar la función `fviz_nbclust()` del paquete
+factoextra para evaluar por medio del método "silhouette" cuál es la cantidad
+óptima de clusters.
 
 ```{r}
+#| fig-width: 10
+#| fig-asp: 0.6
+#| label: fig-optim-cluster
+#| fig-cap: Cantidad óptimda de clusters
+#| warning: false
+fviz_nbclust(ctl_sd, kmeans, method = "silhouette")
+```
+
+En la figura @fig-optim-cluster se comprueba que la cantidad óptima son tres
+grupos.
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.6
+#| label: fig-elbow
+#| fig-cap: Cantidad óptimda de clusters
+#| warning: false
 ggplot(clusterings, aes(k, tot.withinss)) +
   geom_line() +
   geom_point()
 ```
 
+Nuevamente en la figura @fig-elbow comprobamos por el método elbow que tres
+es el número adecuado de grupos.
+
+Una vez que hemos validado los grupos, podemos realizar el ajuste nuevamente
+con la cantidad de clusters para poder graficar adecuadamente.
+
+```{r}
+kclust <- kmeans(ctl_sd, centers = 3)
+```
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.6
+#| label: fig-kmeans
+#| fig-cap: Separación óptima de clases
+#| warning: false
+fviz_cluster(kclust, ctl_sd, ellipse.type = "norm") +
+ yunkel
+```
+
+Vemos que, dejando de lado algunas excepciones, las categorías presentan una
+separación apreciable, sin embargo, hay un cierto solapamiento en las métricas
+de algunas clases.
+
+### PCA
+
+En la sección de análisis de correlación (@sec-correlacion), notamos una alta
+correlación entre muchas de las estadísticas descriptivas utilizadas para
+colapsar el dataset. Esto podría deberse a varias razones. Por ejemplo, las
+métricas de rendimiento en telecomunicaciones a menudo están interconectadas;
+un cambio en una métrica puede influir directamente en otra, como la relación
+entre la calidad de la señal y la tasa de error de bits. Además, la naturaleza
+de los datos recopilados en intervalos regulares puede llevar a redundancias,
+donde las medidas repetidas reflejan la misma variabilidad subyacente.
+
+El PCA, como técnica de extracción de características, es particularmente útil
+en este contexto de alta multicolinealidad. Al transformar las variables
+originales en un nuevo conjunto de variables ortogonales (las componentes
+principales), PCA nos permite capturar la mayor parte de la variabilidad en los
+datos con menos predictores. Esto no solo ayuda a aliviar los problemas
+asociados con predictores correlacionados sino que también simplifica el modelo
+al reducir la cantidad de variables, lo cual es crucial para evitar el
+sobreajuste y mejorar la interpretación del modelo.
+
+Además, al aplicar PCA en la fase de preprocesamiento, podemos evaluar la
+idoneidad de esta técnica para reducir la dimensionalidad antes de proceder al
+modelado predictivo. Si las primeras componentes principales capturan una
+cantidad significativa de la variabilidad total, esto indica que PCA podría ser
+una estrategia efectiva para condensar la información sin perder insights
+críticos. Esto es especialmente relevante en nuestro proyecto CTL, donde la
+eficiencia y la claridad en la interpretación de los modelos son de suma
+importancia para la toma de decisiones basada en datos.
+
+```{r}
+ctl_validacion  <- validation(ctl_split)
+```
+
+```{r}
+ctl_num <- ctl_train |> select(diag, where(is.numeric), -user)
+ctl_rec <- recipe(diag ~ ., data = ctl_num) |>
+ step_zv(all_numeric_predictors()) |>
+ step_orderNorm(all_numeric_predictors()) |>
+ step_normalize(all_numeric_predictors())
+```
+
+```{r}
+ctl_trained <- prep(ctl_rec)
+```
 
 
+```{r}
+plot_validation_results <- function(recipe, dat = ctl_validacion) {
+ recipe |> 
+ prep() |> 
+ bake(new_data = dat) |> 
+ ggplot(aes(x = .panel_x, y = .panel_y, color = diag, fill = diag)) +
+ geom_point(alpha = 0.8, size = 1) +
+ geom_autodensity(alpha = .3) +
+ facet_matrix(vars(-diag), layer.diag = 2) +
+ scale_color_brewer(palette = "Dark2") +
+ scale_fill_brewer(palette = "Dark2") +
+ drako
+}
+```
 
 
+```{r}
+#| fig-width: 11
+#| fig-asp: 0.8
+#| label: fig-pca
+#| fig-cap: Análisis de Componentes Principales
+#| warning: false
+ctl_trained %>%
+  step_pca(all_numeric_predictors(), num_comp = 4) %>%
+  plot_validation_results() +
+  ggtitle("Principal Component Analysis") +
+  theme(legend.position = "bottom", 
+        legend.text = element_text(size = 25),
+        strip.text = element_text(size = 25))
+```
 
+La visualización resultante del PCA, presentada en la Figura @fig-pca, no
+revela una distinción nítida entre las diferentes clases de diagnóstico. Los
+dos primeros componentes principales, PC1 y PC2, no logran capturar una
+separación definida entre las categorías. Esto puede ser indicativo de que las
+variables seleccionadas están influidas por una variabilidad común que no
+distingue adecuadamente entre las clases, o que las interacciones entre
+variables son complejas y no lineales, lo que el PCA, siendo un método lineal,
+no puede determinar.
 
+Es interesante notar que la clase 'disponibilidad' se distingue ligeramente de
+las demás, lo cual es coherente con la naturaleza de sus métricas, que tienden
+a tener un rango de valores más restringido y específico. Esto sugiere que las
+métricas de 'disponibilidad' podrían estar operando en un espacio de
+características distintas o estar menos correlacionadas con las métricas de
+otras clases.
 
+La superposición observada en las clases podría también reflejar la presencia
+de patrones subyacentes complejos que requieren métodos más sofisticados para
+su identificación y separación. Alternativamente, podría ser un indicativo de
+que se necesitan más componentes para capturar la variabilidad relevante para
+la diferenciación de clases, o que otras técnicas de reducción de
+dimensionalidad, como el t-SNE o el UMAP, que son capaces de capturar
+estructuras no lineales, podrían ser más adecuadas para este conjunto de
+datos.
 
+En resumen, los resultados del PCA nos instan a considerar la posibilidad de
+explorar otras técnicas de preprocesamiento y modelado que puedan manejar la
+complejidad inherente a nuestros datos y, por ende, mejorar la separación de
+clases para fines de diagnóstico en el proyecto CTL
 
