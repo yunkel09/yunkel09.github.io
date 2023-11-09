@@ -3,21 +3,21 @@
 ## Justificación
 
 En un entorno donde los consumidores tienen más opciones que nunca, las
-empresas como Tigo Guatemala enfrentan el reto de ofrecer no solo un servicio
+empresas como DSF Nicaragura enfrentan el reto de ofrecer no solo un servicio
 de alta calidad sino también una experiencia de usuario excepcional. Este
 estudio se centra en aplicar modelos de aprendizaje automático para identificar
-a los usuarios detractores de la red móvil de Tigo Guatemala en la unidad de
+a los usuarios detractores de la red móvil de DSF Nicaragua en la unidad de
 negocio B2C y diagnosticar las causas de su insatisfacción.
 
 La experiencia del usuario se ha convertido en un pilar crucial para las
 empresas en la actualidad. Mariano Alonso, director de *Customer Experience* en
-Millicom, subraya la importancia de cada interacción con el cliente en cada
+DSF, subraya la importancia de cada interacción con el cliente en cada
 punto de contacto. La tecnología nos permite capturar y analizar estas
 interacciones, lo cual no solo mejora la experiencia del cliente, sino que
 también tiene el potencial de aumentar los ingresos para la empresa.
 
 Además, este proyecto tiene objetivos estratégicos claros. Primero, busca
-determinar en qué sitios se debe invertir en capex para infraestructura y
+determinar en qué sitios se debe invertir en CaPex para infraestructura y
 mejoras de red con el fin de elevar el CX. Esto es crucial para construir y
 solidificar la marca. Segundo, en un mercado competitivo donde nuestro
 principal competidor está cerca de alcanzar nuestro *market share*, reducir el
@@ -33,7 +33,7 @@ a las nuevas realidades del negocio. [@kuhn_feature_2020]
 
 1. Desarrollar un modelo de machine learning de clasificación
 multinomial para automatizar la clasificación de detractores de red móvil en
-Tigo Guatemala.
+DSF Nicaragua.
 
 ### Específicos
 
@@ -52,11 +52,11 @@ técnicos.
 ## Hipótesis
 
 1. La implementación de modelos de machine learning puede automatizar de
-manera efectiva la clasificación de detractores de red móvil en Tigo Guatemala.
+manera efectiva la clasificación de detractores de red móvil en DSF Nicaragua.
 
 2. La información derivada de la clasificación automatizada de detractores
 de red móvil puede ser utilizada para priorizar acciones de mejora en la red
-de Tigo Guatemala, resultando en una mejora cuantificable en indicadores
+de DSF Nicaragua, resultando en una mejora cuantificable en indicadores
 clave de rendimiento (KPIs).
 
 

@@ -16,7 +16,9 @@ diag_00 <- read_csv(diag_f, col_types = cols_diag)
 ```
 
 ```{r}
-diag_00 |> glimpse(width = 75)
+diag_00 |>
+ select(-msisdn_dd) |> 
+ glimpse(width = 75)
 ```
 
 En el apéndice [-@sec-glosario] se pueden revisar el significado de cada
@@ -29,7 +31,9 @@ hourly_metrics_raw <- read_fst(path = metr_f) |> as_tibble()
 ```
 
 ```{r}
-hourly_metrics_raw |> glimpse(width = 75)
+hourly_metrics_raw |>
+ select(-msisdn_dd) |> 
+ glimpse(width = 75)
 ```
 
 Se aprecian los nombres originales de los atributos.

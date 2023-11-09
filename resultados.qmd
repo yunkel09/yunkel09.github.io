@@ -1,1 +1,546 @@
 # Resultados {#sec-resultados}
+
+Una vez que hemos entrenado el modelo con validación cruzada, el siguiente
+paso es extraer las métricas resultantes para el análisis del error.
+
+```{r}
+#| echo: false
+source("_paquetesx.R")
+source("_configura.R")
+source("_variables.R")
+source("_funciones.R")
+```
+
+```{r}
+#| echo: false
+ctl_split <- pin_read(board = tablero_ctl, name = "ctl_split")
+ctl_train <- training(ctl_split)
+ctl_validation_set <- validation_set(ctl_split)
+```
+
+```{r}
+#| echo: false
+final_tune <- pin_read(board = tablero_ctl, name = "final_tune")
+final_val  <- pin_read(board = tablero_ctl, name = "final_val")
+final_test <- pin_read(board = tablero_ctl, name = "final_test")
+bm <- final_tune |> pull(wflow_id)
+```
+
+## Rendimiento en entrenamiento
+
+```{r}
+metricas_training <- final_tune |>
+ rank_results(select_best = TRUE, rank_metric = "f_meas") |>
+ select(modelo = wflow_id, .metric, mean, rank) |>
+ pivot_wider(names_from = .metric, values_from = mean) |>
+ select(modelo, f1_tr = f_meas, prec_tr = precision,
+ rec_tr = recall)
+```
+
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.65
+#| label: fig-rank-metric
+#| fig-cap: Rank Metrics
+#| warning: false
+final_tune |>
+ autoplot(rank_metric = "f_meas", metric = "f_meas", select_best = TRUE) +
+ ylab("f1-score") +
+ xlab("Modelos") +
+ labs(title = "Combinaciones de modelos y preprocesamiento") +
+ theme(
+ plot.title  = element_text(size = 30),
+ legend.position = "bottom",
+ legend.text = element_text(size = 30),
+ axis.title  = element_text(size = 25),
+ axis.text   = element_text(size = 20))
+```
+
+En la figura @fig-rank-metric se observan los resultados del entrenamiento y
+una comparación con intervalos de confianza de cada modelo ajustado.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Mostrar Código"
+#| label: tbl-metricas-training
+#| tbl-cap: "Resultados entrenamiento"
+metricas_training |> 
+ gt() |> 
+ tab_header(
+    title = md("**Resultados con Conjunto de Entrenamiento**"),
+    subtitle = md("Modelos sin sobreajuste")
+  ) |> 
+ gt_theme_538() |> 
+ cols_label(
+    f1_tr = md("**F1-Score**"),
+    prec_tr = md("**Precisión**"),
+    rec_tr = md("**Recall**"),
+  ) |> 
+ data_color(
+    columns = where(~ is.numeric(.x)),
+    method = "numeric",
+    palette = "RdYlGn", 
+    reverse = FALSE) |> 
+ fmt_number(columns = where(~ is.numeric(.x)), decimals = 4) |> 
+ cols_align_decimal() |> 
+ cols_align(align = "center", columns = where(~ is.numeric(.x)))
+```
+
+Posterior a la revisión de los resultados con los datos de entrenamiento con
+validación cruzada, procedemos a evaluar los modelos contra el conjunto de
+validación.
+
+Lo que haremos primero será extraer el nombre de todos los "workflows" y luego
+extraer los mejores modelos ajustados con validación cruzada. Por mejores se
+entiende que es la combinación de hiperparámetros que resultó en el f1-score
+más alto.
+
+```{r}
+#| eval: false
+best <- metricas_training |> pull(modelo) %>% set_names(.)
+
+# Seleccionar los modelos con los hiperparámetros que generaron el f1-score
+# más alto.
+lista_mejores <- best |>
+ map(~ tune_res |> extract_workflow_set_result(id = .x) |>
+ select_best(metric = "f_meas"))
+```
+
+En la sección @sec-division mencionamos la necesidad de crear un conjunto de
+validación para usarlo con la función `last_fit()`.  Es en este punto donde
+se utiliza el conjunto de validación, el cual se encuentra encapsulado en un
+objeto de tipo `validation_set` que es con lo que puede trabjar la función
+`last_fit()`.  
+
+Recordemos primero el contenido de `ctl_split`, el cual definimos en la
+sección @sec-division
+
+```{r}
+ctl_split
+```
+
+El conjunto de validación es el conjunto de entrenamiento y el conjunto de
+validación:
+
+```{r}
+ctl_validation_set
+```
+
+Lo que haremos a continuación será usar los mejores modelos obtenidos en el
+entrenamiento con validación cruzada y comprobarlos contra el conjunto de
+validación.  Esta tarea en realidad se realizó durante muchas veces, siguiendo
+la metodología descrita en la sección @sec-met-analisis, iterando hasta
+obtener los hiperparámetros que no generaban sobreajuste.
+
+```{r}
+#| eval: false
+final_val <- map2(
+ .x = best,
+ .y = lista_mejores, ~ tune_res %>%
+ extract_workflow(id = .x) %>%
+ finalize_workflow(.y) %>%
+ last_fit(split = ctl_validation_set$splits[[1]], metrics = mset))
+```
+
+```{r}
+metricas_validation <- final_val %>%
+ map_dfr(~ collect_metrics(.x), .id = "modelo") %>%
+ select(-.estimator) |>
+ pivot_wider(names_from = .metric, values_from = .estimate) |>
+ select(modelo, f1_val = f_meas, prec_val = precision, 
+ rec_val = recall, roc_auc)
+```
+
+Debido a que es más eficiente realizar de una vez la comparación de las
+métricas obtenidas en entrenamiento contra validación, no presentaremos los
+resultados de entrenamiento por separado, sino que crearemos un dataframe que
+contenga la comparación.
+
+```{r}
+comparacion <- metricas_training |>
+  left_join(metricas_validation, join_by(modelo)) |>
+  select(-roc_auc) |>
+  relocate(modelo,
+           f1_tr,
+           f1_val,
+           rec_tr,
+           rec_val,
+           prec_tr,
+           prec_val) |>
+  arrange(-f1_val)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Mostrar Código"
+#| label: tbl-comparacion
+#| tbl-cap: "Evaluación"
+comparacion |> 
+ gt() |> 
+ tab_header(
+    title = md("**Evaluación con Conjunto de Validación**"),
+    subtitle = md("Filtrado solo modelos sin sobreajuste")
+  ) |> 
+ gt_theme_538() |> 
+ data_color(
+    columns = where(~ is.numeric(.x)),
+    method = "numeric",
+    palette = "RdYlGn", 
+    reverse = FALSE) |> 
+ fmt_number(columns = where(~ is.numeric(.x)), decimals = 4) |> 
+ cols_align_decimal() |> 
+ cols_align(align = "center", columns = where(~ is.numeric(.x)))
+```
+
+En la tabla @tbl-comparacion se aprecia que ninguno de los modelos presenta
+sobreajuste.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Mostrar Código"
+#| label: tbl-roc
+#| tbl-cap: "ROC-AUC"
+metricas_training |>
+ left_join(metricas_validation, join_by(modelo)) |>
+ slice(1:5) |>
+ select(modelo, roc_auc) |>
+ arrange(-roc_auc) |> 
+ gt() |> 
+ gt_theme_538() |>
+ tab_header(
+    title = md("**Evaluación del ROC-AUC**"),
+    subtitle = md("Top 5 Modelos")
+  ) |> 
+ fmt_number(columns = where(~ is.numeric(.x)), decimals = 4) |> 
+ data_color(
+    columns = where(~ is.numeric(.x)),
+    method = "numeric",
+    palette = "RdYlGn", 
+    reverse = FALSE)
+```
+
+## Selección de modelos
+
+Escogeremos los primeros tres modelos para que puedan competir usando el
+dataset de prueba.
+
+```{r}
+mejorcitos <- comparacion |>
+  slice_max(f1_val, n = 3) |>
+  pull(modelo)
+
+lista_mejores <- mejorcitos %>%
+  map(~ final_tune %>% extract_workflow_set_result(id = .x) %>%
+  select_best(metric = "f_meas")) |>
+  set_names(mejorcitos)
+```
+
+En esta ocasión utilizaremos el objeto `ctl_split` y le diremos que haga un
+último ajuste (`last_fit`), pero en esta ocasión usando únicamente los tres
+mejores modelos que resultaron en el conjunto de validación y, adicionalmente
+que entrene estos modelos con esa combinación específica de hiperparámetros,
+utilizando tanto los datos de entrenamiento como los datos de validación. Para
+lograr esto agregamos el parámetro `add_validation_set = TRUE`.
+
+```{r}
+#| eval: false
+final_test <- map2(
+ .x = mejorcitos,
+ .y = lista_mejores,
+ ~ tune_res |>
+ extract_workflow(id = .x) |>
+ finalize_workflow(.y) |>
+ last_fit(split = ctl_split, metrics = mset, add_validation_set = TRUE))
+```
+
+```{r}
+metricas_test <- final_test |> 
+ map_dfr(~ collect_metrics(.x), .id = "modelo") |> 
+ select(-.estimator) |>
+ pivot_wider(names_from = .metric, values_from = .estimate) |> 
+ select(modelo, f1_test = f_meas, prec_test = precision,
+ rec_test = recall, roc_auc) |>
+ mutate(modelo = mejorcitos)
+```
+
+```{r}
+comparacion_final <- metricas_training |>
+ inner_join(metricas_test, join_by(modelo)) |>
+ relocate(
+  modelo,
+  f1_tr,
+  f1_test,
+  rec_tr,
+  rec_test,
+  prec_tr,
+  prec_test
+  ) |>
+ arrange(-f1_test)
+```
+
+
+```{r}
+#| code-fold: true
+#| code-summary: "Mostrar Código"
+#| label: tbl-ajuste-final
+#| tbl-cap: "test"
+#| column: page
+comparacion_final |> 
+ gt() |> 
+ gt_theme_538() |> 
+ tab_header(
+    title = md("**Evaluación final con datos de prueba**"),
+    subtitle = md("Top 3 Modelos")
+  ) |> 
+ fmt_number(columns = where(~ is.numeric(.x)), decimals = 4) |> 
+ data_color(
+    columns = where(~ is.numeric(.x)),
+    method = "numeric",
+    palette = "RdYlGn", 
+    reverse = FALSE)
+```
+
+Los resultados de la tabla @tbl-ajuste-final indican que el primer candidato
+presentó un ligero sobreajuste en la precisión.  Los dos modelos restantes no
+presentan sobreajuste.  Seleccionaremos el modelo con el mejor f1-score en los
+datos de prueba que no presente sobreajuste.
+
+```{r}
+best_model <- "boruta_regular_bt_lightgbm"
+lg <- final_test |>
+ set_names(mejorcitos) |>
+ keep_at(best_model) |>
+ pluck(1)
+```
+
+```{r}
+predicciones <- lg |>
+ collect_predictions(summarize = T) |> 
+ select(diag, .pred_class)
+```
+
+Ahora nos disponemos a calcular las métricas con base a las predicciones de
+clase. Para esto crearemos un dataframe que solo contenga la
+*ground-truth label* que en este caso es la columna `diag` y la estimación o
+predicción que es la columna `.pred_class`.
+
+```{r}
+predicciones |>
+ head() |>
+ gt() |>
+ gt_theme_538() |> 
+ cols_align(align = "left") |> 
+ tab_header(
+    title = md("**Muestra de dataset con predicciones**"),
+    subtitle = md("Calculo de métricas de clase")
+  )
+```
+
+::: {.callout-important}
+#### Importante
+Durante el proceso de evaluación de los modelos en nuestro proyecto, nos
+enfrentamos a un desafío significativo debido al desbalance de clases en
+nuestro conjunto de datos. Al utilizar yardstick [@R-yardstick] para calcular
+la precisión multiclase, nos encontramos con advertencias indicando que algunos
+niveles no tenían eventos predichos, lo que resultaba en una precisión
+indefinida para esas clases y, por ende, afectaba el promedio de precisión
+general del modelo.
+
+Este comportamiento de `yardstick` puede ser problemático en nuestro contexto,
+ya que las clases con cero predicciones son excluidas del cálculo del promedio,
+lo que podría dar una impresión engañosa de un rendimiento más bajo de lo real.
+En contraste, `classification_report` de scikit-learn maneja estas situaciones
+asignando un valor de cero a las métricas de precisión, recall y f1-score para
+las clases sin eventos predichos. Esto refleja de manera más precisa la
+incapacidad del modelo para identificar esas clases y proporciona una imagen
+más realista del rendimiento del modelo.
+
+La decisión de utilizar `classification_report` se basó en la necesidad de
+tener una representación más fiel del desempeño de los modelos, especialmente
+en lo que respecta a la precisión. Queríamos asegurarnos de que todas las
+clases, independientemente de su frecuencia, fueran consideradas en la
+evaluación del modelo. Esto es crucial en nuestro proyecto, donde cada clase
+tiene importancia y el objetivo es lograr un modelo que sea capaz de
+identificar todas las categorías de diagnóstico de manera efectiva.
+
+En resumen, `classification_report` nos proporcionó una visión más integral y
+menos sesgada del rendimiento de los modelos en presencia de clases
+desbalanceadas, lo que nos permitió tomar decisiones más informadas durante la
+selección y ajuste del modelo final.
+:::
+
+
+```{r}
+source("_python.R")
+```
+
+```{python}
+from sklearn.metrics import classification_report
+```
+
+
+```{python}
+import pandas as pd
+import numpy as np
+```
+
+```{python}
+y_true = r.predicciones['diag']
+y_pred = r.predicciones['.pred_class']
+reporte_dict = classification_report(y_true, y_pred, output_dict=True)
+reporte_df = pd.DataFrame(reporte_dict).transpose()
+```
+
+```{r}
+res_test <- py$reporte_df |>
+ rownames_to_column(var = "categoria") |> 
+ as_tibble(.name_repair = make_clean_names) |> 
+ slice(1:5) |> 
+ select(-support) |> 
+ pivot_longer(
+ cols = where(is.numeric), names_to = "metric", values_to = "value")
+```
+
+```{r}
+porcentaje <- label_percent(decimal.mark = ".", suffix = "%", accuracy = 0.1)
+```
+
+```{r}
+#| eval: false
+#| echo: false
+write_fst(res_test, path = "./data/res_test.fst", compress = 0)
+```
+
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.65
+#| label: fig-metricas-res
+#| fig-cap: res-metrics
+res_test |> 
+ ggplot(aes(x = value, y = categoria)) +
+ geom_col(aes(fill = metric)) +
+ scale_fill_paletteer_d(`"ggsci::nrc_npg"`) +
+ geom_text(aes(label = porcentaje(value)),
+ vjust = 0.5,
+ hjust = 1.1,
+ color = "white",
+ size = 10) +
+ facet_grid(~ metric, scales = "free") +
+ theme(
+ plot.margin     = unit(c(1, 1, 1, 1), "mm"),
+ legend.position = "none",
+ axis.title  = element_blank(),
+ axis.text   = element_text(size = 30),
+ strip.text  = element_text(size = 35),
+ axis.text.x = element_text(size = 25))
+```
+
+Se observa en la figura @fig-metricas-res el desempeño del modelo con
+el conjunto de prueba y cada una de las métricas para cada una de las clases.
+Al parecer el modelo captura de manera muy eficiente los patrones relacionados
+a la disponibilidad, sin embargo, la precisión de los promotores y el recall de
+la categoría de capacidad son particularmente bajos en relación al resto de
+métricas.
+
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.65
+#| label: fig-roc-auc-plot
+#| fig-cap: ROC-AUC
+lg |>
+ collect_predictions() |>
+ roc_curve(diag, .pred_CAPACIDAD:.pred_PROMOTOR) |>
+ ggplot(aes(1 - specificity, sensitivity, color = .level)) +
+  geom_abline(lty = 2, color = "gray80", linewidth = 1.5) +
+  geom_path(alpha = 0.8, linewidth = 1.2) +
+  coord_equal() +
+  scale_color_paletteer_d(`"ggsci::nrc_npg"`) +
+  labs(title = "LightGBM Gradient Boosting Decision Tree") +
+  theme(
+   plot.title = element_text(size = 30),
+   legend.position = "bottom",
+   legend.text     = element_text(size = 25),
+   axis.title      = element_text(size = 25),
+   axis.text       = element_text(size = 20))
+```
+
+### Importancia de los predictores
+
+```{r}
+#| echo: false
+load(file = "./data/lgbm.rda")
+```
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.65
+#| label: fig-feature-importance
+#| fig-cap: Feature Importance
+lgbm |> lgb.plot.importance(top_n = 10, cex = 2)
+```
+
+La gráfica @fig-feature-importance se realizó después de ajustar el modelo
+seleccionado `boruta_regular_bt_lightgbm` con todos los datos, es
+decir, con los datos de entrenamiento, validación y prueba.  Contrario a lo
+que esperábamos, el `prb` no se encuentra en este top. Es posible que
+Boruta lo haya eliminado y dejado únicamente `thp`.
+
+En entrevistas finales, como parte del *Human-in-the-Loop*, los SMEs nos
+indicaron que cada una de las categorías tiene al menos un predictor en este
+top 10.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

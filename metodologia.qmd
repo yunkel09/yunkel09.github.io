@@ -1,8 +1,3 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
 # Metodologia {#sec-metodologia}
 
 Este estudio se realizó durante el tercer trimestre de 2023. La investigación
@@ -17,7 +12,7 @@ modelo basado en las encuestas NPS e información de red.
 
 Para el envío de encuestas NPS, se realiza un perfilamiento aleatorio de
 usuarios con ciertos criterios. Tras cumplirse un evento entre el usuario y
-algún servicio de Tigo Guatemala, se envía una solicitud de encuesta a través
+algún servicio de DSF Nicaragua, se envía una solicitud de encuesta a través
 de Medalia. Este trabajo se centra únicamente en las encuestas de Uso Móvil de
 los usuarios Prepago. Las encuestas se almacenan en bases de datos en AWS para
 su posterior análisis por el equipo de Business Analytics. El proceso se puede
@@ -112,7 +107,7 @@ transformación, un CSV fue exportado para compartir con el equipo.
 ## Data Collection
 
 La variable objetivo fue generada a través del sistema Medallia, en el cual un
-muestreo estratificado de los clientes de Tigo fue creado para el envío de una
+muestreo estratificado de los clientes de DSF fue creado para el envío de una
 encuesta de NPS. Si un usuario es clasificado como detractor por razones de
 red, una llamada telefónica es realizada por Close The Loop para obtener
 retroalimentación. Este proceso ha sido mantenido desde 2020. Los resultados

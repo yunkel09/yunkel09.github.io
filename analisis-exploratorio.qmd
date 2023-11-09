@@ -21,7 +21,9 @@ Los datos de entrenamiento, los cuales fueron preparados anteriormente constan
 de `r nrow(ctl_train)` filas y `r ncol(ctl_train)` columnas.
 
 ```{r}
-ctl_train |> glimpse(width = 77)
+ctl_train |> 
+ select(-user) |> 
+ glimpse(width = 77)
 ```
 
 ```{r}
@@ -30,7 +32,7 @@ ctl_train |> glimpse(width = 77)
 #| label: tbl-ctl
 #| tbl-cap: "Solo 8 columnas y 5 filas"
 ctl_train |> 
- select(1:8) |> 
+ select(2:9) |> 
  slice_head(n = 5) |> 
  gt() |> 
  tab_header(
@@ -38,7 +40,7 @@ ctl_train |>
     subtitle = md("Tabla principal")
   ) |> 
  gt_theme_538() |> 
- fmt_integer(columns = user, use_seps = FALSE) |> 
+ # fmt_integer(columns = user, use_seps = FALSE) |> 
  fmt_number(columns = 2:8, decimals = 2) |> 
  cols_align_decimal() |> 
  cols_align(align = "center", columns = where(~ is.numeric(.x)))
@@ -707,7 +709,8 @@ transformación llamada *spatial sign* [ver @kuhn_feature_2020] y
 
 Según los SMEs entrevistados, la categoría **optimización** por lo general
 depende de un par de variables, es decir, que esta categoría podría ser el
-resultado de interacciones entre variables.  Las métricas que principalmente se
+resultado de interacciones entre variables.  Para la gráfica utilizamos el
+paquete effects [@effects2003]. Las métricas que principalmente se
 utilizan para determinar esto son:
 
 ```{r}
@@ -763,6 +766,15 @@ plot(
  lattice = list(key.args = list(columns = 1),
                 strip = list(factor.names = FALSE)))
 ```
+
+En la primera gráfica de la izquierda, en el eje superior (los strips)
+mostrados como 0, 4.02, 9.04 y 12.05 son los cuatro valores en que se
+partió el `thp_mim` y en el eje x en la parte inferior están los valores de
+`prb_mim`.
+
+Entonces, si el `thp_mim` es cero, básicamente no importa el nivel del
+`prb_mim` (cualquier valor entre 0 y 87.39), la probabilidad de que sea un
+problema de capacidad es muy alta.
 
 ### Análisis de correlación {#sec-correlacion}
 

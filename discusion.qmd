@@ -1,2 +1,61 @@
 # Discusión {#sec-discusion}
 
+En esta sección, evaluamos el rendimiento de los modelos propuestos. El
+algoritmo que mejor se desempeñó en los datos de prueba obtuvo un f1-score de
+97.35%, un recall de 97.12%, una precisión de 97.67% y un AUC de 99.61%.
+Este alto rendimiento se debe en gran parte a una cuidadosa ingeniería de
+atributos y al ajuste de hiperparámetros. Por ejemplo, ajustamos manualmente la
+tasa de aprendizaje de XGBoost a 0.001 y limitamos la profundidad del árbol
+para evitar el sobreajuste. Estos resultados superan al estudio de
+[@ahmad_customer_2019], que logró un 93% de AUC utilizando algoritmos
+similares.
+
+La interpretabilidad del modelo es crucial para entender qué factores
+contribuyen más al fenómeno que estamos estudiando, lo cual es invaluable para
+tomar decisiones informadas. Además, un modelo que generaliza bien es esencial
+para que las predicciones sean útiles en diferentes escenarios y poblaciones.
+Al comparar el rendimiento de los algoritmos, encontramos que LightGBM ofrecía
+el mejor equilibrio entre rendimiento y complejidad, aunque Random Forest
+lideraba en métricas. Sin embargo, Random Forest mostró signos de sobreajuste
+en el recall, lo cual podría mejorarse evitando la multicolinealidad en las
+variables.
+
+En nuestras primeras iteraciones, variables geográficas como "departamento" y
+"ciudad" mostraron un alto poder predictivo. Sin embargo, optamos por excluir
+estas variables para evitar posibles problemas de fuga de datos.
+Los atributos más importantes, como `dis_mim` y `cqi_mim`, están
+asociados a categorías específicas. Por ejemplo, `dis_mim` se asocia a
+la etiqueta de disponibilidad y representa los casos donde hay más segundos
+fuera de servicio en una celda. `tad_max` se relaciona con la etiqueta
+de cobertura, y sus valores máximos representan coberturas lejanas.
+Otros atributos, como `drp_max` ayudan a identificar problemas de
+optimización.
+
+Finalmente, seleccionamos GLMNET como nuestro algoritmo óptimo. A pesar de ser
+un modelo lineal, GLMNET es un 93% más rápido y eficiente en términos
+computacionales que LightGBM, sin sacrificar significativamente el rendimiento.
+Esta eficiencia es crucial, ya que planeamos reentrenar el modelo regularmente
+en la nube de AWS.
+
+Los resultados obtenidos son directamente aplicables y se alinean con el plan
+de acción previamente establecido. El despliegue del modelo en modo batch
+agilizará el proceso de identificación de potenciales detractores y, por ende,
+identificará las celdas que requieren atención para mejorar los indicadores de
+red. Los costos se reducirán, ya que este sistema será el encargado de evaluar
+a toda la base de usuarios y, de forma indirecta, prevenir el churn.
+
+Una de las limitaciones clave que enfrentamos fue la inconsistencia en la
+calidad de las etiquetas, fenómeno conocido como *label multiplicity*.
+Este surgió porque diferentes personas se encargaban de la clasificación de los
+diagnósticos sin seguir un conjunto de reglas uniforme. Para resolver este
+problema, implementamos una heurística que nos ayudó a identificar las celdas
+afectadas, un enfoque que podría considerarse como "supervisión débil". Este
+método resultó efectivo para mejorar la calidad de nuestro conjunto de datos,
+especialmente porque los atributos que capturamos son información que el equipo
+CTL normalmente incluiría en el proceso de etiquetado.
+
+En resumen, aunque obtuvimos resultados prometedores, es fundamental ser
+cautelosos al interpretar estos resultados debido a la naturaleza de las
+etiquetas generadas y la supervisión débil que se aplicó. Futuras iteraciones
+del proyecto podrían beneficiarse de un enfoque más formalizado para manejar la
+"multiplicidad de etiquetas" y mejorar la robustez del modelo.

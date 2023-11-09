@@ -13,4 +13,4 @@ conjuntos de entrenamiento como de prueba, sin signos de sobreajuste.
 Específicamente, el f1-score en el conjunto de prueba fue de 97.34%, con una
 precisión de 97.67% y un Recall de 97.12%. Estos resultados demuestran
 la eficacia de nuestro enfoque, que tiene aplicaciones significativas en la
-mejora de CX en Tigo Guatemala.
+mejora de CX.

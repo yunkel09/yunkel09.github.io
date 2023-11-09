@@ -14,7 +14,7 @@ para una mejor comprensión de los usuarios. El análisis de
 usuarios que abandonan la compañía (churn) en Malasia, utilizando un modelo de
 Clasificación y Árboles de Regresión (CART), revela que los bajos puntajes en
 NPS incrementan la probabilidad de que los clientes terminen su relación con la
-empresa. Una limitación de este indicador en Tigo Guatemala es que no todos los
+empresa. Una limitación de este indicador en DSF Nicaragua es que no todos los
 clientes reportan sus malas experiencias, lo que reduce la visibilidad de
 problemas potenciales.
 
@@ -35,7 +35,7 @@ predictor directo de la lealtad del cliente, a diferencia de la garantía de
 nivel de servicio, que no lo es [@izogo_customer_2017]. La fiabilidad se define
 como el correcto funcionamiento de un sistema durante un tiempo establecido
 [@ahmed_reliability_2017]. Un funcionamiento constante de la red de
-telecomunicaciones en Tigo Guatemala podría contribuir a mantener y aumentar su
+telecomunicaciones en DSF Nicaragua podría contribuir a mantener y aumentar su
 cuota de mercado.
 
 En la investigación de variables para predecir el churn, [@ahmad_customer_2019]

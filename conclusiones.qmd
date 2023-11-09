@@ -1,3 +1,42 @@
 # Conclusiones {#sec-conclusiones}
 
 
+El principal objetivo de este estudio fue desarrollar un modelo de
+clasificación multinomial para automatizar la clasificación de detractores de
+red móvil en Tigo Guatemala. Este objetivo se logró con éxito, alcanzando un
+F1-Score de 97.33%%, lo cual supera el umbral del 90% establecido inicialmente.
+De esta manera, se confirma la hipótesis de que la clasificación de detractores
+de red móvil puede ser automatizada de manera efectiva en nuestra empresa.
+
+Los resultados secundarios, como un recall de 97.11% y una precisión del
+97.67%, junto con un AUC del 99.61%, demuestran la alta eficacia del modelo
+en la clasificación de detractores y promotores de red. Estos indicadores son un
+testimonio de la robustez del modelo y su capacidad para distinguir
+correctamente entre diferentes clases.
+
+La ingeniería de atributos, el preprocesamiento de datos y el ajuste de
+hiperparámetros jugaron un papel crucial en el rendimiento del modelo. El uso
+de técnicas de selección de atributos y el conocimiento de dominio adquirido a
+través de entrevistas con expertos en la materia (SMEs) fueron fundamentales
+para este éxito.
+
+En cuanto a la selección del algoritmo, se evaluaron varias opciones. Aunque
+Random Forest mostró un rendimiento excepcional, su alta demanda de recursos
+computacionales podría ser un desafío para implementaciones a gran escala.
+LightGBM y Glmnet emergieron como alternativas viables, siendo este último
+especialmente atractivo para la producción debido a su menor costo
+computacional y complejidad.
+
+La implementación del modelo desarrollado ha demostrado ser una herramienta
+valiosa para los equipos técnicos de nuestra empresa. Su uso en modo batch
+acelerará la identificación de posibles detractores y las celdas que requieren
+atención, lo que a su vez contribuirá a la mejora de los indicadores clave de
+rendimiento (KPIs) de la red. Este modelo actuará como una brújula para guiar
+las inversiones en infraestructura, con el potencial de mejorar el NPS
+transaccional y, por ende, la experiencia del cliente (CX), un factor crucial
+para la retención de usuarios en un mercado competitivo.
+
+Finalmente, este estudio abre la puerta a futuras investigaciones, como la
+posibilidad de predecir qué celdas o radio bases podrían enfrentar problemas de
+red en el futuro cercano, un desafío que podría abordarse desde una perspectiva
+de detección de anomalías multivariadas.

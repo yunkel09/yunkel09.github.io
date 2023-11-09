@@ -1,2 +1,41 @@
 # Recomendaciones {#sec-recomendaciones}
 
+  - **Etiquetado de celdas de diagnóstico:** El uso de machine
+  learning es crucial para automatizar la clasificación de detractores,
+  especialmente porque el etiquetado manual es inviable a largo plazo. Por ello,
+  se recomienda que durante el etiquetado manual se incluyan atributos
+  específicos que indiquen las celdas, rangos de fechas y horas que fundamentan
+  el diagnóstico. Esta información será invaluable para futuras iteraciones del
+  modelo.
+
+  - **Supervisión débil:** Dado el alto costo en tiempo y recursos del
+  etiquetado manual, se sugiere la implementación de supervisión débil. Este
+  enfoque utiliza heurísticas simples para generar etiquetas preliminares, lo
+  que puede ser especialmente útil para diagnósticos que no requieren una
+  comprensión profunda de las interacciones entre variables. Herramientas como
+  Snorkel pueden ser útiles en este contexto.
+
+  - **Utilizar modelos de baja varianza:** En el contexto del
+  equilibrio entre sesgo y varianza, se recomienda la utilización de modelos de
+  baja varianza como GLMNET para la puesta en producción. Estos modelos, que
+  han demostrado ser efectivos en pruebas preliminares, son robustos ante
+  variaciones en los datos y ofrecen una buena generalización.
+
+  - **Monitoreo y reentrenamiento:** Es imperativo que cualquier
+  modelo en producción sea objeto de un monitoreo y reentrenamiento continuos
+  para evitar la *drift* del modelo. Aunque MLOps es un marco de trabajo en
+  desarrollo, un monitoreo periódico del rendimiento del modelo es esencial.
+
+  - **Aplicar Human-in-the-Loop (HITL):** A pesar de la eficacia de
+  los modelos de machine learning, siempre existirá un margen de error. Por
+  ello, se recomienda la implementación de un enfoque de Human-in-the-Loop,
+  especialmente en contextos donde la toma de decisiones es crítica. Este
+  enfoque permite que expertos humanos validen y, si es necesario, corrijan las
+  decisiones del modelo.
+
+  - **Detección de anomalías:** Finalmente, se sugiere la exploración
+  de modelos especializados en la detección de anomalías para series temporales.
+  Este enfoque podría permitir intervenciones más tempranas en la red,
+  mejorando así la experiencia del cliente y potencialmente reduciendo la tasa
+  de abandono.
+

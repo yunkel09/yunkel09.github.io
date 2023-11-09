@@ -6,10 +6,14 @@ book:
   title: "Close the Loop"
   sidebar:
     style: docked
-    background: white
+    background: light
+    logo: fav.jpg
+    type: dark
+    pinned: true
   author:
   - name: "William Chavarría"
     orcid: 0009-0001-4084-9290
+  search: true
   date: "11/1/2023"
 
   page-footer:
@@ -41,7 +45,6 @@ book:
       chapters:
         - validacion-cruzada.qmd
         - modelado.qmd
-        - evaluacion.qmd
 
     - resultados.qmd
     - discusion.qmd
