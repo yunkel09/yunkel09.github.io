@@ -7,9 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="William Chavarría">
-<meta name="dcterms.date" content="2023-11-01">
 
-<title>Close the Loop</title>
+<title>Close the Loop - 4&nbsp; Metodologia</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +21,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -31,7 +49,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./introduccion.html" rel="next">
+<link href="./preparacion.html" rel="next">
+<link href="./marco-teorico.html" rel="prev">
 <link href="./fav.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -67,6 +86,10 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<meta name="mermaid-theme" content="forest">
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 </head>
@@ -80,7 +103,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Resumen</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./metodologia.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metodologia</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -113,7 +136,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Resumen</span></a>
   </div>
 </li>
@@ -137,7 +160,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./metodologia.html" class="sidebar-item-text sidebar-link">
+  <a href="./metodologia.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metodologia</span></span></a>
   </div>
 </li>
@@ -256,7 +279,23 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#resumen" id="toc-resumen" class="nav-link active" data-scroll-target="#resumen">Resumen</a></li>
+  <li><a href="#información-de-red" id="toc-información-de-red" class="nav-link active" data-scroll-target="#información-de-red"><span class="header-section-number">4.1</span> Información de Red</a></li>
+  <li><a href="#sec-framework" id="toc-sec-framework" class="nav-link" data-scroll-target="#sec-framework"><span class="header-section-number">4.2</span> Framework</a></li>
+  <li><a href="#sec-met-analisis" id="toc-sec-met-analisis" class="nav-link" data-scroll-target="#sec-met-analisis"><span class="header-section-number">4.3</span> Metodología de análisis</a>
+  <ul class="collapse">
+  <li><a href="#recetas" id="toc-recetas" class="nav-link" data-scroll-target="#recetas"><span class="header-section-number">4.3.1</span> Recetas</a></li>
+  <li><a href="#motores" id="toc-motores" class="nav-link" data-scroll-target="#motores"><span class="header-section-number">4.3.2</span> Motores</a></li>
+  <li><a href="#workflows" id="toc-workflows" class="nav-link" data-scroll-target="#workflows"><span class="header-section-number">4.3.3</span> Workflows</a></li>
+  <li><a href="#data-sources" id="toc-data-sources" class="nav-link" data-scroll-target="#data-sources"><span class="header-section-number">4.3.4</span> Data Sources</a></li>
+  </ul></li>
+  <li><a href="#data-collection" id="toc-data-collection" class="nav-link" data-scroll-target="#data-collection"><span class="header-section-number">4.4</span> Data Collection</a></li>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation"><span class="header-section-number">4.5</span> Data Preparation</a>
+  <ul class="collapse">
+  <li><a href="#limpieza-y-transformación" id="toc-limpieza-y-transformación" class="nav-link" data-scroll-target="#limpieza-y-transformación"><span class="header-section-number">4.5.1</span> Limpieza y transformación</a></li>
+  <li><a href="#ingeniería-de-atributos" id="toc-ingeniería-de-atributos" class="nav-link" data-scroll-target="#ingeniería-de-atributos"><span class="header-section-number">4.5.2</span> Ingeniería de Atributos</a></li>
+  <li><a href="#división-de-los-datos" id="toc-división-de-los-datos" class="nav-link" data-scroll-target="#división-de-los-datos"><span class="header-section-number">4.5.3</span> División de los datos</a></li>
+  <li><a href="#análisis-exploratorio" id="toc-análisis-exploratorio" class="nav-link" data-scroll-target="#análisis-exploratorio"><span class="header-section-number">4.5.4</span> Análisis Exploratorio</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -265,26 +304,14 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Close the Loop</h1>
+<h1 class="title"><span id="sec-metodologia" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metodologia</span></span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>William Chavarría <a href="https://orcid.org/0009-0001-4084-9290" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">November 1, 2023</p>
-    </div>
-  </div>
   
     
   </div>
@@ -292,12 +319,120 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p>Este estudio se realizó durante el tercer trimestre de 2023. La investigación apuntó a determinar los detractores de red mediante una combinación de variables cualitativas y cuantitativas. Las cualitativas incluyen la ubicación del usuario en Guatemala y el tipo de dispositivo, mientras que las cuantitativas abarcan aspectos como el tiempo en LTE en los sitios de uso. Es relevante mencionar que las primeras tres fases de la metodología son procedimientos ya existentes en la compañía antes de la adopción de este trabajo. Sin embargo, el enfoque innovador radica en el aprendizaje de un modelo basado en las encuestas NPS e información de red.</p>
+<p>Para el envío de encuestas NPS, se realiza un perfilamiento aleatorio de usuarios con ciertos criterios. Tras cumplirse un evento entre el usuario y algún servicio de DSF Nicaragua, se envía una solicitud de encuesta a través de Medalia. Este trabajo se centra únicamente en las encuestas de Uso Móvil de los usuarios Prepago. Las encuestas se almacenan en bases de datos en AWS para su posterior análisis por el equipo de Business Analytics. El proceso se puede observar en la <a href="#fig-proceso" class="quarto-xref">Figure&nbsp;<span>4.1</span></a></p>
+<div id="fig-proceso" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="./imagenes/proceso.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;4.1: Proceso CTL</figcaption>
+</figure>
+</div>
+<section id="información-de-red" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="información-de-red"><span class="header-section-number">4.1</span> Información de Red</h2>
+<p>El equipo de Quality Strategy recibe la información de los detractores de red y presenta quincenalmente un informe sobre el plan de acción para mejorar el NPS. Se revisan indicadores provenientes de diversas fuentes, incluidas las estadísticas de red 2G, 3G y LTE almacenadas en el servidor Taishan de Huawei, así como datos de disponibilidad obtenidos de una herramienta llamada Tivoli.</p>
+</section>
+<section id="sec-framework" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="sec-framework"><span class="header-section-number">4.2</span> Framework</h2>
+<p>Un diagrama de trabajo fue realizado y se muestra en <a href="#fig-framework_dataflow" class="quarto-xref">Figure&nbsp;<span>4.2</span></a>. Este diagrama detalla el proceso de la metodología, desde las fuentes de información hasta los resultados obtenidos. A continuación, los procesos empleados para la obtención de los resultados del proyecto son detallados con mayor granularidad.</p>
+<div id="fig-framework_dataflow" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="./imagenes/framework_dataflow.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;4.2: Framework Data Flow</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-met-analisis" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="sec-met-analisis"><span class="header-section-number">4.3</span> Metodología de análisis</h2>
+<p>Todo este trabajo fue realizado en la infraestructura de Aws Redshift para la obtención de los datos. Se utiliza Google Colab, R studio y SageMaker para la obtención de los datos, estudio de estos y las pruebas de los distintos modelos. Para la parte de limpieza y modelado se utilizó el lenguaje R y el framework tidymodel. Como referencia, el proceso definido en <a href="#fig-modelado" class="quarto-xref">Figure&nbsp;<span>4.3</span></a> fue utilizado.</p>
+<div id="fig-modelado" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="./imagenes/modelado.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;4.3: Modelado</figcaption>
+</figure>
+</div>
+<section id="recetas" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="recetas"><span class="header-section-number">4.3.1</span> Recetas</h3>
+<p>Las recetas son objetos (e.g data set de entrenamiento) que sufren transformaciones (e.g normalización) y que posteriormente se integran al workflow para su uso. Son pasos de preprocesamiento encapsulados en un objeto para su posterior integración con los motores dentro de un workflow.</p>
+</section>
+<section id="motores" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="motores"><span class="header-section-number">4.3.2</span> Motores</h3>
+<p>Motor es la combinación de un paquete y modo de trabajo de un modelo computacional. Por ejemplo, el motor boost_tree encapsula distintos paquetes que manejan árboles ensamblados, tales como xgboost para clasificación o lightgbm para regresión. Esto permite una amplia flexibilidad en términos de unificación y estandarización de la interfaz, lo que permite que se estandaricen hiperparámetros globales y secundarios. Un único modelo puede tener diferentes implementaciones en términos de paquetes, es decir, puede haber un paquete que implemente xgboost como una API a su contraparte en C o Python y puede haber otro paquete que implemente lo mismo, pero con variaciones que optimizan otros aspectos.</p>
+</section>
+<section id="workflows" class="level3" data-number="4.3.3">
+<h3 data-number="4.3.3" class="anchored" data-anchor-id="workflows"><span class="header-section-number">4.3.3</span> Workflows</h3>
+<p>Para poder combinar los diferentes preprocesamientos con los modelos candidatos, el framework utilizado utiliza el concepto de workflow en el que todo el ajuste se encuentra dentro de un mismo pipeline. Esto permite una mayor coherencia y reproducibilidad, ya que todas las etapas del modelado se definen y ejecutan de manera conjunta. Dentro de un workflow, se pueden incorporar “recetas” para el preprocesamiento de datos, que incluyen tareas como la imputación de valores faltantes, la codificación de variables categóricas y la normalización de características.</p>
+</section>
+<section id="data-sources" class="level3" data-number="4.3.4">
+<h3 data-number="4.3.4" class="anchored" data-anchor-id="data-sources"><span class="header-section-number">4.3.4</span> Data Sources</h3>
+<p>Para la extracción de la información, gestores de Huawei que ofrecen métricas por hora fueron utilizados por los analistas. Estos registros se encuentran almacenados en nuestro datalake en Amazon S3 y pueden ser consultados mediante Amazon Redshift o Amazon Athena. Athena fue elegido por la agilidad en la extracción de datos y su integración con Amazon SageMaker facilitó la edición programática de SQL en Python. El histórico de navegación de los usuarios fue almacenado en formato parquet para compartir con el equipo.</p>
+<p>Los datos del clima se extraen de una fuente externa proveniente de consultorías realizadas dos años atrás. Los datos se encontraban por días y se cuenta con la cantidad de centímetros cúbicos de precipitación que caen en la latitud de un sitio.</p>
+<p>Amazon SageMaker fue utilizado como herramienta de ETL y limpieza de datos. Los archivos de Excel, utilizados por los analistas entre 2021 y 2022, fueron leídos y transformados para la concatenación con registros de fechas posteriores. Para 2023, una tabla de Redshift fue consultada, y la información fue almacenada en un dataframe de pandas en formato wide. Tras la limpieza y transformación, un CSV fue exportado para compartir con el equipo.</p>
+</section>
+</section>
+<section id="data-collection" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="data-collection"><span class="header-section-number">4.4</span> Data Collection</h2>
+<p>La variable objetivo fue generada a través del sistema Medallia, en el cual un muestreo estratificado de los clientes de DSF fue creado para el envío de una encuesta de NPS. Si un usuario es clasificado como detractor por razones de red, una llamada telefónica es realizada por Close The Loop para obtener retroalimentación. Este proceso ha sido mantenido desde 2020. Los resultados fueron almacenados en Excel desde 2021 hasta 2022, y desde 2023 en adelante, son almacenados en una plataforma web para la visualización de datos y resultados. En el apéndice <a href="glosario.html" class="quarto-xref"><span>Appendix&nbsp;A</span></a>, se presentan los atributos iniciales generados por el ETL obtenidos desde las fuentes descritas, detallando su relevancia para el modelo desarrollado.</p>
+<p>Posterior a comprender el proceso de etiquetado de parte del equipo CTL, se concluyó que era necesario obtener los datos con una granularidad en el orden de las horas. Por lo que al final quedaron tres tablas, a como se observa en la figura fig:data-collection. La tabla principal contiene más de 70 mil registros, muchos de ellos sin etiquetas. La cantidad de usuarios únicos era de 4,675.</p>
+<p><br></p>
+<div class="cell" data-fig-width="9.5">
+<div class="cell-output-display">
+<div>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+  DIAGNOSTICO ||--o{ METRICAS_RBS : has
+  DIAGNOSTICO ||--o{ DATOS_CLIMA : has
+  DIAGNOSTICO {
+    int msisdn_dd
+    int srvy_id
+  }
+  METRICAS_RBS {
+    int msisdn_dd
+    int srvy_id
+  }
+  DATOS_CLIMA {
+    int msisdn_dd
+    int srvy_id
+  }
+</pre>
+</div>
+</div>
+</div>
+</div>
+<p>La tabla de métricas se agrupaba de la siguiente manera: a cada usuario se le extrajo el top 10 de celdas a las que más se conecta en el mes. Por cada celda habían 30 días multiplicado por 18 horas de datos, por lo que cada usuario tenía en total un promedio de 5400 registros de métricas. Si tenemos 4,675 usuarios, el total del archivo final era de 25,245,000 el cual pesaba 5 gigabytes. Se creó un archivo parquet para poder ingresar el archivo a R.</p>
+</section>
+<section id="data-preparation" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="data-preparation"><span class="header-section-number">4.5</span> Data Preparation</h2>
+<section id="limpieza-y-transformación" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="limpieza-y-transformación"><span class="header-section-number">4.5.1</span> Limpieza y transformación</h3>
+<p>El archivo parquet se unió con el archivo principal de usuarios y con los datos de clima. Posteriormente se realizaron operaciones de limpieza y transformación, tales como la conversión de tipos de datos, filtros iniciales y principalmente la selección de un primer conjunto de atributos, el cual fue validado con los SMEs.</p>
+<p>Los datos tenían una estructura jerárquica en la que un usuario tenía diferentes niveles de anidamiento. Este tipo de datos es mejor conocido en la literatura como datos multinivel o <em>profile data</em> <span class="citation" data-cites="kuhn_feature_2020">(<a href="references.html#ref-kuhn_feature_2020" role="doc-biblioref">Kuhn and Johnson 2020</a>)</span>. El procesamiento de este tipo de datos requiere un tratamiento especial en cuanto a que es indispensable colapsar los datos a nivel de usuario para poder tener todo en el mismo que la unidad de predicción. Lo relevante era poder resumir esta estructura en una única fila sin que se perdiera información predictiva.</p>
+<p>El siguiente paso fue detectar la celda que cumplía las características que los SMEs nos brindaron en entrevistas. Este fue el punto más crucial de todo el proyecto. El etiquetador no dejaba plasmada en los datos la celda de la cual había obtenido el diagnóstico. Esto implicaba que, si simplemente resumíamos los datos, muchas celdas con buenos indicadores, cancelarían las celdas con malos indicadores y tendríamos mucho ruido de fondo, sin una señal clara que los modelos pudieran capturar.</p>
+<p>Lo que se hizo fue identificar las celdas fuera de rango por medio de una heurística sencilla y luego comparar las celdas que cumplían ese criterio, para luego filtrarlas. De esta forma se colapsarían únicamente las celdas de los usuarios que sí estuvieran fuera de los rangos.</p>
+</section>
+<section id="ingeniería-de-atributos" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="ingeniería-de-atributos"><span class="header-section-number">4.5.2</span> Ingeniería de Atributos</h3>
+<p>La ingeniería de atributos fue realizada con base en el análisis exploratorio de los datos multinivel. La selección inicial de atributos fue realizada en colaboración con los SMEs. Estadísticas descriptivas como la media, mediana, rango intercuartílico, valores máximos y mínimos, y percentiles específicos fueron empleadas para crear nuevos atributos.</p>
+<p>Adicionalmente, la latitud y longitud de las celdas fueron convertidas a coordenadas polares, extrayendo el radio y el coeficiente theta.</p>
+</section>
+<section id="división-de-los-datos" class="level3" data-number="4.5.3">
+<h3 data-number="4.5.3" class="anchored" data-anchor-id="división-de-los-datos"><span class="header-section-number">4.5.3</span> División de los datos</h3>
+<p>Los datos se dividieron en 60% para datos de entrenamiento, 20% para el conjunto de validación y 20% para el conjunto de prueba. La razón para elegir esta partición es que el conjunto de datos es relativamente grande en términos de representatividad de la población bajo estudio. Otras razones incluyen el hecho de que se utilizó k-fold cross-validation con 10 folds y que si el tamaño del conjunto de entrenamiento era muy grande, habría un costo computacional innecesariamente grande.</p>
+</section>
+<section id="análisis-exploratorio" class="level3" data-number="4.5.4">
+<h3 data-number="4.5.4" class="anchored" data-anchor-id="análisis-exploratorio"><span class="header-section-number">4.5.4</span> Análisis Exploratorio</h3>
+<p>En el análisis exploratorio llevado a cabo, se examinaron inicialmente los valores faltantes y las estadísticas resumidas. Posteriormente, la exploración se subdividió en dos fases principales: análisis univariado y análisis bivariado.</p>
+<section id="análisis-univariado" class="level4" data-number="4.5.4.1">
+<h4 data-number="4.5.4.1" class="anchored" data-anchor-id="análisis-univariado"><span class="header-section-number">4.5.4.1</span> Análisis Univariado</h4>
+<p>Se adoptó un enfoque metódico y estructurado para el análisis de las variables numéricas y categóricas. En el caso de las variables numéricas, se comenzó con la variable de respuesta, evaluando su distribución y el nivel de desbalance entre las clases. Las distribuciones de los predictores continuos se examinaron en colaboración con los expertos en la materia (SMEs), identificando anomalías y valores atípicos que requerían eliminación.</p>
 
-<section id="resumen" class="level1 unnumbered">
-<h1 class="unnumbered">Resumen</h1><p><img src="cover.jpg" title="Close the Loop" class="quarto-cover-image img-fluid"></p>
-<p>En el ámbito de las telecomunicaciones, la mejora de la experiencia del cliente (CX) es esencial para mantener una ventaja competitiva. Este estudio se centra en la aplicación de modelos de aprendizaje automático para optimizar diversas métricas relacionadas con CX. Utilizamos el método de envoltura Boruta y una implementación específica de Lightgbm, un algoritmo de árbol de decisión de impulso de gradiente (GBDT), para predecir y diagnosticar correctamente los distintos tipos de detractores de red. Nuestros experimentos demuestran que el método de envoltura (<em>wrapper</em>) Boruta con Lightgbm supera a otros algoritmos en términos de f1-score macro, precisión y recuperación, tanto en conjuntos de entrenamiento como de prueba, sin signos de sobreajuste. Específicamente, el f1-score en el conjunto de prueba fue de 97.34%, con una precisión de 97.67% y un Recall de 97.12%. Estos resultados demuestran la eficacia de nuestro enfoque, que tiene aplicaciones significativas en la mejora de CX.</p>
 
-
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-kuhn_feature_2020" class="csl-entry" role="listitem">
+Kuhn, Max, and Kjell Johnson. 2020. <em>Feature Engineering and Selection: A Practical Approach for Predictive Models</em>. Chapman &amp; <span>Hall</span>/<span>CRC</span> Data Science Series. Boca Raton London New York: CRC Press, Taylor &amp; Francis Group.
+</div>
+</div>
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -605,10 +740,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./marco-teorico.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Marco Teórico</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./introduccion.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./preparacion.html" class="pagination-link">
+        <span class="nav-page-text">Preparación</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

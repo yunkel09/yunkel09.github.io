@@ -7,9 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="William Chavarría">
-<meta name="dcterms.date" content="2023-11-01">
 
-<title>Close the Loop</title>
+<title>Close the Loop - 12&nbsp; Discusión</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +21,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -31,7 +49,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./introduccion.html" rel="next">
+<link href="./conclusiones.html" rel="next">
+<link href="./resultados.html" rel="prev">
 <link href="./fav.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -80,7 +99,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Resumen</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./discusion.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Discusión</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -113,7 +132,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Resumen</span></a>
   </div>
 </li>
@@ -207,7 +226,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./discusion.html" class="sidebar-item-text sidebar-link">
+  <a href="./discusion.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Discusión</span></span></a>
   </div>
 </li>
@@ -252,39 +271,21 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#resumen" id="toc-resumen" class="nav-link active" data-scroll-target="#resumen">Resumen</a></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Close the Loop</h1>
+<h1 class="title"><span id="sec-discusion" class="quarto-section-identifier"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Discusión</span></span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>William Chavarría <a href="https://orcid.org/0009-0001-4084-9290" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">November 1, 2023</p>
-    </div>
-  </div>
   
     
   </div>
@@ -292,13 +293,20 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p>En esta sección, evaluamos el rendimiento de los modelos propuestos. El algoritmo que mejor se desempeñó en los datos de prueba obtuvo un f1-score de 97.35%, un recall de 97.12%, una precisión de 97.67% y un AUC de 99.61%. Este alto rendimiento se debe en gran parte a una cuidadosa ingeniería de atributos y al ajuste de hiperparámetros. Por ejemplo, ajustamos manualmente la tasa de aprendizaje de XGBoost a 0.001 y limitamos la profundidad del árbol para evitar el sobreajuste. Estos resultados superan al estudio de <span class="citation" data-cites="ahmad_customer_2019">(<a href="references.html#ref-ahmad_customer_2019" role="doc-biblioref">Ahmad, Jafar, and Aljoumaa 2019</a>)</span>, que logró un 93% de AUC utilizando algoritmos similares.</p>
+<p>La interpretabilidad del modelo es crucial para entender qué factores contribuyen más al fenómeno que estamos estudiando, lo cual es invaluable para tomar decisiones informadas. Además, un modelo que generaliza bien es esencial para que las predicciones sean útiles en diferentes escenarios y poblaciones. Al comparar el rendimiento de los algoritmos, encontramos que LightGBM ofrecía el mejor equilibrio entre rendimiento y complejidad, aunque Random Forest lideraba en métricas. Sin embargo, Random Forest mostró signos de sobreajuste en el recall, lo cual podría mejorarse evitando la multicolinealidad en las variables.</p>
+<p>En nuestras primeras iteraciones, variables geográficas como “departamento” y “ciudad” mostraron un alto poder predictivo. Sin embargo, optamos por excluir estas variables para evitar posibles problemas de fuga de datos. Los atributos más importantes, como <code>dis_mim</code> y <code>cqi_mim</code>, están asociados a categorías específicas. Por ejemplo, <code>dis_mim</code> se asocia a la etiqueta de disponibilidad y representa los casos donde hay más segundos fuera de servicio en una celda. <code>tad_max</code> se relaciona con la etiqueta de cobertura, y sus valores máximos representan coberturas lejanas. Otros atributos, como <code>drp_max</code> ayudan a identificar problemas de optimización.</p>
+<p>Finalmente, seleccionamos GLMNET como nuestro algoritmo óptimo. A pesar de ser un modelo lineal, GLMNET es un 93% más rápido y eficiente en términos computacionales que LightGBM, sin sacrificar significativamente el rendimiento. Esta eficiencia es crucial, ya que planeamos reentrenar el modelo regularmente en la nube de AWS.</p>
+<p>Los resultados obtenidos son directamente aplicables y se alinean con el plan de acción previamente establecido. El despliegue del modelo en modo batch agilizará el proceso de identificación de potenciales detractores y, por ende, identificará las celdas que requieren atención para mejorar los indicadores de red. Los costos se reducirán, ya que este sistema será el encargado de evaluar a toda la base de usuarios y, de forma indirecta, prevenir el churn.</p>
+<p>Una de las limitaciones clave que enfrentamos fue la inconsistencia en la calidad de las etiquetas, fenómeno conocido como <em>label multiplicity</em>. Este surgió porque diferentes personas se encargaban de la clasificación de los diagnósticos sin seguir un conjunto de reglas uniforme. Para resolver este problema, implementamos una heurística que nos ayudó a identificar las celdas afectadas, un enfoque que podría considerarse como “supervisión débil”. Este método resultó efectivo para mejorar la calidad de nuestro conjunto de datos, especialmente porque los atributos que capturamos son información que el equipo CTL normalmente incluiría en el proceso de etiquetado.</p>
+<p>En resumen, aunque obtuvimos resultados prometedores, es fundamental ser cautelosos al interpretar estos resultados debido a la naturaleza de las etiquetas generadas y la supervisión débil que se aplicó. Futuras iteraciones del proyecto podrían beneficiarse de un enfoque más formalizado para manejar la “multiplicidad de etiquetas” y mejorar la robustez del modelo.</p>
 
-<section id="resumen" class="level1 unnumbered">
-<h1 class="unnumbered">Resumen</h1><p><img src="cover.jpg" title="Close the Loop" class="quarto-cover-image img-fluid"></p>
-<p>En el ámbito de las telecomunicaciones, la mejora de la experiencia del cliente (CX) es esencial para mantener una ventaja competitiva. Este estudio se centra en la aplicación de modelos de aprendizaje automático para optimizar diversas métricas relacionadas con CX. Utilizamos el método de envoltura Boruta y una implementación específica de Lightgbm, un algoritmo de árbol de decisión de impulso de gradiente (GBDT), para predecir y diagnosticar correctamente los distintos tipos de detractores de red. Nuestros experimentos demuestran que el método de envoltura (<em>wrapper</em>) Boruta con Lightgbm supera a otros algoritmos en términos de f1-score macro, precisión y recuperación, tanto en conjuntos de entrenamiento como de prueba, sin signos de sobreajuste. Específicamente, el f1-score en el conjunto de prueba fue de 97.34%, con una precisión de 97.67% y un Recall de 97.12%. Estos resultados demuestran la eficacia de nuestro enfoque, que tiene aplicaciones significativas en la mejora de CX.</p>
 
-
-</section>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-ahmad_customer_2019" class="csl-entry" role="listitem">
+Ahmad, Abdelrahim Kasem, Assef Jafar, and Kadan Aljoumaa. 2019. <span>“Customer Churn Prediction in Telecom Using Machine Learning in Big Data Platform.”</span> <em>Journal of Big Data</em> 6 (1): 28. <a href="https://doi.org/10.1186/s40537-019-0191-6">https://doi.org/10.1186/s40537-019-0191-6</a>.
+</div>
+</div>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -605,10 +613,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./resultados.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Resultados</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./introduccion.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./conclusiones.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Conclusiones</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

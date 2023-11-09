@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.232">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="William Chavarría">
+
+<title>Close the Loop - 3&nbsp; Marco Teórico</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./metodologia.html" rel="next">
+<link href="./antecedentes.html" rel="prev">
+<link href="./fav.jpg" rel="icon" type="image/jpeg">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./marco-teorico.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Marco Teórico</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./fav.jpg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Close the Loop</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/yunkel09/yunkel09.github.io" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Resumen</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduccion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./antecedentes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Antecedentes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./marco-teorico.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Marco Teórico</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./metodologia.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metodologia</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./preparacion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preparación</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./importacion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Importación</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./prep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Prep</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./division.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">División</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./analisis-exploratorio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Análisis Exploratorio</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Workflow</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./validacion-cruzada.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Validación Cruzada</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./modelado.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Modelado</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./resultados.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Resultados</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./discusion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Discusión</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusiones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./recomendaciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Recomendaciones</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografía</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glosario.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Glosario</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#clasificación-multiclase-desbalanceada" id="toc-clasificación-multiclase-desbalanceada" class="nav-link active" data-scroll-target="#clasificación-multiclase-desbalanceada"><span class="header-section-number">3.1</span> Clasificación Multiclase Desbalanceada</a>
+  <ul class="collapse">
+  <li><a href="#smote" id="toc-smote" class="nav-link" data-scroll-target="#smote"><span class="header-section-number">3.1.1</span> SMOTE</a></li>
+  </ul></li>
+  <li><a href="#métricas-para-clasificación-multiclase-desbalanceada" id="toc-métricas-para-clasificación-multiclase-desbalanceada" class="nav-link" data-scroll-target="#métricas-para-clasificación-multiclase-desbalanceada"><span class="header-section-number">3.2</span> Métricas para clasificación multiclase desbalanceada</a>
+  <ul class="collapse">
+  <li><a href="#precisión-y-recall" id="toc-precisión-y-recall" class="nav-link" data-scroll-target="#precisión-y-recall"><span class="header-section-number">3.2.1</span> Precisión y Recall</a></li>
+  <li><a href="#f1-score-macro" id="toc-f1-score-macro" class="nav-link" data-scroll-target="#f1-score-macro"><span class="header-section-number">3.2.2</span> F1-Score Macro</a></li>
+  </ul></li>
+  <li><a href="#algoritmos" id="toc-algoritmos" class="nav-link" data-scroll-target="#algoritmos"><span class="header-section-number">3.3</span> Algoritmos</a>
+  <ul class="collapse">
+  <li><a href="#lightgbm" id="toc-lightgbm" class="nav-link" data-scroll-target="#lightgbm"><span class="header-section-number">3.3.1</span> LightGBM</a></li>
+  <li><a href="#glmnet" id="toc-glmnet" class="nav-link" data-scroll-target="#glmnet"><span class="header-section-number">3.3.2</span> Glmnet</a></li>
+  <li><a href="#random-forest" id="toc-random-forest" class="nav-link" data-scroll-target="#random-forest"><span class="header-section-number">3.3.3</span> Random Forest</a></li>
+  </ul></li>
+  <li><a href="#técnicas-de-selección-de-características" id="toc-técnicas-de-selección-de-características" class="nav-link" data-scroll-target="#técnicas-de-selección-de-características"><span class="header-section-number">3.4</span> Técnicas de selección de características</a>
+  <ul class="collapse">
+  <li><a href="#métodos-implícitos" id="toc-métodos-implícitos" class="nav-link" data-scroll-target="#métodos-implícitos"><span class="header-section-number">3.4.1</span> Métodos Implícitos</a></li>
+  <li><a href="#métodos-basados-en-filtros" id="toc-métodos-basados-en-filtros" class="nav-link" data-scroll-target="#métodos-basados-en-filtros"><span class="header-section-number">3.4.2</span> Métodos basados en filtros</a></li>
+  <li><a href="#métodos-wrappers" id="toc-métodos-wrappers" class="nav-link" data-scroll-target="#métodos-wrappers"><span class="header-section-number">3.4.3</span> Métodos Wrappers</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-marco-teorico" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Marco Teórico</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="clasificación-multiclase-desbalanceada" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="clasificación-multiclase-desbalanceada"><span class="header-section-number">3.1</span> Clasificación Multiclase Desbalanceada</h2>
+<p>Un conjunto de datos se considera desbalanceado cuando existe una distribución desigual significativa, o en algunos casos extrema, entre el número de ejemplos de cada clase. En este escenario desbalanceado, el desafío más notable es la presencia de múltiples clases minoritarias y mayoritarias. Esta situación hace que ya no sea posible centrarse en reforzar el aprendizaje hacia una sola clase. Sin embargo, esta no es la única dificultad al abordar conjuntos de datos multiclase desbalanceados. Cualquier característica intrínseca del conjunto de datos que degrade el rendimiento en el caso binario se acentúa aún más en el contexto multiclase.</p>
+<p>Entre las estrategias de descomposición más populares para tratar el desbalance en la clasificación multiclase, destacan los enfoques One-vs-One (OVO) y One-vs-All (OVA). El enfoque OVO divide el problema original en tantos pares de clases como sea posible, ignorando los ejemplos que no pertenecen a las clases relacionadas. Estos se aprenden de manera independiente mediante los llamados aprendices o clasificadores base del conjunto. Por otro lado, el enfoque OVA toma una clase como “positiva” y el conjunto de las restantes como “negativas”, resultando en tantos clasificadores como clases, cada uno dedicado a reconocer una única clase <span class="citation" data-cites="fernandez_learning_2018">(<a href="references.html#ref-fernandez_learning_2018" role="doc-biblioref">Fernandez and García 2018</a>)</span>.</p>
+<section id="smote" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="smote"><span class="header-section-number">3.1.1</span> SMOTE</h3>
+<p>SMOTE (Synthetic Minority Over-sampling TEchnique), es un enfoque que aborda el problema de desbalance en conjuntos de datos al generar ejemplos sintéticos de la clase minoritaria en lugar de simplemente replicar los existentes. Este método opera en el “espacio de características” y crea nuevas muestras sintéticas al tomar en cuenta los vecinos más cercanos de cada muestra de la clase minoritaria. Concretamente, para cada muestra de la clase minoritaria, se generan ejemplos sintéticos a lo largo de los segmentos de línea que unen a cualquiera o todos los <span class="math inline">\(k\)</span> vecinos más cercanos de la misma clase. Estos vecinos se seleccionan al azar según la cantidad de sobremuestreo necesario. La generación de ejemplos sintéticos se realiza mediante una combinación lineal del vector de características de la muestra en cuestión y su vecino más cercano, utilizando un número aleatorio entre 0 y 1 como coeficiente.</p>
+<p>Este enfoque tiene varias ventajas. Primero, ayuda a generalizar la región de decisión de la clase minoritaria, permitiendo que los clasificadores tengan un rendimiento más robusto. Segundo, la combinación de SMOTE con técnicas de submuestreo suele tener un rendimiento superior al submuestreo simple. Además, los resultados experimentales en diversos conjuntos de datos han demostrado que SMOTE generalmente supera a otros métodos como Ripper o el Clasificador Bayesiano Ingenuo, que también tratan de manejar la distribución sesgada de clases <span class="citation" data-cites="chawla_smote_2002">(<a href="references.html#ref-chawla_smote_2002" role="doc-biblioref">Chawla et al. 2002</a>)</span>.</p>
+</section>
+</section>
+<section id="métricas-para-clasificación-multiclase-desbalanceada" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="métricas-para-clasificación-multiclase-desbalanceada"><span class="header-section-number">3.2</span> Métricas para clasificación multiclase desbalanceada</h2>
+<p>Al igual que en la evaluación de clasificadores binarios, es posible utilizar métricas como la Precisión, Recall, y F1-Score para evaluar el rendimiento de un clasificador multiclase. Sin embargo, tener más de dos clases requiere prestar más atención a las métricas utilizadas.</p>
+<p>Las macro-métricas o métricas de “macro-average” calculan cada métrica para cada clase y luego toman la media aritmética para obtener un valor global. Las fórmulas para todas estas métricas son similares a sus contrapartes en la clasificación binaria, simplemente se dividen por el número de clases, asignando el mismo peso a cada clase <span class="citation" data-cites="oliva_navarro_metaheuristics_2021">(<a href="references.html#ref-oliva_navarro_metaheuristics_2021" role="doc-biblioref">Oliva Navarro, Houssein, and Hinojosa 2021</a>)</span>.</p>
+<p>En el caso de conjuntos de datos desbalanceados o donde algunas clases son más raras que otras, las métricas de “macro-average” son especialmente útiles. Estas métricas aseguran que todas las clases tengan igual peso en el cálculo de la métrica global, independientemente de su frecuencia en el conjunto de datos. Por lo tanto, si todas las clases son igualmente importantes para tu problema, el uso de “macro-average” proporciona una medida de rendimiento más equitativa.</p>
+<section id="precisión-y-recall" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="precisión-y-recall"><span class="header-section-number">3.2.1</span> Precisión y Recall</h3>
+<p>La precisión y el Recall en “macro-average” se calcula como:</p>
+<p><span id="eq-precision"><span class="math display">\[
+Precision_{M} = \frac{1}{n} \sum_{i = 1}^{n} \frac{TP_{i}}{TP_{i} + FP_{i}}
+\tag{3.1}\]</span></span></p>
+<p><span id="eq-recall"><span class="math display">\[
+Recall_{M} = \frac{1}{n} \sum_{i = 1}^{n} \frac{TP_{i}}{TP_{i} + FN_{i}}
+\tag{3.2}\]</span></span></p>
+<p>Aquí <span class="math inline">\(n\)</span> es el número de clases y <span class="math inline">\(TP_{i}\)</span>, <span class="math inline">\(FP_{i}\)</span>, <span class="math inline">\(FN_{i}\)</span> son los Verdaderos Positivos, Falsos Positivos y Falsos Negativos para la i-ésima clase, respectivamente.</p>
+</section>
+<section id="f1-score-macro" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="f1-score-macro"><span class="header-section-number">3.2.2</span> F1-Score Macro</h3>
+<p>El F1-Score Macro, o simplemente “Macro F1,” es una métrica de evaluación de clasificadores que es especialmente útil cuando se trabaja con conjuntos de datos desbalanceados. Según un estudio realizado por <span class="citation" data-cites="opitz_macro_2021">(<a href="references.html#ref-opitz_macro_2021" role="doc-biblioref">Opitz and Burst 2021</a>)</span>, Macro F1 es recomendable para asignar un peso igual a clases frecuentes e infrecuentes. La métrica se calcula tomando el promedio aritmético de los F1-Scores individuales para cada clase. En términos matemáticos, el F1-Score Macro se define como:</p>
+<p><span id="eq-f1-score"><span class="math display">\[
+\mathcal{F}_{1} = \frac{1}{n} \sum_{x} F1_{x} = \frac{1}{n} \sum_{x}
+\frac{2P_{x}R_{x}}{P_{x} + R_{x}}
+\tag{3.3}\]</span></span></p>
+<p>Aquí, <span class="math inline">\(n\)</span> es el número de clases, <span class="math inline">\(P_{x}\)</span> es la precisión y <span class="math inline">\(R_{x}\)</span> es el recall para la clase <span class="math inline">\(x\)</span>. Este enfoque es más robusto en términos de distribución de tipos de error y no solo puede llevar a puntuaciones absolutas diferentes sino también a diferentes clasificaciones de clasificadores. Los autores del estudio recomiendan utilizar Macro F1 para evaluar clasificadores en situaciones de desbalance de clases.</p>
+</section>
+</section>
+<section id="algoritmos" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="algoritmos"><span class="header-section-number">3.3</span> Algoritmos</h2>
+<section id="lightgbm" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="lightgbm"><span class="header-section-number">3.3.1</span> LightGBM</h3>
+<p>LightGBM es una implementación más eficiente de <em>Gradient Boosting Decision Tree</em> (GBDT) creada por investigadores de Microsoft en cooperación con la universidad de Pekín, el cual implementa dos nuevas técnicas: <em>Gradient-based One-Side Sampling (GOSS)</em> y <em>Exclusive Feature Bundling (EFB)</em>, las cuales pueden ayudar a reducir hasta 20 veces el tiempo de entrenamiento versus un GBDT puro, alcanzando casi la misma precisión. <span class="citation" data-cites="ke_lightgbm_2017">(<a href="references.html#ref-ke_lightgbm_2017" role="doc-biblioref">Ke et al. 2017</a>)</span>. La idea fundamental para hacer que LightGBM sea más eficiente es reducir el número de instancias y atributos.</p>
+<p>Aunque GBDT alcanza una gran eficiencia, en especial en tareas de clasificación multiclase, tiende a ser muy lento cuando los datos son altamente dimensionales debido a que por cada atributo realiza un scan de todas las instancias con el fin de estimar el <em>information gain</em> de cada punto posible de división, por lo que la complejidad computacional estará determinada tanto por el número de atributos como por el número de instancias.</p>
+<p>Para resolver esto se usan dos nuevos métodos:</p>
+<p><strong>Gradient-based One-Side Sampling (GOSS):</strong> Se basa en la idea de que las instancias con un gradiente más grande contribuirán más al <em>information gain</em> por lo que al realizar un muestreo de las instancias lo que se hace es retener estas que tienen un gradiente grande (ej. basado en algún umbral predefinido) y con el resto de instancias que tienen un gradiente pequeño, realizar un muestreo. Este sistema ayudará a reducir el tiempo de forma considerable a la vez que conlleva aun estimación más precisa de la ganancia que utilizando un muestreo uniforme.</p>
+<p><strong>Exclusive Feature Bundling (EFB):</strong> Es una técnica que aprovecha los atributos dispersos en los datos para reducir su dimensionalidad sin sacrificar mucha información. Funciona particularmente bien en escenarios donde hay muchas características categóricas codificadas como one-hot, lo que a menudo da lugar a una matriz dispersa. La clave está en identificar features que son “exclusivos”, lo que significa que raramente toman valores distintos de cero al mismo tiempo. Estos features exclusivos se pueden agrupar en un solo feature.</p>
+<p>LightGBM es más rápido que XGBoost.</p>
+</section>
+<section id="glmnet" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="glmnet"><span class="header-section-number">3.3.2</span> Glmnet</h3>
+<p>Glmnet (Generalized Linear Model with NETwork penalties) es un algoritmo altamente eficiente y rápido que ajusta modelos lineales generalizados mediante la maximización penalizada de la verosimilitud. Glmnet implementa una forma regularizada (penalizada) de regresión logística. La ruta de regularización se calcula para las penalizaciones del lasso o elastic net en una cuadrícula de valores (en la escala logarítmica) para el parámetro de regularización <span class="math inline">\(\lambda\)</span> Este algoritmo es particularmente veloz y puede aprovechar la dispersión en la matriz de entrada <span class="math inline">\(x\)</span>. Las penalizaciones, que pueden ser <span class="math inline">\(L1\)</span> (Lasso) y <span class="math inline">\(L2\)</span> (Ridge), actúan como un mecanismo para prevenir el uso excesivo de variables en el modelo. De esta manera, Glmnet es útil para evitar el sobreajuste, dando como resultado modelos más simples y robustos (parsimoniosos). <span class="citation" data-cites="hastie_introduction_2023">(<a href="references.html#ref-hastie_introduction_2023" role="doc-biblioref">Hastie, Quian, and Tay 2023</a>)</span></p>
+<p>El modelo multinomial extiende el binomial cuando el número de clases es mayor a dos. Suponga que la variable de respuesta tiene <span class="math inline">\(K\)</span> niveles <span class="math inline">\({\cal G} = {1,2,\ldots,K}\)</span>. Aquí se modela:</p>
+<p><span id="eq-glmnet"><span class="math display">\[
+Pr\left (G = k | X = x \right ) = \frac{e^{\beta_{0k}+\beta_{k^{x}}^{T}}}{\sum_{\ell = 1}^{K} e^{\beta_{0\ell}+\beta^{T}_{\ell^{x}}}}
+\tag{3.4}\]</span></span></p>
+</section>
+<section id="random-forest" class="level3" data-number="3.3.3">
+<h3 data-number="3.3.3" class="anchored" data-anchor-id="random-forest"><span class="header-section-number">3.3.3</span> Random Forest</h3>
+<p>El Random Forest es un algoritmo basado en un conjunto de árboles de decisión. Cada árbol se desarrolla utilizando una muestra aleatoria del conjunto de datos original, lo que elimina la correlación entre los aprendices básicos. Además, cada división dentro del árbol se crea utilizando solo un subconjunto aleatorio de atributos. La cantidad de estos atributos influye en el equilibrio entre el sesgo y la varianza para el conjunto de entrenamiento.</p>
+</section>
+</section>
+<section id="técnicas-de-selección-de-características" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="técnicas-de-selección-de-características"><span class="header-section-number">3.4</span> Técnicas de selección de características</h2>
+<p>Las técnicas de selección de características se dividen en tres clases generales: métodos intrínsecos (o implícitos), métodos de filtro y métodos de envoltura.</p>
+<section id="métodos-implícitos" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="métodos-implícitos"><span class="header-section-number">3.4.1</span> Métodos Implícitos</h3>
+<p>Los métodos intrínsecos integran la selección de características en el propio proceso de modelado, lo que ofrece varias ventajas. Algunos ejemplos de métodos intrínsecos incluyen:</p>
+<p><strong>Modelos basados en árboles y reglas:</strong> Estos modelos buscan el mejor predictor y punto de división para que los resultados sean más homogéneos dentro de cada nueva partición. Si un predictor no se usa en ninguna división, es funcionalmente independiente y se excluye del modelo. Ejemplos populares de este tipo de modelos incluyen LightGBM, Random Forest y XGBoost, los cuales son altamente efectivos en la selección intrínseca de características.</p>
+<p><strong>Modelos de regularización:</strong> Estos modelos utilizan penalizaciones para reducir o eliminar coeficientes de predictores, como en el caso del método Lasso, que reduce algunos coeficientes a cero absoluto, excluyendo así esas características del modelo final. Un ejemplo notable en este ámbito es Glmnet, que implementa regularización eficiente y rápida.</p>
+<p>La principal ventaja de los métodos intrínsecos es su eficiencia, ya que el proceso de selección está incrustado en la fase de ajuste del modelo, eliminando la necesidad de herramientas de selección de características externas. Sin embargo, una desventaja importante es que la selección de características es dependiente del modelo. Si el conjunto de datos se ajusta mejor a un tipo de modelo que no tiene selección de características intrínsecas, el rendimiento predictivo podría no ser óptimo <span class="citation" data-cites="kuhn_feature_2020">(<a href="references.html#ref-kuhn_feature_2020" role="doc-biblioref">Kuhn and Johnson 2020</a>)</span>.</p>
+</section>
+<section id="métodos-basados-en-filtros" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="métodos-basados-en-filtros"><span class="header-section-number">3.4.2</span> Métodos basados en filtros</h3>
+<p>Los métodos de selección de características basados en filtros realizan un análisis preliminar supervisado de los predictores para identificar cuáles son importantes para el modelado posterior. Este análisis se lleva a cabo generalmente una sola vez antes de pasar al proceso de modelado. Los métodos de filtro pueden considerar cada predictor de forma independiente o en conjunto, aunque el enfoque individual es más común. Estos métodos emplean diversas técnicas de puntuación para cuantificar la importancia de cada predictor en relación con la variable objetivo. Aunque son rápidos y efectivos para captar grandes tendencias en los datos, son propensos a la sobreselección de predictores. Además, la medida de “importancia” en muchos casos podría no estar alineada con el rendimiento predictivo del modelo. Para mitigar las falsas selecciones positivas, a menudo se utiliza un conjunto de datos independiente para evaluar las características seleccionadas.</p>
+<section id="information-gain" class="level4" data-number="3.4.2.1">
+<h4 data-number="3.4.2.1" class="anchored" data-anchor-id="information-gain"><span class="header-section-number">3.4.2.1</span> Information Gain</h4>
+<p>Dado que la entropía es una medida de la impureza en una colección de ejemplos de entrenamiento, ahora podemos definir una medida de la efectividad de un atributo en la clasificación de los datos de entrenamiento. La medida que usaremos, llamada information gain, es simplemente la reducción esperada en la entropía causada por la partición de los ejemplos según este atributo. Más precisamente, la ganancia de información, Gain(S,A), de un atributo A, en relación con una colección de ejemplos S, se define como:</p>
+<p><span id="eq-entropy"><span class="math display">\[
+\text{Entropy}(S) \equiv \sum_{i = 1}^{c} - p_{i}\;\log_{2}\;p_{i}
+\tag{3.5}\]</span></span></p>
+<p>donde <span class="math inline">\(p_{i}\)</span> es la proporción de <span class="math inline">\(S\)</span> que pertenece a la clase <span class="math inline">\(i\)</span>. Hay que tener en cuenta que el logaritmo sigue siendo en base 2 porque la entropía es una medida de la longitud de codificación esperada medida en <em>bits</em>.</p>
+<p><span id="eq-ig"><span class="math display">\[
+\text{Information Gain}, (S, A) = Entropy, (S)\; - \sum_{v \in Values(A)}^{} \; \frac{|S_{v}|}{|S|} Entropy(S_{v})
+\tag{3.6}\]</span></span></p>
+<p>donde <span class="math inline">\(Values(A)\)</span> es el conjunto de todos los posibles valores para el atributo <span class="math inline">\(A\)</span>, y <span class="math inline">\(S_{v}\)</span> es el subconjunto de <span class="math inline">\(S\)</span> para el cual el atributo <span class="math inline">\(A\)</span> tiene el valor <span class="math inline">\(v\)</span> (es decir, <span class="math inline">\(S_{v} = {S \in S|A(S) = v}\)</span>) <span class="citation" data-cites="mitchell_machine_2013">(<a href="references.html#ref-mitchell_machine_2013" role="doc-biblioref">Mitchell 2013</a>)</span>.</p>
+<p>Un ejemplo específico de un método de filtro es la función <code>step_select_infgain()</code> del paquete colino, que utiliza <em>information gain</em> como métrica para evaluar la importancia de un predictor. Este paquete se centra principalmente en métodos de selección de características basados en filtros y está diseñado para integrarse con el paquete tidymodels para recetas de modelado <span class="citation" data-cites="pawley_github_2022">(<a href="references.html#ref-pawley_github_2022" role="doc-biblioref">Pawley 2022</a>)</span>.</p>
+</section>
+</section>
+<section id="métodos-wrappers" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="métodos-wrappers"><span class="header-section-number">3.4.3</span> Métodos Wrappers</h3>
+<p>Los métodos de envoltura (wrappers) evalúan múltiples modelos utilizando procedimientos que agregan y/o eliminan predictores para encontrar la combinación óptima que maximiza el rendimiento del modelo. En esencia, los métodos de envoltura son algoritmos de búsqueda que tratan a los predictores como las entradas y utilizan el rendimiento del modelo como la salida a optimizar.</p>
+<p>Estos métodos pueden adoptar enfoques de búsqueda “voraces” o “no voraces”. Los voraces eligen rápidamente subconjuntos de predictores basados en el rendimiento inmediato del modelo, aunque corren el riesgo de quedar atrapados en óptimos locales. Un ejemplo es la eliminación de características recursiva (RFE), que elimina iterativamente los predictores menos importantes.</p>
+<p>La principal ventaja de los métodos de envoltura es su capacidad para explorar una amplia gama de subconjuntos de predictores. Sin embargo, son computacionalmente intensivos y tienen un mayor riesgo de sobreajuste, lo cual requiere validación externa.</p>
+<section id="boruta" class="level4" data-number="3.4.3.1">
+<h4 data-number="3.4.3.1" class="anchored" data-anchor-id="boruta"><span class="header-section-number">3.4.3.1</span> Boruta</h4>
+<p>Boruta es una herramienta que explora datos y genera múltiples árboles de decisión basados en muestras, combinándolos mediante votación mayoritaria. Utiliza modelos de Random Forest para estimar la relevancia de las características. En el paquete Boruta, se crean variables aleatorias utilizando múltiples combinaciones de otras variables en el conjunto de datos. Estas nuevas variables se combinan con las originales para entrenar un Random Forest diferente. La importancia de las distintas características se obtiene comparando la importancia de las variables aleatorias con la de las variables originales. Solo las variables con una importancia mayor que la de las variables aleatorias se consideran importantes. El paquete Boruta puede ser muy exigente en tiempo si el número de variables es alto, especialmente porque el algoritmo crea aún más variables para clasificar sus características <span class="citation" data-cites="stanczyk_advances_2017">(<a href="references.html#ref-stanczyk_advances_2017" role="doc-biblioref">Stanczyk, Zielosko, and Jain 2017</a>)</span>.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-chawla_smote_2002" class="csl-entry" role="listitem">
+Chawla, N. V., K. W. Bowyer, L. O. Hall, and W. P. Kegelmeyer. 2002. <span>“<span>SMOTE</span>: <span>Synthetic</span> <span>Minority</span> <span>Over</span>-Sampling <span>Technique</span>.”</span> <em>Journal of Artificial Intelligence Research</em> 16 (June): 321–57. <a href="https://doi.org/10.1613/jair.953">https://doi.org/10.1613/jair.953</a>.
+</div>
+<div id="ref-fernandez_learning_2018" class="csl-entry" role="listitem">
+Fernandez, Alberto, and Salvador García. 2018. <em>Learning from Imbalanced Data Sets</em>. New York, NY: Springer Science+Business Media.
+</div>
+<div id="ref-hastie_introduction_2023" class="csl-entry" role="listitem">
+Hastie, Trevor, Junyang Quian, and Kennet Tay. 2023. <span>“An <span>Introduction</span> to <span>GLMNET</span>.”</span> <a href="https://stanford.io/3QGGqcD">https://stanford.io/3QGGqcD</a>.
+</div>
+<div id="ref-ke_lightgbm_2017" class="csl-entry" role="listitem">
+Ke, Guolin, Qi Meng, Thomas Finley, Taifeng Wang, Wei Chen, Weidong Ma, Qiwei Ye, and Tie-Yan Liu. 2017. <span>“<span>LightGBM</span>: <span>A</span> <span>Highly</span> <span>Efficient</span> <span>Gradient</span> <span>Boosting</span> <span>Decision</span> <span>Tree</span>,”</span> January.
+</div>
+<div id="ref-kuhn_feature_2020" class="csl-entry" role="listitem">
+Kuhn, Max, and Kjell Johnson. 2020. <em>Feature Engineering and Selection: A Practical Approach for Predictive Models</em>. Chapman &amp; <span>Hall</span>/<span>CRC</span> Data Science Series. Boca Raton London New York: CRC Press, Taylor &amp; Francis Group.
+</div>
+<div id="ref-mitchell_machine_2013" class="csl-entry" role="listitem">
+Mitchell, Tom M. 2013. <em>Machine Learning</em>. Nachdr. <span>McGraw</span>-<span>Hill</span> Series in <span>Computer</span> <span>Science</span>. New York: McGraw-Hill.
+</div>
+<div id="ref-oliva_navarro_metaheuristics_2021" class="csl-entry" role="listitem">
+Oliva Navarro, Diego Alberto, Essam H. Houssein, and Salvador Hinojosa, eds. 2021. <em>Metaheuristics in Machine Learning: Theory and Applications</em>. Studies in Computational Intelligence, volume 967. Cham: Springer.
+</div>
+<div id="ref-opitz_macro_2021" class="csl-entry" role="listitem">
+Opitz, Juri, and Sebastian Burst. 2021. <span>“Macro <span>F1</span> and <span>Macro</span> <span>F1</span>,”</span> February. <a href="http://arxiv.org/abs/1911.03347">http://arxiv.org/abs/1911.03347</a>.
+</div>
+<div id="ref-pawley_github_2022" class="csl-entry" role="listitem">
+Pawley, Steven. 2022. <span>“<span>GitHub</span> - Stevenpawley/Colino: <span>Recipes</span> <span>Steps</span> for <span>Supervised</span> <span>Filter</span>-<span>Based</span> <span>Feature</span> <span>Selection</span>.”</span> <em>GitHub</em>. <a href="https://github.com/stevenpawley/colino">https://github.com/stevenpawley/colino</a>.
+</div>
+<div id="ref-stanczyk_advances_2017" class="csl-entry" role="listitem">
+Stanczyk, Urszula, Beata Zielosko, and Lakhmi C. Jain. 2017. <em>Advances in Feature Selection for Data and Pattern Recognition</em>. New York, NY: Springer Berlin Heidelberg.
+</div>
+</div>
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./antecedentes.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Antecedentes</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./metodologia.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Metodologia</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Close the Loop (CTL) fue escrito por William Chavarría</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Universidad del Valle de Guatemala <a href="https://www.uvg.edu.gt/">UVG</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

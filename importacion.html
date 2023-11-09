@@ -7,9 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="William Chavarría">
-<meta name="dcterms.date" content="2023-11-01">
 
-<title>Close the Loop</title>
+<title>Close the Loop - 5&nbsp; Importación</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -31,7 +64,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./introduccion.html" rel="next">
+<link href="./prep.html" rel="next">
+<link href="./preparacion.html" rel="prev">
 <link href="./fav.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -80,7 +114,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Resumen</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./preparacion.html">Preparación</a></li><li class="breadcrumb-item"><a href="./importacion.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Importación</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -113,7 +147,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Resumen</span></a>
   </div>
 </li>
@@ -152,7 +186,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./importacion.html" class="sidebar-item-text sidebar-link">
+  <a href="./importacion.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Importación</span></span></a>
   </div>
 </li>
@@ -256,35 +290,25 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#resumen" id="toc-resumen" class="nav-link active" data-scroll-target="#resumen">Resumen</a></li>
+  <li><a href="#diagnósticos" id="toc-diagnósticos" class="nav-link active" data-scroll-target="#diagnósticos"><span class="header-section-number">5.1</span> Diagnósticos</a></li>
+  <li><a href="#métricas-rbs" id="toc-métricas-rbs" class="nav-link" data-scroll-target="#métricas-rbs"><span class="header-section-number">5.2</span> Métricas RBS</a></li>
+  <li><a href="#datos-ubicación" id="toc-datos-ubicación" class="nav-link" data-scroll-target="#datos-ubicación"><span class="header-section-number">5.3</span> Datos Ubicación</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./preparacion.html">Preparación</a></li><li class="breadcrumb-item"><a href="./importacion.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Importación</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Close the Loop</h1>
+<h1 class="title"><span id="sec-importacion" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Importación</span></span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>William Chavarría <a href="https://orcid.org/0009-0001-4084-9290" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">November 1, 2023</p>
-    </div>
-  </div>
   
     
   </div>
@@ -292,10 +316,124 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-
-<section id="resumen" class="level1 unnumbered">
-<h1 class="unnumbered">Resumen</h1><p><img src="cover.jpg" title="Close the Loop" class="quarto-cover-image img-fluid"></p>
-<p>En el ámbito de las telecomunicaciones, la mejora de la experiencia del cliente (CX) es esencial para mantener una ventaja competitiva. Este estudio se centra en la aplicación de modelos de aprendizaje automático para optimizar diversas métricas relacionadas con CX. Utilizamos el método de envoltura Boruta y una implementación específica de Lightgbm, un algoritmo de árbol de decisión de impulso de gradiente (GBDT), para predecir y diagnosticar correctamente los distintos tipos de detractores de red. Nuestros experimentos demuestran que el método de envoltura (<em>wrapper</em>) Boruta con Lightgbm supera a otros algoritmos en términos de f1-score macro, precisión y recuperación, tanto en conjuntos de entrenamiento como de prueba, sin signos de sobreajuste. Específicamente, el f1-score en el conjunto de prueba fue de 97.34%, con una precisión de 97.67% y un Recall de 97.12%. Estos resultados demuestran la eficacia de nuestro enfoque, que tiene aplicaciones significativas en la mejora de CX.</p>
+<p>Cargar las librerías y scripts auxiliares.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"_paquetesx.R"</span>)  <span class="co"># Paquetes</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"_configura.R"</span>)  <span class="co"># Configuración</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"_variables.R"</span>)  <span class="co"># Variables globales</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"_funciones.R"</span>)  <span class="co"># Funciones</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="diagnósticos" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="diagnósticos"><span class="header-section-number">5.1</span> Diagnósticos</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>diag_00 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(diag_f, <span class="at">col_types =</span> cols_diag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>diag_00 <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(<span class="sc">-</span>msisdn_dd) <span class="sc">|&gt;</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">glimpse</span>(<span class="at">width =</span> <span class="dv">75</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 72,644
+Columns: 5
+$ fct_srvy_dt &lt;chr&gt; "20220103", "20221026", "20221119", "20230614", "2022…
+$ srvy_id     &lt;int&gt; 539124531, 685399274, 698188789, 811943714, 677228448…
+$ class_desc  &lt;chr&gt; "NEUTRO", "PROMOTOR", "DETRACTOR", "PROMOTOR", "PROMO…
+$ time_lte    &lt;dbl&gt; 0.9904817, 0.9884153, 0.0000000, 0.9326159, 0.6964744…
+$ diag        &lt;chr&gt; "no_diag", "no_diag", "no_diag", "no_diag", "no_diag"…</code></pre>
+</div>
+</div>
+<p>En el apéndice <a href="glosario.html" class="quarto-xref"><span>A</span></a> se pueden revisar el significado de cada variable</p>
+</section>
+<section id="métricas-rbs" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="métricas-rbs"><span class="header-section-number">5.2</span> Métricas RBS</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hourly_metrics_raw <span class="ot">&lt;-</span> <span class="fu">read_fst</span>(<span class="at">path =</span> metr_f) <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>hourly_metrics_raw <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(<span class="sc">-</span>msisdn_dd) <span class="sc">|&gt;</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">glimpse</span>(<span class="at">width =</span> <span class="dv">75</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 10
+Columns: 29
+$ fct_srvy_dt            &lt;chr&gt; "20220104", "20220112", "20220102", "20220…
+$ srvy_id                &lt;int&gt; 542654190, 546333723, 540796453, 549967036…
+$ r1                     &lt;int&gt; 4, 17, 3, 10, 7, 2, 9, 3, 5, 9
+$ cll_prctg              &lt;dbl&gt; 0.032281439, 0.007013118, 0.152949317, 0.0…
+$ bts_sh_nm              &lt;chr&gt; "OAVP811A", "LGUA298B", "LGTA025A", "OJTP0…
+$ prttn_hr               &lt;chr&gt; "2021121719", "2021121719", "2021122110", …
+$ rate_prb_dl            &lt;dbl&gt; 0.48648, 0.61776, 0.27068, 0.67176, 0.6717…
+$ cell_load              &lt;dbl&gt; 0.13119228, 0.27534060, 0.14068818, 0.1821…
+$ rrc_success_rate       &lt;dbl&gt; 0.9949593, 0.9989575, 1.0000000, 0.9983299…
+$ erab_success_rate      &lt;dbl&gt; 0.9952722, 0.9994387, 1.0000000, 0.9989012…
+$ service_drop_rate      &lt;dbl&gt; 0.00192794313, 0.00037406484, 0.0000000000…
+$ l_ul_interference_avg  &lt;dbl&gt; -118, -104, -113, -114, -114, -115, -118, …
+$ thoughput_dl           &lt;dbl&gt; 13324.383, 8501.190, 6915.360, 5634.725, 5…
+$ thpughput_ul           &lt;dbl&gt; 126.7266, 1745.8053, 258.4719, 223.3298, 2…
+$ corrected_cqi          &lt;dbl&gt; 13, 10, 8, 10, 10, 10, 12, 12, 11, 12
+$ ra_ta_ue_index1        &lt;dbl&gt; 0.0119986287, 0.6181172291, 0.2095238095, …
+$ ra_ta_ue_index2        &lt;dbl&gt; 0.021597532, 0.335257549, 0.323249300, 0.0…
+$ ra_ta_ue_index3        &lt;dbl&gt; 0.09770312, 0.01776199, 0.19215686, 0.0173…
+$ ra_ta_ue_index4        &lt;dbl&gt; 0.4748028797, 0.0003700414, 0.0605042017, …
+$ ra_ta_ue_index5        &lt;dbl&gt; 0.284710319, 0.000000000, 0.049299720, 0.6…
+$ ra_ta_ue_index6        &lt;dbl&gt; 0.0675351388, 0.0000000000, 0.0700280112, …
+$ ra_ta_ue_index7        &lt;dbl&gt; 0.040109702, 0.000000000, 0.007282913, 0.0…
+$ ra_ta_ue_total         &lt;dbl&gt; 5834, 13512, 1785, 19175, 19175, 5732, 143…
+$ volte_erlang           &lt;dbl&gt; 1.91277778, 8.04652778, 0.79697222, 0.0827…
+$ modulation_64qam_ratio &lt;dbl&gt; 0.8543821, 0.6106413, 0.3532195, 0.5319436…
+$ modulation_16qam_ratio &lt;dbl&gt; 0.1087508, 0.2855035, 0.2447876, 0.3256994…
+$ modulation_qpsk_ratio  &lt;dbl&gt; 0.03686716, 0.10385525, 0.40199284, 0.1423…
+$ cell_unavail           &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+$ cell_unavail_s1fail    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0</code></pre>
+</div>
+</div>
+<p>Se aprecian los nombres originales de los atributos.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Importante
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En el caso de la tabla <code>hourly_metrics</code> estamos viendo una muestra de únicamente 10 registros debido a que el tamaño real del dataset es de más de 44 millones de filas y cargarlo en este reporte web es muy tardado.</p>
+</div>
+</div>
+</section>
+<section id="datos-ubicación" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="datos-ubicación"><span class="header-section-number">5.3</span> Datos Ubicación</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Conexión a base de datos</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> conectigo<span class="sc">::</span><span class="fu">conectar_msql</span>()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Query para extraer información geográfica y clima</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>sitiosfs_raw <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="fu">in_schema</span>(<span class="st">"fieldservice"</span>, <span class="st">"site_collate"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">twr =</span> cilocation, <span class="at">lat =</span> latitude, <span class="at">lon =</span> longitude,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">dpto =</span> department, <span class="at">municipalidad =</span> municipality) <span class="sc">|&gt;</span> </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a> <span class="fu">collect</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a> <span class="fu">distinct</span>(twr, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Estandarización de columnas</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>sitiosfs <span class="ot">&lt;-</span> sitiosfs_raw <span class="sc">|&gt;</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(dpto<span class="sc">:</span>municipalidad, \(x) <span class="fu">estandarizar_columnas</span>(x))) <span class="sc">|&gt;</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">city =</span> <span class="st">"municipalidad"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sitiosfs <span class="sc">%&gt;%</span> <span class="fu">glimpse</span>(<span class="at">width =</span> <span class="dv">75</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 5,412
+Columns: 6
+$ twr    &lt;chr&gt; "GUA001", "GUA002", "GUA003", "GUA004", "GUA006", "GUA007"…
+$ status &lt;chr&gt; "OPERATING", "OPERATING", "OPERATING", "OPERATING", "OPERA…
+$ lat    &lt;dbl&gt; 14.61550, 14.53500, 14.63681, 14.59050, 14.59250, 14.58750…
+$ lon    &lt;dbl&gt; -90.53310, -90.57030, -90.46111, -90.50340, -90.52090, -90…
+$ dpto   &lt;chr&gt; "GUATEMALA", "GUATEMALA", "GUATEMALA", "GUATEMALA", "GUATE…
+$ city   &lt;chr&gt; "GUATEMALA", "VILLA_NUEVA", "GUATEMALA", "GUATEMALA", "GUA…</code></pre>
+</div>
+</div>
 
 
 </section>
@@ -605,10 +743,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./preparacion.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preparación</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./introduccion.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./prep.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Prep</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
